@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Star, ArrowUpDown, ArrowRight, ChevronDown, Check, Sparkles, X, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
@@ -368,8 +369,9 @@ function ExchangePanel() {
         </div>
       </motion.div>
 
-      {/* Voucher picker modal */}
-      <AnimatePresence>
+      {/* Voucher picker modal — rendered in a portal at document.body to escape any stacking context */}
+      {typeof document !== "undefined" && createPortal(
+        <AnimatePresence>
         {pickerOpen && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -417,50 +419,48 @@ function ExchangePanel() {
                       className="group text-left"
                     >
                       <div
-                        className={`rounded-xl overflow-hidden transition-all duration-200 p-[1.5px] ${
+                        className={`relative bg-white rounded-xl overflow-hidden flex flex-col h-full transition-all duration-200 ${
                           isSelected
                             ? "shadow-md shadow-[#0068ff]/20"
                             : "hover:shadow-sm hover:-translate-y-0.5"
                         }`}
                         style={{
-                          background: isSelected ? "#0068ff" : "#e5e7eb",
+                          border: `1.5px solid ${isSelected ? "#0068ff" : "#e5e7eb"}`,
                         }}
                       >
-                        <div className="relative bg-white rounded-[calc(0.75rem-1.5px)] overflow-hidden flex flex-col h-full">
-                          <div className="relative overflow-hidden bg-gray-50 aspect-[5/3]">
-                            <ImageWithFallback
-                              src={v.image}
-                              alt={t(`vouchers.cards.${v.translationKey}.name`)}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            />
-                            {isSelected && (
-                              <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[#0068ff] flex items-center justify-center shadow-md">
-                                <Check className="w-3 h-3 text-white" />
-                              </div>
-                            )}
+                        <div className="relative overflow-hidden bg-gray-50 aspect-[5/3]">
+                          <ImageWithFallback
+                            src={v.image}
+                            alt={t(`vouchers.cards.${v.translationKey}.name`)}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                          {isSelected && (
+                            <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[#0068ff] flex items-center justify-center shadow-md">
+                              <Check className="w-3 h-3 text-white" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="p-2 flex flex-col flex-1">
+                          <div className="flex items-center gap-1 mb-1">
+                            <Clock className="w-2.5 h-2.5 text-gray-300 shrink-0" />
+                            <span className="text-gray-400" style={{ fontSize: "0.5625rem", fontWeight: 500 }}>
+                              {t(`vouchers.cards.${v.translationKey}.expiry`)}
+                            </span>
                           </div>
-                          <div className="p-2 flex flex-col flex-1">
-                            <div className="flex items-center gap-1 mb-1">
-                              <Clock className="w-2.5 h-2.5 text-gray-300 shrink-0" />
-                              <span className="text-gray-400" style={{ fontSize: "0.5625rem", fontWeight: 500 }}>
-                                {t(`vouchers.cards.${v.translationKey}.expiry`)}
-                              </span>
-                            </div>
-                            <h4
-                              className="text-[#002a38] mb-0.5"
-                              style={{ fontSize: "0.75rem", fontWeight: 700 }}
-                            >
-                              {t(`vouchers.cards.${v.translationKey}.name`)}
-                            </h4>
-                            <p className="text-gray-400 mb-2" style={{ fontSize: "0.625rem", lineHeight: 1.4 }}>
-                              {t(`vouchers.cards.${v.translationKey}.desc`)}
-                            </p>
-                            <div className="flex items-center gap-1 mt-auto">
-                              <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
-                              <span className="text-[#002a38]" style={{ fontSize: "0.75rem", fontWeight: 700 }}>
-                                {v.stars}
-                              </span>
-                            </div>
+                          <h4
+                            className="text-[#002a38] mb-0.5"
+                            style={{ fontSize: "0.75rem", fontWeight: 700 }}
+                          >
+                            {t(`vouchers.cards.${v.translationKey}.name`)}
+                          </h4>
+                          <p className="text-gray-400 mb-2" style={{ fontSize: "0.625rem", lineHeight: 1.4 }}>
+                            {t(`vouchers.cards.${v.translationKey}.desc`)}
+                          </p>
+                          <div className="flex items-center gap-1 mt-auto">
+                            <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
+                            <span className="text-[#002a38]" style={{ fontSize: "0.75rem", fontWeight: 700 }}>
+                              {v.stars}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -471,7 +471,9 @@ function ExchangePanel() {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
 
       <PurchaseConfirmationModal
         isOpen={confirmModal.isOpen}
