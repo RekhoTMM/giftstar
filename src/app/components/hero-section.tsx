@@ -20,7 +20,6 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ onRegister: _onRegister }: HeroSectionProps) {
-  const [activeTab, setActiveTab] = useState<"A" | "B">("A");
   const { t } = useLanguage();
 
   return (
@@ -73,27 +72,7 @@ export function HeroSection({ onRegister: _onRegister }: HeroSectionProps) {
           </h1>
         </motion.div>
 
-        {/* Tab bar */}
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }} className="flex justify-center mb-5">
-          <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-gray-100">
-            {(["A", "B"] as const).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                  activeTab === tab ? "bg-[#002a38] text-white shadow-sm" : "text-gray-500 hover:text-[#002a38]"
-                }`}
-              >
-                {tab === "A" ? "Variant A" : "Variant B"}
-              </button>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Active panel */}
-        <AnimatePresence mode="wait">
-          {activeTab === "A" ? <VariantAPanel key="A" /> : <VariantBPanel key="B" />}
-        </AnimatePresence>
+        <VariantAPanel />
       </div>
     </section>
   );
@@ -408,7 +387,7 @@ function VariantAPanel() {
         {/* Exchange button */}
         <div className="px-5 pb-5">
           <button onClick={handleExchange} disabled={isPurchasing || !starInput || !amountMatches}
-            className="w-full py-4 bg-[#002a38] text-white rounded-2xl hover:bg-[#003a50] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+            className="w-full py-4 bg-[#0068ff] text-white rounded-2xl hover:bg-[#0050cc] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
             style={{ fontWeight: 600, fontSize: "0.9375rem" }}>
             {isPurchasing ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : t("hero.swap.exchangeBtn")}
           </button>
@@ -610,7 +589,7 @@ function VariantBPanel() {
         {/* Exchange button */}
         <div className="mt-3">
           <button onClick={handleExchange} disabled={isPurchasing || !starInput || !amountMatches}
-            className="w-full py-4 bg-[#002a38] text-white rounded-2xl hover:bg-[#003a50] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+            className="w-full py-4 bg-[#0068ff] text-white rounded-2xl hover:bg-[#0050cc] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
             style={{ fontWeight: 600, fontSize: "0.9375rem" }}>
             {isPurchasing ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : t("hero.swap.exchangeBtn")}
           </button>
