@@ -205,7 +205,7 @@ export function VouchersSection() {
                         e.stopPropagation();
                         setInfoVoucher(voucher);
                       }}
-                      className="absolute top-2 right-2 h-8 flex items-center bg-white/80 backdrop-blur-sm rounded-full px-1.5 hover:bg-white transition-colors z-10"
+                      className="absolute top-2 right-2 h-8 flex items-center bg-white/90 rounded-full px-1.5 hover:bg-white transition-colors z-10"
                     >
                       {mysteryBoxPrizes.filter(p => p.type === "image").slice(0, 3).map((prize, idx) => (
                         <div
@@ -230,7 +230,7 @@ export function VouchersSection() {
                         e.stopPropagation();
                         setInfoVoucher(voucher);
                       }}
-                      className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-white transition-colors z-10"
+                      className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center hover:bg-white transition-colors z-10"
                     >
                       <Info className="w-4.5 h-4.5 text-gray-600" />
                     </button>
