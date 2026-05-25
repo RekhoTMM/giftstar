@@ -4,6 +4,21 @@
     "register": "Register"
   },
   "hero": {
+    "swap": {
+      "tabs": {
+        "exchange": "Exchange",
+        "redeem": "Redeem"
+      },
+      "sell": "SELL",
+      "buy": "BUY",
+      "starsLabel": "Stars",
+      "balance": "Balance",
+      "rate": "Rate",
+      "exchangeBtn": "Exchange",
+      "redeemInput": "PROMO CODE",
+      "redeemOutput": "STARS",
+      "redeemBtn": "Redeem"
+    },
     "guest": {
       "headline1": "Exchange",
       "headline2": "Stars",

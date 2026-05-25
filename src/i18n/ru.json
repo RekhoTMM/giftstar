@@ -4,6 +4,21 @@
     "register": "Регистрация"
   },
   "hero": {
+    "swap": {
+      "tabs": {
+        "exchange": "Обмен",
+        "redeem": "Погасить"
+      },
+      "sell": "ПРОДАТЬ",
+      "buy": "КУПИТЬ",
+      "starsLabel": "Звёзды",
+      "balance": "Баланс",
+      "rate": "Курс",
+      "exchangeBtn": "Обменять",
+      "redeemInput": "ПРОМО КОД",
+      "redeemOutput": "ЗВЁЗДЫ",
+      "redeemBtn": "Погасить"
+    },
     "guest": {
       "headline1": "Обменяй",
       "headline2": "звёзды",
