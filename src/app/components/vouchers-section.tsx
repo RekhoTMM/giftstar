@@ -196,7 +196,7 @@ export function VouchersSection() {
                   }
                 }}
               >
-                <div className="voucher-card rounded-2xl overflow-hidden hover:shadow-lg hover:shadow-[#0068ff]/10 hover:-translate-y-0.5 transition-all duration-200 flex flex-col h-full p-[1px]" style={{ background: "linear-gradient(to bottom, #e5e7eb, #e5e7eb 50%, #0068ff 100%)" }}>
+                <div className="voucher-card rounded-2xl overflow-hidden hover:shadow-lg hover:shadow-gray-200/80 hover:-translate-y-0.5 transition-all duration-200 flex flex-col h-full p-[1px]" style={{ background: "#e5e7eb" }}>
                 <div className="relative bg-white rounded-[calc(1rem-1px)] overflow-hidden flex flex-col h-full">
                   {/* Info trigger — prize strip for Mystery BOX, info icon for others */}
                   {voucher.id.startsWith("mysteryBox") ? (

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Star, ArrowUpDown, ArrowRight, ChevronDown, Check, Sparkles, X } from "lucide-react";
+import { Star, ArrowUpDown, ArrowRight, ChevronDown, Check, Sparkles, X, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useAuth } from "./auth-context";
@@ -393,7 +393,7 @@ function ExchangePanel() {
               <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-xl border-b border-gray-100 px-5 py-4 flex items-center justify-between rounded-t-3xl">
                 <div className="sm:hidden absolute top-2 left-1/2 -translate-x-1/2 w-10 h-1 bg-gray-200 rounded-full" />
                 <h3 className="text-[#002a38]" style={{ fontSize: "1.0625rem", fontWeight: 700 }}>
-                  {t("hero.swap.buy")}
+                  აირჩიე სასურველი ვაუჩერი
                 </h3>
                 <button
                   onClick={() => setPickerOpen(false)}
@@ -404,7 +404,7 @@ function ExchangePanel() {
               </div>
 
               {/* Card grid */}
-              <div className="p-5 flex flex-wrap gap-3 justify-center">
+              <div className="p-5 grid grid-cols-2 gap-3">
                 {vouchers.map((v, i) => {
                   const isSelected = selectedIndex === i;
                   return (
@@ -412,18 +412,15 @@ function ExchangePanel() {
                       key={v.id}
                       onClick={() => handleSelectVoucher(i)}
                       className="group text-left"
-                      style={{ width: "calc(50% - 0.375rem)", maxWidth: "200px" }}
                     >
                       <div
                         className={`rounded-2xl overflow-hidden transition-all duration-200 p-[1.5px] ${
                           isSelected
                             ? "shadow-lg shadow-[#0068ff]/20"
-                            : "hover:shadow-md hover:shadow-[#0068ff]/10 hover:-translate-y-0.5"
+                            : "hover:shadow-md hover:-translate-y-0.5"
                         }`}
                         style={{
-                          background: isSelected
-                            ? "linear-gradient(to bottom, #0068ff, #0068ff)"
-                            : "linear-gradient(to bottom, #e5e7eb, #e5e7eb 50%, #0068ff 100%)",
+                          background: isSelected ? "#0068ff" : "#e5e7eb",
                         }}
                       >
                         <div className="relative bg-white rounded-[calc(1rem-1.5px)] overflow-hidden flex flex-col h-full">
@@ -440,12 +437,21 @@ function ExchangePanel() {
                             )}
                           </div>
                           <div className="p-3 flex flex-col flex-1">
+                            <div className="flex items-center gap-1 mb-1.5">
+                              <Clock className="w-3 h-3 text-gray-300 shrink-0" />
+                              <span className="text-gray-400" style={{ fontSize: "0.625rem", fontWeight: 500 }}>
+                                {t(`vouchers.cards.${v.translationKey}.expiry`)}
+                              </span>
+                            </div>
                             <h4
-                              className="text-[#002a38] mb-2"
+                              className="text-[#002a38] mb-1"
                               style={{ fontSize: "0.875rem", fontWeight: 700 }}
                             >
                               {t(`vouchers.cards.${v.translationKey}.name`)}
                             </h4>
+                            <p className="text-gray-400 mb-3" style={{ fontSize: "0.6875rem", lineHeight: 1.5 }}>
+                              {t(`vouchers.cards.${v.translationKey}.desc`)}
+                            </p>
                             <div className="flex items-center gap-1 mt-auto">
                               <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
                               <span className="text-[#002a38]" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
