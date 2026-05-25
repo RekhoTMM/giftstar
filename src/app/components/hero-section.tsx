@@ -311,8 +311,8 @@ function VariantAPanel() {
                       <Plus className="w-5 h-5 text-gray-400 group-hover:text-[#0068ff] transition-colors" />
                     </div>
                     <div className="text-left">
-                      <p className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 600 }}>პრომო კოდის გამოყენება</p>
-                      <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>ვარსკვლავების დასამატებლად</p>
+                      <p className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 600 }}>გაქვს პრომო კოდი?</p>
+                      <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>მიიღე ვარსკვლავები</p>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-[#0068ff] transition-colors" />
