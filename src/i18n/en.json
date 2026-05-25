@@ -1,0 +1,303 @@
+{
+  "header": {
+    "login": "Log In",
+    "register": "Register"
+  },
+  "hero": {
+    "guest": {
+      "headline1": "Exchange",
+      "headline2": "Stars",
+      "headline3": "for Your Favorite Vouchers",
+      "subtitle": "Enter a promo code, collect stars, and choose your desired voucher",
+      "cta": "Get Started"
+    },
+    "auth": {
+      "greeting": "Hello,",
+      "promoTitle": "Enter Promo Code",
+      "promoSubtitle": "Voucher code received from promo girl",
+      "promoPlaceholder": "e.g.: GIFT10, STAR20, VIP50",
+      "activateCode": "Activate Code",
+      "activated": "Activated!",
+      "activatedCodes": "Activated Codes",
+      "noCodesYet": "No codes activated yet",
+      "enterCodeAbove": "Enter a promo code above",
+      "expired": "Expired",
+      "remaining": "remaining"
+    }
+  },
+  "vouchers": {
+    "sectionTag": "Vouchers",
+    "title": "Available Vouchers",
+    "subtitle": "Collect stars and choose your favorite gift",
+    "exchange": "Exchange",
+    "prizes": "Prizes",
+    "star": "star",
+    "authRequired": "Please log in to purchase a voucher",
+    "cards": {
+      "krokoShop": {
+        "name": "Crocoshop.ge",
+        "desc": "Product voucher",
+        "expiry": "Valid for 30 days",
+        "details": [
+          "Crocoshop.ge voucher can be used on any item",
+          "Vouchers cannot be combined with Welcam and other Crocoshop vouchers"
+        ]
+      },
+      "citrus": {
+        "name": "Citrus.ge",
+        "desc": "Electronics store voucher",
+        "expiry": "Valid for 30 days",
+        "details": [
+          "Voucher can be used on any item",
+          "Vouchers cannot be combined with Welcam and other Crocoshop vouchers"
+        ]
+      },
+      "beko": {
+        "name": "Beko",
+        "desc": "Home appliances voucher",
+        "expiry": "Valid for 30 days",
+        "details": [
+          "With a Beko voucher you can purchase home appliances at official Beko stores",
+          "Valid for 30 days"
+        ]
+      },
+      "krokoCard": {
+        "name": "Crococard.ge",
+        "desc": "Gift card",
+        "expiry": "Valid for 30 days",
+        "details": [
+          "Crococard.ge voucher can be used by persons aged 25+",
+          "Crococard.ge balance can be withdrawn contactlessly from any Liberty, TBC Bank or BOG ATM, or by inserting the card into the ATM",
+          "Payment with Croco Card is possible both contactlessly and via TBC Bank and BOG POS terminals"
+        ]
+      },
+      "wolt": {
+        "name": "Wolt",
+        "desc": "Delivery service voucher",
+        "expiry": "Valid for 14 days",
+        "details": [
+          "With a Wolt voucher you can order your favorite meals from any restaurant",
+          "Valid for 14 days"
+        ]
+      },
+      "mysteryBox": {
+        "name": "Mystery BOX",
+        "desc": "Chance to win iPhone, PlayStation and more!",
+        "expiry": "Valid for 7 days",
+        "details": [
+          "General voucher rules apply to prizes won in the Mystery voucher",
+          "In case of winning electronics, you will receive a corresponding Crocoshop product voucher"
+        ]
+      },
+      "mysteryBox2": {
+        "name": "Mystery BOX 2",
+        "desc": "Chance to win iPhone, PlayStation and more!",
+        "expiry": "Valid for 7 days",
+        "details": [
+          "General voucher rules apply to prizes won in the Mystery voucher",
+          "In case of winning electronics, you will receive a corresponding Crocoshop product voucher"
+        ]
+      }
+    },
+    "prizeNames": {
+      "iPhone": "iPhone",
+      "PlayStation": "PlayStation",
+      "laptop": "Laptop",
+      "tv": "Television",
+      "krokoShopVoucher": "Crocoshop.ge Voucher",
+      "citrusVoucher": "Citrus.ge Voucher",
+      "krokoCardVoucher": "Crococard.ge Voucher",
+      "voucherValue": "Voucher Value",
+      "stars": "5 / 10 / 15 / 20 / 30"
+    }
+  },
+  "invite": {
+    "title": "Invite a Friend,",
+    "titleSuffix": "Get +5⭐",
+    "subtitle": "Share your referral code with friends and earn 5 stars for each invited friend!",
+    "referralLabel": "Your referral code",
+    "cta": "Invite Friend",
+    "copiedToast": "Text copied successfully:",
+    "referralCopied": "Referral code copied!"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "For other questions, please contact us",
+    "items": [
+      {
+        "q": "How do I get a promo code?",
+        "a": "You can get a promo code at various promo locations and through the invite friend feature."
+      },
+      {
+        "q": "How do I collect stars?",
+        "a": "After registration, you can collect stars by entering promo codes or inviting friends."
+      },
+      {
+        "q": "What is Mystery BOX?",
+        "a": "With Mystery BOX you can win an iPhone, PlayStation, or X2, X5, X10 voucher value!"
+      }
+    ]
+  },
+  "auth": {
+    "registerTitle": "Register",
+    "loginTitle": "Log In",
+    "registerSubtitle": "Create an account, activate a promo code and get stars as a gift",
+    "loginSubtitle": "Enter your phone number",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Enter first name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Enter last name",
+    "phone": "Phone Number",
+    "phonePlaceholder": "5XX XXX XXX",
+    "birthDate": "Date of Birth",
+    "promoCode": "Promo Code",
+    "promoCodeOptional": "(optional)",
+    "promoCodePlaceholder": "e.g.: GIFT10, STAR20",
+    "registerButton": "Register",
+    "registerBonus": "+20 stars on registration",
+    "loginButton": "Log In",
+    "haveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?",
+    "testHint": "For testing: enter",
+    "ageError": "Registration is only available for 18+",
+    "registerSuccess": "Registration successful! You received 20 stars!",
+    "loginSuccess": "Successfully logged in!",
+    "loginError": "User not found. Try test number: 555",
+    "otp": {
+      "title": "Code Verification",
+      "subtitle": "Code sent to",
+      "testHint": "For testing: enter any 4 digits",
+      "confirm": "Confirm",
+      "resend": "Resend",
+      "enterCode": "Enter 4-digit code",
+      "codeSent": "Code resent",
+      "back": "Back"
+    }
+  },
+  "purchase": {
+    "title": "Purchase Voucher",
+    "subtitle": "Confirm your purchase",
+    "voucher": "Voucher",
+    "cost": "Cost",
+    "balanceAfter": "Balance after purchase",
+    "lowBalance": "Only {count} stars will remain after purchase",
+    "ageRestriction": "You must be 25+ years old to use this voucher",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "purchaseSuccess": "Voucher purchased! Code:",
+    "successTitle": "Voucher Purchased!",
+    "viewVoucher": "View Voucher",
+    "continue": "Continue",
+    "close": "Close",
+    "code": "Voucher Code"
+  },
+  "mysteryBox": {
+    "ready": "Ready?",
+    "opening": "Opening...",
+    "congrats": "Congratulations!",
+    "youWon": "You won",
+    "viewPrize": "View Prize",
+    "bonusStars": "You received {count} bonus stars!",
+    "wonPrize": "Congratulations! You won {name}!",
+    "prizes": {
+      "iphone": { "name": "iPhone", "desc": "Win the latest iPhone!" },
+      "ps5": { "name": "PlayStation", "desc": "Win a Sony PlayStation console!" },
+      "laptop": { "name": "Laptop", "desc": "Win a laptop!" },
+      "tv": { "name": "Television", "desc": "Win a television!" },
+      "krokoVoucher": { "name": "Crocoshop.ge Voucher", "desc": "Crocoshop.ge voucher!" },
+      "citrusVoucher": { "name": "Citrus.ge Voucher", "desc": "Citrus.ge voucher!" },
+      "x2": { "name": "Voucher Value X2", "desc": "Get double the voucher value!" },
+      "stars5": { "name": "5 Stars", "desc": "Get 5 bonus stars!" },
+      "stars20": { "name": "20 Stars", "desc": "Get 20 bonus stars!" },
+      "stars30": { "name": "30 Stars", "desc": "Get 30 bonus stars!" }
+    }
+  },
+  "footer": {
+    "description": "Collect stars, choose gifts, and enjoy exclusive vouchers.",
+    "siteRules": "Site Rules",
+    "voucherRules": "Voucher Rules",
+    "copyright": "© 2026 GiftMe.ge — All rights reserved",
+    "city": "Tbilisi, Georgia"
+  },
+  "rules": {
+    "title": "Site Rules",
+    "subtitle": "Terms of Use",
+    "back": "Home",
+    "lastUpdated": "Last updated: March 25, 2026",
+    "sections": [
+      {
+        "title": "General Rules",
+        "items": [
+          "GiftMe.ge is a promo platform that allows users to collect stars and exchange them for desired vouchers.",
+          "Registration on the site is free.",
+          "Users must be 18 years or older to use the site."
+        ]
+      },
+      {
+        "title": "Registration & Account",
+        "items": [
+          "During registration, users must provide their first name, last name, phone number, and date of birth.",
+          "Only one account can be created per phone number.",
+          "Users are responsible for the security of their accounts."
+        ]
+      },
+      {
+        "title": "Star System",
+        "items": [
+          "A promo code can only be used once, before stars are spent.",
+          "The number of stars received from promo activities is variable.",
+          "Users receive 5 stars for inviting a friend (subject to conditions).",
+          "Vouchers cannot be exchanged for cash.",
+          "Stars can be used until depleted.",
+          "Each voucher has its own redemption and usage period. After expiration, the voucher becomes void."
+        ]
+      },
+      {
+        "title": "Liability",
+        "items": [
+          "GiftMe.ge reserves the right to change terms and conditions with prior notice.",
+          "Accounts will be blocked if fraudulent activity is detected.",
+          "GiftMe.ge is not obligated to compensate for damages in case of technical issues."
+        ]
+      },
+      {
+        "title": "Friend Referral",
+        "items": [
+          "Each user who registers a new user will receive 5 stars.",
+          "New users must be 18+ years old.",
+          "During registration, new users must enter the inviter's code in the promo code field.",
+          "Bonus is credited only when the new user redeems a gift worth at least 15 stars."
+        ]
+      },
+      {
+        "title": "Mystery Voucher",
+        "items": [
+          "When choosing a mystery voucher, you may receive: iPhone, PlayStation, and more.",
+          "The Mystery BOX result is final and cannot be appealed.",
+          "Gifts from the mystery box are distributed proportionally."
+        ]
+      }
+    ]
+  },
+  "dashboard": {
+    "title": "My Profile",
+    "balance": "Your Balance",
+    "inviteFriend": "Invite a Friend",
+    "inviteSubtitle": "Get +5 stars for each friend",
+    "invitedFriends": "Invited Friends",
+    "noFriendsYet": "No invited friends yet",
+    "showAll": "All",
+    "showLess": "Less",
+    "voucherHistory": "Voucher History",
+    "voucherCount": "{count} vouchers",
+    "noVouchers": "No vouchers yet",
+    "noVouchersSubtitle": "Collect stars and exchange them for your desired voucher",
+    "code": "Code:",
+    "copy": "Copy",
+    "copied": "Copied",
+    "referralCopied": "Referral code copied!",
+    "voucherCopied": "Voucher code copied!",
+    "expires": "Expires:",
+    "logout": "Log Out"
+  }
+}

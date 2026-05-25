@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@300;400;500;600;700;800;900&display=swap');
+
+@font-face {
+  font-family: 'CB Sans VF';
+  src: url('/fonts/CBSansVF-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CB Sans VF';
+  src: url('/fonts/CBSansVF-Hair.ttf') format('truetype');
+  font-weight: 200;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CB Sans VF';
+  src: url('/fonts/CBSansVF-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CB Sans VF';
+  src: url('/fonts/CBSansVF-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CB Sans VF';
+  src: url('/fonts/CBSansVF-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CB Sans VF';
+  src: url('/fonts/CBSansVF-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CB Sans VF';
+  src: url('/fonts/CBSansVF-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-display: swap;
+}
+
+body {
+  font-family: 'CB Sans VF', 'Noto Sans Georgian', 'Inter', sans-serif;
+}
