@@ -164,7 +164,7 @@ function ExchangePanel() {
   const { isAuthenticated, user, purchaseVoucher } = useAuth();
   const { t } = useLanguage();
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [starInput, setStarInput] = useState(String(vouchers[0].stars));
+  const [starInput, setStarInput] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
@@ -261,20 +261,47 @@ function ExchangePanel() {
               </p>
             )}
           </div>
-          <input
-            type="number"
-            min="1"
-            value={starInput}
-            onChange={(e) => {
-              setStarInput(e.target.value);
-              const val = parseInt(e.target.value, 10);
-              const idx = !isNaN(val) ? vouchers.findIndex((v) => v.stars === val) : -1;
-              if (idx !== -1) setSelectedIndex(idx);
-            }}
-            placeholder="0"
-            className="w-full bg-transparent text-[#002a38] placeholder:text-gray-300 focus:outline-none tracking-widest"
-            style={{ fontSize: "1.75rem", fontWeight: 800, letterSpacing: "0.06em" }}
-          />
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-[#DCEFD2] flex items-center justify-center shrink-0">
+              <Star className="w-5 h-5 text-[#3FA62E] fill-[#3FA62E]" />
+            </div>
+            <input
+              type="number"
+              min="1"
+              value={starInput}
+              onChange={(e) => {
+                setStarInput(e.target.value);
+                const val = parseInt(e.target.value, 10);
+                const idx = !isNaN(val) ? vouchers.findIndex((v) => v.stars === val) : -1;
+                if (idx !== -1) setSelectedIndex(idx);
+              }}
+              placeholder="e.g. 15, 20, 25"
+              className="flex-1 bg-transparent text-[#002a38] placeholder:text-gray-300 focus:outline-none"
+              style={{ fontSize: "1.75rem", fontWeight: 800, letterSpacing: "0.06em" }}
+            />
+          </div>
+          {/* Suggestion chips */}
+          <div className="flex flex-wrap gap-2 mt-3">
+            {[...new Set(vouchers.map((v) => v.stars))].map((amt) => (
+              <button
+                key={amt}
+                onClick={() => {
+                  setStarInput(String(amt));
+                  const idx = vouchers.findIndex((v) => v.stars === amt);
+                  if (idx !== -1) setSelectedIndex(idx);
+                }}
+                className={`flex items-center gap-1 px-3 py-1 rounded-full border text-sm font-semibold transition-all duration-150 ${
+                  starInput === String(amt)
+                    ? "bg-[#DCEFD2] border-[#3FA62E] text-[#002a38]"
+                    : "bg-gray-50 border-gray-200 text-gray-500 hover:border-[#3FA62E] hover:text-[#002a38]"
+                }`}
+                style={{ fontSize: "0.8125rem" }}
+              >
+                <Star className={`w-3 h-3 ${starInput === String(amt) ? "text-[#3FA62E] fill-[#3FA62E]" : "text-gray-400"}`} />
+                {amt}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Divider + swap icon */}
@@ -401,7 +428,7 @@ function ExchangePanel() {
         <div className="px-5 pb-5">
           <button
             onClick={handleExchange}
-            disabled={isPurchasing || (!matchedVoucher && starInput !== "" && !isNaN(typedAmount))}
+            disabled={isPurchasing || !starInput || !matchedVoucher}
             className="w-full py-4 bg-[#002a38] text-white rounded-2xl hover:bg-[#003a50] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
             style={{ fontWeight: 600, fontSize: "0.9375rem" }}
           >
