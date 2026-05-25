@@ -283,40 +283,8 @@ function VariantAPanel() {
       >
         {/* SELL */}
         <div className="p-5 pb-4">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-gray-400" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>{t("hero.swap.sell")}</p>
-            {isAuthenticated && user && (
-              <p className="text-gray-400 flex items-center gap-1" style={{ fontSize: "0.6875rem", fontWeight: 600 }}>
-                {t("hero.swap.balance")}: <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" /> <span className="text-[#002a38]">{user.stars}</span>
-              </p>
-            )}
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#DCEFD2] flex items-center justify-center shrink-0">
-              <Star className="w-5 h-5 text-[#3FA62E] fill-[#3FA62E]" />
-            </div>
-            <input
-              type="number" min="1" value={starInput} onChange={(e) => setStarInput(e.target.value)}
-              placeholder="e.g. 15, 20, 25"
-              className="flex-1 bg-transparent text-[#002a38] placeholder:text-gray-300 focus:outline-none"
-              style={{ fontSize: "1.75rem", fontWeight: 800, letterSpacing: "0.06em" }}
-            />
-          </div>
-          {/* Suggestion chips */}
-          <div className="flex flex-wrap gap-2 mt-3">
-            {[...new Set(vouchers.map((v) => v.stars))].map((amt) => (
-              <button key={amt} onClick={() => setStarInput(String(amt))}
-                className={`flex items-center gap-1 px-3 py-1 rounded-full border font-semibold transition-all duration-150 ${starInput === String(amt) ? "bg-[#DCEFD2] border-[#3FA62E] text-[#002a38]" : "bg-gray-50 border-gray-200 text-gray-500 hover:border-[#3FA62E] hover:text-[#002a38]"}`}
-                style={{ fontSize: "0.8125rem" }}
-              >
-                <Star className={`w-3 h-3 ${starInput === String(amt) ? "text-[#3FA62E] fill-[#3FA62E]" : "text-gray-400"}`} />
-                {amt}
-              </button>
-            ))}
-          </div>
-
-          {/* Separator + promo code section */}
-          <div className="border-t border-gray-100 mt-4 pt-4">
+          {/* Promo code section — top */}
+          <div className="pb-4 border-b border-gray-100 mb-4">
             <AnimatePresence mode="wait">
               {promoSuccess !== null ? (
                 <motion.div key="success" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
@@ -372,6 +340,38 @@ function VariantAPanel() {
                 </motion.button>
               )}
             </AnimatePresence>
+          </div>
+
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-gray-400" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>{t("hero.swap.sell")}</p>
+            {isAuthenticated && user && (
+              <p className="text-gray-400 flex items-center gap-1" style={{ fontSize: "0.6875rem", fontWeight: 600 }}>
+                {t("hero.swap.balance")}: <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" /> <span className="text-[#002a38]">{user.stars}</span>
+              </p>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-[#DCEFD2] flex items-center justify-center shrink-0">
+              <Star className="w-5 h-5 text-[#3FA62E] fill-[#3FA62E]" />
+            </div>
+            <input
+              type="number" min="1" value={starInput} onChange={(e) => setStarInput(e.target.value)}
+              placeholder="e.g. 15, 20, 25"
+              className="flex-1 bg-transparent text-[#002a38] placeholder:text-gray-300 focus:outline-none"
+              style={{ fontSize: "1.75rem", fontWeight: 800, letterSpacing: "0.06em" }}
+            />
+          </div>
+          {/* Suggestion chips */}
+          <div className="flex flex-wrap gap-2 mt-3">
+            {[...new Set(vouchers.map((v) => v.stars))].map((amt) => (
+              <button key={amt} onClick={() => setStarInput(String(amt))}
+                className={`flex items-center gap-1 px-3 py-1 rounded-full border font-semibold transition-all duration-150 ${starInput === String(amt) ? "bg-[#DCEFD2] border-[#3FA62E] text-[#002a38]" : "bg-gray-50 border-gray-200 text-gray-500 hover:border-[#3FA62E] hover:text-[#002a38]"}`}
+                style={{ fontSize: "0.8125rem" }}
+              >
+                <Star className={`w-3 h-3 ${starInput === String(amt) ? "text-[#3FA62E] fill-[#3FA62E]" : "text-gray-400"}`} />
+                {amt}
+              </button>
+            ))}
           </div>
         </div>
 
