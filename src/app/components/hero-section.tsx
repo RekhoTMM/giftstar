@@ -102,11 +102,31 @@ export function HeroSection({ onRegister: _onRegister }: HeroSectionProps) {
           paddingBottom: "var(--space-hero-pb)",
         }}
       >
+        {/* Headline */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+          className="text-center mb-6"
+        >
+          <h1
+            className="text-[#002a38]"
+            style={{ fontSize: "clamp(1.375rem, 3vw, 1.875rem)", fontWeight: 800, lineHeight: 1.3, letterSpacing: "-0.02em" }}
+          >
+            {t("hero.guest.headline1")}{" "}
+            <span className="relative inline-block px-1.5">
+              <span className="absolute bg-[#B0E89F] rounded-md -skew-x-2" style={{ top: "15%", bottom: "3%", left: "-1%", right: "-1%" }} />
+              <span className="relative">{t("hero.guest.headline2")}</span>
+            </span>{" "}
+            {t("hero.guest.headline3")}
+          </h1>
+        </motion.div>
+
         {/* Tab bar */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
           className="flex justify-center mb-5"
         >
           <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-gray-100">
@@ -144,6 +164,7 @@ function ExchangePanel() {
   const { isAuthenticated, user, purchaseVoucher } = useAuth();
   const { t } = useLanguage();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [starInput, setStarInput] = useState(String(vouchers[0].stars));
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
@@ -153,6 +174,10 @@ function ExchangePanel() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selected = vouchers[selectedIndex];
+  const typedAmount = parseInt(starInput, 10);
+  const matchedVoucher = !isNaN(typedAmount)
+    ? vouchers.find((v) => v.stars === typedAmount) ?? null
+    : null;
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -166,6 +191,14 @@ function ExchangePanel() {
     return () => document.removeEventListener("mousedown", handler);
   }, [dropdownOpen]);
 
+  const handleSelectVoucher = (index: number) => {
+    setSelectedIndex(index);
+    setStarInput(String(vouchers[index].stars));
+    setDropdownOpen(false);
+  };
+
+  const exchangeVoucher = matchedVoucher ?? selected;
+
   const handleExchange = () => {
     if (!isAuthenticated) {
       setAuthMode("register");
@@ -174,9 +207,9 @@ function ExchangePanel() {
     }
     setConfirmModal({
       isOpen: true,
-      voucherId: selected.id,
-      name: t(`vouchers.cards.${selected.translationKey}.name`),
-      stars: selected.stars,
+      voucherId: exchangeVoucher.id,
+      name: t(`vouchers.cards.${exchangeVoucher.translationKey}.name`),
+      stars: exchangeVoucher.stars,
     });
   };
 
@@ -191,8 +224,8 @@ function ExchangePanel() {
           isOpen: true,
           name,
           code: result.voucherCode!,
-          image: selected.image,
-          expiry: t(`vouchers.cards.${selected.translationKey}.expiry`),
+          image: exchangeVoucher.image,
+          expiry: t(`vouchers.cards.${exchangeVoucher.translationKey}.expiry`),
         });
       } else {
         toast.error(result.message);
@@ -219,8 +252,8 @@ function ExchangePanel() {
           >
             {t("hero.swap.sell")}
           </p>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 shrink-0">
               <div className="w-10 h-10 rounded-full bg-[#DCEFD2] flex items-center justify-center shrink-0">
                 <Star className="w-5 h-5 text-[#3FA62E] fill-[#3FA62E]" />
               </div>
@@ -235,9 +268,20 @@ function ExchangePanel() {
                 )}
               </div>
             </div>
-            <span className="text-[#002a38]" style={{ fontSize: "2.25rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
-              {selected.stars}
-            </span>
+            <input
+              type="number"
+              min="1"
+              value={starInput}
+              onChange={(e) => {
+                setStarInput(e.target.value);
+                const val = parseInt(e.target.value, 10);
+                const idx = !isNaN(val) ? vouchers.findIndex((v) => v.stars === val) : -1;
+                if (idx !== -1) setSelectedIndex(idx);
+              }}
+              placeholder="0"
+              className="text-right bg-transparent text-[#002a38] placeholder:text-gray-200 focus:outline-none w-24"
+              style={{ fontSize: "2.25rem", fontWeight: 800, letterSpacing: "-0.02em" }}
+            />
           </div>
         </div>
 
@@ -266,13 +310,13 @@ function ExchangePanel() {
               >
                 <div className="w-10 h-10 rounded-xl overflow-hidden bg-gray-100 shrink-0">
                   <ImageWithFallback
-                    src={selected.image}
-                    alt={t(`vouchers.cards.${selected.translationKey}.name`)}
+                    src={exchangeVoucher.image}
+                    alt={t(`vouchers.cards.${exchangeVoucher.translationKey}.name`)}
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <span className="text-[#002a38]" style={{ fontWeight: 700, fontSize: "1rem" }}>
-                  {t(`vouchers.cards.${selected.translationKey}.name`)}
+                  {t(`vouchers.cards.${exchangeVoucher.translationKey}.name`)}
                 </span>
                 <ChevronDown
                   className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
@@ -292,9 +336,9 @@ function ExchangePanel() {
                     {vouchers.map((v, i) => (
                       <button
                         key={v.id}
-                        onClick={() => { setSelectedIndex(i); setDropdownOpen(false); }}
+                        onClick={() => handleSelectVoucher(i)}
                         className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors ${
-                          i === selectedIndex ? "bg-[#f0f5ff]" : ""
+                          exchangeVoucher.id === v.id ? "bg-[#f0f5ff]" : ""
                         }`}
                       >
                         <div className="w-8 h-8 rounded-lg overflow-hidden bg-gray-100 shrink-0">
@@ -312,7 +356,7 @@ function ExchangePanel() {
                             {v.stars}
                           </span>
                         </div>
-                        {i === selectedIndex && (
+                        {exchangeVoucher.id === v.id && (
                           <Check className="w-3.5 h-3.5 text-[#0068ff] ml-1 shrink-0" />
                         )}
                       </button>
@@ -326,10 +370,25 @@ function ExchangePanel() {
             <div className="flex items-center gap-1 shrink-0 bg-[#e6f0ff] rounded-full px-3 py-1">
               <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
               <span className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 800 }}>
-                {selected.stars}
+                {exchangeVoucher.stars}
               </span>
             </div>
           </div>
+
+          {/* No-match hint */}
+          <AnimatePresence>
+            {starInput && !isNaN(typedAmount) && !matchedVoucher && (
+              <motion.p
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="mt-2 text-amber-500"
+                style={{ fontSize: "0.75rem" }}
+              >
+                No voucher costs {typedAmount} ★ — available: {[...new Set(vouchers.map((v) => v.stars))].join(", ")}
+              </motion.p>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Rate row */}
@@ -341,7 +400,7 @@ function ExchangePanel() {
             <span>1 voucher =</span>
             <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
             <span className="text-[#002a38]" style={{ fontWeight: 700 }}>
-              {selected.stars}
+              {exchangeVoucher.stars}
             </span>
           </div>
         </div>
@@ -350,7 +409,7 @@ function ExchangePanel() {
         <div className="px-5 pb-5">
           <button
             onClick={handleExchange}
-            disabled={isPurchasing}
+            disabled={isPurchasing || (!matchedVoucher && starInput !== "" && !isNaN(typedAmount))}
             className="w-full py-4 bg-[#002a38] text-white rounded-2xl hover:bg-[#003a50] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
             style={{ fontWeight: 600, fontSize: "0.9375rem" }}
           >
