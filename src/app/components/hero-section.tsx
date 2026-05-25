@@ -139,27 +139,29 @@ function VoucherPickerModal({ isOpen, onClose, selectedIndex, onSelect }: Vouche
                 return (
                   <button key={v.id} onClick={() => { onSelect(i); onClose(); }} className="group text-left">
                     <div
-                      className={`relative bg-white rounded-xl overflow-hidden flex flex-col h-full transition-all duration-200 ${isSel ? "shadow-md shadow-[#0068ff]/20" : "hover:shadow-sm hover:-translate-y-0.5"}`}
-                      style={{ border: `1.5px solid ${isSel ? "#0068ff" : "#e5e7eb"}` }}
+                      className={`rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-200 p-[1px] ${isSel ? "shadow-md shadow-[#0068ff]/20" : "hover:shadow-sm hover:-translate-y-0.5"}`}
+                      style={{ background: isSel ? "#0068ff" : "#e5e7eb" }}
                     >
-                      <div className="relative overflow-hidden bg-gray-50 aspect-[5/3]">
-                        <ImageWithFallback src={v.image} alt={t(`vouchers.cards.${v.translationKey}.name`)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        {isSel && (
-                          <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[#0068ff] flex items-center justify-center shadow-md">
-                            <Check className="w-3 h-3 text-white" />
-                          </div>
-                        )}
-                      </div>
-                      <div className="p-2 flex flex-col flex-1">
-                        <div className="flex items-center gap-1 mb-1">
-                          <Clock className="w-2.5 h-2.5 text-gray-300 shrink-0" />
-                          <span className="text-gray-400" style={{ fontSize: "0.5625rem", fontWeight: 500 }}>{t(`vouchers.cards.${v.translationKey}.expiry`)}</span>
+                      <div className="relative bg-white rounded-[calc(1rem-1px)] overflow-hidden flex flex-col h-full">
+                        <div className="relative overflow-hidden bg-gray-50 aspect-[5/3]">
+                          <ImageWithFallback src={v.image} alt={t(`vouchers.cards.${v.translationKey}.name`)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                          {isSel && (
+                            <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[#0068ff] flex items-center justify-center shadow-md">
+                              <Check className="w-3 h-3 text-white" />
+                            </div>
+                          )}
                         </div>
-                        <h4 className="text-[#002a38] mb-0.5" style={{ fontSize: "0.75rem", fontWeight: 700 }}>{t(`vouchers.cards.${v.translationKey}.name`)}</h4>
-                        <p className="text-gray-400 mb-2" style={{ fontSize: "0.625rem", lineHeight: 1.4 }}>{t(`vouchers.cards.${v.translationKey}.desc`)}</p>
-                        <div className="flex items-center gap-1 mt-auto">
-                          <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
-                          <span className="text-[#002a38]" style={{ fontSize: "0.75rem", fontWeight: 700 }}>{v.stars}</span>
+                        <div className="p-3.5 flex flex-col flex-1">
+                          <div className="flex items-center gap-1 mb-1">
+                            <Clock className="w-2.5 h-2.5 text-gray-300 shrink-0" />
+                            <span className="text-gray-400" style={{ fontSize: "0.5625rem", fontWeight: 500 }}>{t(`vouchers.cards.${v.translationKey}.expiry`)}</span>
+                          </div>
+                          <h4 className="text-[#002a38] mb-0.5" style={{ fontSize: "0.75rem", fontWeight: 700 }}>{t(`vouchers.cards.${v.translationKey}.name`)}</h4>
+                          <p className="text-gray-400 mb-2" style={{ fontSize: "0.625rem", lineHeight: 1.4 }}>{t(`vouchers.cards.${v.translationKey}.desc`)}</p>
+                          <div className="flex items-center gap-1 mt-auto">
+                            <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
+                            <span className="text-[#002a38]" style={{ fontSize: "0.75rem", fontWeight: 700 }}>{v.stars}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
