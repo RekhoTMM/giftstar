@@ -62,7 +62,7 @@ export function HeroSection({ onRegister: _onRegister }: HeroSectionProps) {
       >
         {/* Headline */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.05 }} className="text-center mb-6">
-          <h1 className="text-[#002a38]" style={{ fontSize: "clamp(1.375rem, 3vw, 1.875rem)", fontWeight: 800, lineHeight: 1.3, letterSpacing: "-0.02em" }}>
+          <h1 className="text-[#002a38]" style={{ fontSize: "clamp(2.25rem, 4vw, 3rem)", fontWeight: 800, lineHeight: 1.3, letterSpacing: "-0.02em" }}>
             {t("hero.guest.headline1")}{" "}
             <span className="relative inline-block px-1.5">
               <span className="absolute bg-[#B0E89F] rounded-md -skew-x-2" style={{ top: "15%", bottom: "3%", left: "-1%", right: "-1%" }} />
@@ -368,7 +368,7 @@ function VariantAPanel() {
               <span className="text-[#002a38] truncate" style={{ fontWeight: 700, fontSize: "1rem" }}>{t(`vouchers.cards.${selected.translationKey}.name`)}</span>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <div className="flex items-center gap-1 bg-[#e6f0ff] rounded-full px-3 py-1">
+              <div className="flex items-center gap-1 bg-[#DCEFD2] rounded-full px-3 py-1">
                 <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
                 <span className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 800 }}>{selected.stars}</span>
               </div>
@@ -570,7 +570,7 @@ function VariantBPanel() {
               <span className="text-[#002a38] truncate" style={{ fontWeight: 700, fontSize: "1rem" }}>{t(`vouchers.cards.${selected.translationKey}.name`)}</span>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <div className="flex items-center gap-1 bg-[#e6f0ff] rounded-full px-3 py-1">
+              <div className="flex items-center gap-1 bg-[#DCEFD2] rounded-full px-3 py-1">
                 <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
                 <span className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 800 }}>{selected.stars}</span>
               </div>
