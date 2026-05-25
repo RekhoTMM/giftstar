@@ -9,8 +9,8 @@
         "exchange": "Exchange",
         "redeem": "Redeem"
       },
-      "sell": "SELL",
-      "buy": "BUY",
+      "sell": "STARS",
+      "buy": "VOUCHER",
       "starsLabel": "Stars",
       "balance": "Balance",
       "rate": "Rate",

@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import { Star, ArrowUpDown, ArrowRight, ChevronDown, Check, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Star, ArrowUpDown, ArrowRight, ChevronDown, Check, Sparkles, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useAuth } from "./auth-context";
@@ -162,42 +162,36 @@ export function HeroSection({ onRegister: _onRegister }: HeroSectionProps) {
 /* ─── Exchange Panel: Stars → Voucher ─── */
 function ExchangePanel() {
   const { isAuthenticated, user, purchaseVoucher } = useAuth();
-  const { t } = useLanguage();
+  const { t, tArray: _tArray } = useLanguage();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [starInput, setStarInput] = useState("");
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("register");
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, voucherId: "", name: "", stars: 0 });
   const [successModal, setSuccessModal] = useState({ isOpen: false, name: "", code: "", image: "", expiry: "" });
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selected = vouchers[selectedIndex];
   const typedAmount = parseInt(starInput, 10);
-  const matchedVoucher = !isNaN(typedAmount)
-    ? vouchers.find((v) => v.stars === typedAmount) ?? null
-    : null;
+  const amountMatches = !isNaN(typedAmount) && typedAmount === selected.stars;
 
-  // Close dropdown on outside click
+  // Lock page scroll when picker is open
   useEffect(() => {
-    if (!dropdownOpen) return;
-    const handler = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [dropdownOpen]);
+    if (pickerOpen) {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.documentElement.style.overflow = "";
+        document.body.style.overflow = "";
+      };
+    }
+  }, [pickerOpen]);
 
   const handleSelectVoucher = (index: number) => {
     setSelectedIndex(index);
-    setStarInput(String(vouchers[index].stars));
-    setDropdownOpen(false);
+    setPickerOpen(false);
   };
-
-  const exchangeVoucher = matchedVoucher ?? selected;
 
   const handleExchange = () => {
     if (!isAuthenticated) {
@@ -207,9 +201,9 @@ function ExchangePanel() {
     }
     setConfirmModal({
       isOpen: true,
-      voucherId: exchangeVoucher.id,
-      name: t(`vouchers.cards.${exchangeVoucher.translationKey}.name`),
-      stars: exchangeVoucher.stars,
+      voucherId: selected.id,
+      name: t(`vouchers.cards.${selected.translationKey}.name`),
+      stars: selected.stars,
     });
   };
 
@@ -224,8 +218,8 @@ function ExchangePanel() {
           isOpen: true,
           name,
           code: result.voucherCode!,
-          image: exchangeVoucher.image,
-          expiry: t(`vouchers.cards.${exchangeVoucher.translationKey}.expiry`),
+          image: selected.image,
+          expiry: t(`vouchers.cards.${selected.translationKey}.expiry`),
         });
       } else {
         toast.error(result.message);
@@ -269,12 +263,7 @@ function ExchangePanel() {
               type="number"
               min="1"
               value={starInput}
-              onChange={(e) => {
-                setStarInput(e.target.value);
-                const val = parseInt(e.target.value, 10);
-                const idx = !isNaN(val) ? vouchers.findIndex((v) => v.stars === val) : -1;
-                if (idx !== -1) setSelectedIndex(idx);
-              }}
+              onChange={(e) => setStarInput(e.target.value)}
               placeholder="e.g. 15, 20, 25"
               className="flex-1 bg-transparent text-[#002a38] placeholder:text-gray-300 focus:outline-none"
               style={{ fontSize: "1.75rem", fontWeight: 800, letterSpacing: "0.06em" }}
@@ -285,11 +274,7 @@ function ExchangePanel() {
             {[...new Set(vouchers.map((v) => v.stars))].map((amt) => (
               <button
                 key={amt}
-                onClick={() => {
-                  setStarInput(String(amt));
-                  const idx = vouchers.findIndex((v) => v.stars === amt);
-                  if (idx !== -1) setSelectedIndex(idx);
-                }}
+                onClick={() => setStarInput(String(amt))}
                 className={`flex items-center gap-1 px-3 py-1 rounded-full border text-sm font-semibold transition-all duration-150 ${
                   starInput === String(amt)
                     ? "bg-[#DCEFD2] border-[#3FA62E] text-[#002a38]"
@@ -313,122 +298,61 @@ function ExchangePanel() {
         </div>
 
         {/* BUY card */}
-        <div className="p-5 pt-6">
+        <div className="p-5 pt-6 pb-5">
           <p
             className="text-gray-400 mb-3"
             style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}
           >
             {t("hero.swap.buy")}
           </p>
-          <div className="flex items-center justify-between gap-3">
-            {/* Voucher dropdown */}
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setDropdownOpen((o) => !o)}
-                className="flex items-center gap-2.5 hover:bg-gray-50 rounded-xl px-2 py-1.5 -mx-2 -my-1.5 transition-colors"
-              >
-                <div className="w-10 h-10 rounded-xl overflow-hidden bg-gray-100 shrink-0">
-                  <ImageWithFallback
-                    src={exchangeVoucher.image}
-                    alt={t(`vouchers.cards.${exchangeVoucher.translationKey}.name`)}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <span className="text-[#002a38]" style={{ fontWeight: 700, fontSize: "1rem" }}>
-                  {t(`vouchers.cards.${exchangeVoucher.translationKey}.name`)}
-                </span>
-                <ChevronDown
-                  className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
+          <button
+            onClick={() => setPickerOpen(true)}
+            className="w-full flex items-center justify-between gap-3 hover:bg-gray-50 rounded-xl px-2 py-1.5 -mx-2 transition-colors"
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl overflow-hidden bg-gray-100 shrink-0">
+                <ImageWithFallback
+                  src={selected.image}
+                  alt={t(`vouchers.cards.${selected.translationKey}.name`)}
+                  className="w-full h-full object-cover"
                 />
-              </button>
-
-              <AnimatePresence>
-                {dropdownOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -6, scale: 0.97 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -6, scale: 0.97 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute top-full left-0 mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden"
-                    style={{ minWidth: "220px" }}
-                  >
-                    {vouchers.map((v, i) => (
-                      <button
-                        key={v.id}
-                        onClick={() => handleSelectVoucher(i)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors ${
-                          exchangeVoucher.id === v.id ? "bg-[#f0f5ff]" : ""
-                        }`}
-                      >
-                        <div className="w-8 h-8 rounded-lg overflow-hidden bg-gray-100 shrink-0">
-                          <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
-                        </div>
-                        <span
-                          className="text-[#002a38] flex-1 text-left"
-                          style={{ fontSize: "0.875rem", fontWeight: 600 }}
-                        >
-                          {t(`vouchers.cards.${v.translationKey}.name`)}
-                        </span>
-                        <div className="flex items-center gap-0.5 shrink-0">
-                          <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
-                          <span className="text-[#002a38]" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
-                            {v.stars}
-                          </span>
-                        </div>
-                        {exchangeVoucher.id === v.id && (
-                          <Check className="w-3.5 h-3.5 text-[#0068ff] ml-1 shrink-0" />
-                        )}
-                      </button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Voucher cost badge */}
-            <div className="flex items-center gap-1 shrink-0 bg-[#e6f0ff] rounded-full px-3 py-1">
-              <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
-              <span className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 800 }}>
-                {exchangeVoucher.stars}
+              </div>
+              <span className="text-[#002a38] truncate" style={{ fontWeight: 700, fontSize: "1rem" }}>
+                {t(`vouchers.cards.${selected.translationKey}.name`)}
               </span>
             </div>
-          </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-1 bg-[#e6f0ff] rounded-full px-3 py-1">
+                <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
+                <span className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 800 }}>
+                  {selected.stars}
+                </span>
+              </div>
+              <ChevronDown className="w-4 h-4 text-gray-400" />
+            </div>
+          </button>
 
-          {/* No-match hint */}
+          {/* Mismatch hint */}
           <AnimatePresence>
-            {starInput && !isNaN(typedAmount) && !matchedVoucher && (
+            {starInput && !isNaN(typedAmount) && !amountMatches && (
               <motion.p
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="mt-2 text-amber-500"
+                className="mt-3 text-amber-500"
                 style={{ fontSize: "0.75rem" }}
               >
-                No voucher costs {typedAmount} ★ — available: {[...new Set(vouchers.map((v) => v.stars))].join(", ")}
+                This voucher costs {selected.stars} ★, you entered {typedAmount}.
               </motion.p>
             )}
           </AnimatePresence>
-        </div>
-
-        {/* Rate row */}
-        <div className="mx-5 mb-4 pt-3 border-t border-gray-50 flex items-center justify-between">
-          <span className="text-gray-400" style={{ fontSize: "0.8125rem" }}>
-            {t("hero.swap.rate")}
-          </span>
-          <div className="flex items-center gap-1 text-gray-500" style={{ fontSize: "0.8125rem" }}>
-            <span>1 voucher =</span>
-            <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
-            <span className="text-[#002a38]" style={{ fontWeight: 700 }}>
-              {exchangeVoucher.stars}
-            </span>
-          </div>
         </div>
 
         {/* Exchange button */}
         <div className="px-5 pb-5">
           <button
             onClick={handleExchange}
-            disabled={isPurchasing || !starInput || !matchedVoucher}
+            disabled={isPurchasing || !starInput || !amountMatches}
             className="w-full py-4 bg-[#002a38] text-white rounded-2xl hover:bg-[#003a50] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
             style={{ fontWeight: 600, fontSize: "0.9375rem" }}
           >
@@ -440,6 +364,105 @@ function ExchangePanel() {
           </button>
         </div>
       </motion.div>
+
+      {/* Voucher picker modal */}
+      <AnimatePresence>
+        {pickerOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center"
+            onClick={() => setPickerOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "100%", opacity: 0 }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="relative w-full sm:max-w-2xl bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[90dvh] overflow-y-auto pb-[env(safe-area-inset-bottom)]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-xl border-b border-gray-100 px-5 py-4 flex items-center justify-between rounded-t-3xl">
+                <div className="sm:hidden absolute top-2 left-1/2 -translate-x-1/2 w-10 h-1 bg-gray-200 rounded-full" />
+                <h3 className="text-[#002a38]" style={{ fontSize: "1.0625rem", fontWeight: 700 }}>
+                  {t("hero.swap.buy")}
+                </h3>
+                <button
+                  onClick={() => setPickerOpen(false)}
+                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                >
+                  <X className="w-4 h-4 text-gray-500" />
+                </button>
+              </div>
+
+              {/* Card grid */}
+              <div className="p-5 flex flex-wrap gap-3 justify-center">
+                {vouchers.map((v, i) => {
+                  const isSelected = selectedIndex === i;
+                  return (
+                    <button
+                      key={v.id}
+                      onClick={() => handleSelectVoucher(i)}
+                      className="group text-left"
+                      style={{ width: "calc(50% - 0.375rem)", maxWidth: "200px" }}
+                    >
+                      <div
+                        className={`rounded-2xl overflow-hidden transition-all duration-200 p-[1.5px] ${
+                          isSelected
+                            ? "shadow-lg shadow-[#0068ff]/20"
+                            : "hover:shadow-md hover:shadow-[#0068ff]/10 hover:-translate-y-0.5"
+                        }`}
+                        style={{
+                          background: isSelected
+                            ? "linear-gradient(to bottom, #0068ff, #0068ff)"
+                            : "linear-gradient(to bottom, #e5e7eb, #e5e7eb 50%, #0068ff 100%)",
+                        }}
+                      >
+                        <div className="relative bg-white rounded-[calc(1rem-1.5px)] overflow-hidden flex flex-col h-full">
+                          <div className="relative overflow-hidden bg-gray-50 aspect-[5/3]">
+                            <ImageWithFallback
+                              src={v.image}
+                              alt={t(`vouchers.cards.${v.translationKey}.name`)}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                            {isSelected && (
+                              <div className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[#0068ff] flex items-center justify-center shadow-md">
+                                <Check className="w-4 h-4 text-white" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="p-3 flex flex-col flex-1">
+                            <h4
+                              className="text-[#002a38] mb-2"
+                              style={{ fontSize: "0.875rem", fontWeight: 700 }}
+                            >
+                              {t(`vouchers.cards.${v.translationKey}.name`)}
+                            </h4>
+                            <div className="flex items-center gap-1 mt-auto">
+                              <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
+                              <span className="text-[#002a38]" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
+                                {v.stars}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <PurchaseConfirmationModal
         isOpen={confirmModal.isOpen}
