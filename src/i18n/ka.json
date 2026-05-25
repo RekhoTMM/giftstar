@@ -17,7 +17,9 @@
       "exchangeBtn": "გადაცვლა",
       "redeemInput": "პრომო კოდი",
       "redeemOutput": "ვარსკვლავები",
-      "redeemBtn": "გამოსყიდვა"
+      "redeemBtn": "გამოსყიდვა",
+      "promoSuccessLabel": "ვარსკვლავი დაემატა!",
+      "promoBalanceUpdated": "ბალანსი განახლდა"
     },
     "guest": {
       "headline1": "გადაცვალე",

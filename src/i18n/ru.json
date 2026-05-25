@@ -17,7 +17,9 @@
       "exchangeBtn": "Обменять",
       "redeemInput": "ПРОМО КОД",
       "redeemOutput": "ЗВЁЗДЫ",
-      "redeemBtn": "Погасить"
+      "redeemBtn": "Погасить",
+      "promoSuccessLabel": "звёзд добавлено!",
+      "promoBalanceUpdated": "Баланс обновлён"
     },
     "guest": {
       "headline1": "Обменяй",

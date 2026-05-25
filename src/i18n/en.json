@@ -17,7 +17,9 @@
       "exchangeBtn": "Exchange",
       "redeemInput": "PROMO CODE",
       "redeemOutput": "STARS",
-      "redeemBtn": "Redeem"
+      "redeemBtn": "Redeem",
+      "promoSuccessLabel": "stars added!",
+      "promoBalanceUpdated": "Balance updated"
     },
     "guest": {
       "headline1": "Exchange",

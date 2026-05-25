@@ -271,8 +271,8 @@ function VariantAPanel() {
                     <Check className="w-5 h-5 text-green-500" />
                   </div>
                   <div>
-                    <p className="text-green-700" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>+{promoSuccess} stars added!</p>
-                    <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>Balance updated</p>
+                    <p className="text-green-700" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>+{promoSuccess} {t("hero.swap.promoSuccessLabel")}</p>
+                    <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>{t("hero.swap.promoBalanceUpdated")}</p>
                   </div>
                 </motion.div>
               ) : promoOpen ? (
@@ -312,7 +312,7 @@ function VariantAPanel() {
                     </div>
                     <div className="text-left">
                       <p className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 600 }}>გაქვს პრომო კოდი?</p>
-                      <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>მიიღე ვარსკვლავები</p>
+                      <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>გამოიყენე და მიიღე ვარსკვლავები</p>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-[#0068ff] transition-colors" />
