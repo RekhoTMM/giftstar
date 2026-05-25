@@ -403,8 +403,8 @@ function ExchangePanel() {
                 </button>
               </div>
 
-              {/* Card grid — fixed height shows 2 rows (4 cards) + peek of 5th */}
-              <div className="p-3 grid grid-cols-2 gap-2 overflow-y-auto pb-[env(safe-area-inset-bottom)]" style={{ maxHeight: "26rem" }}>
+              {/* Card grid — shows 2 full rows (4 cards) + peek of 5th */}
+              <div className="p-3 grid grid-cols-2 gap-2 overflow-y-auto pb-[env(safe-area-inset-bottom)] max-h-[29rem] sm:max-h-[38rem]">
                 {vouchers.map((v, i) => {
                   const isSelected = selectedIndex === i;
                   return (
