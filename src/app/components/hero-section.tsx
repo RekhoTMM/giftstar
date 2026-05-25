@@ -283,6 +283,55 @@ function VariantAPanel() {
       >
         {/* SELL */}
         <div className="p-5 pb-4">
+          {/* Promo code boost — top of SELL */}
+          <div className="mb-3">
+            <AnimatePresence mode="wait">
+              {promoSuccess !== null ? (
+                <motion.div key="success" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                  className="flex items-center gap-2 px-3 py-2 bg-[#f0fdf4] rounded-xl border border-[#86efac]">
+                  <Check className="w-4 h-4 text-green-500 shrink-0" />
+                  <span className="text-green-700" style={{ fontSize: "0.8125rem", fontWeight: 600 }}>+{promoSuccess} stars added!</span>
+                </motion.div>
+              ) : promoOpen ? (
+                <motion.div key="open" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-gray-400" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>
+                      შეიყვანეთ პრომო კოდი
+                    </p>
+                    <button onClick={() => { setPromoOpen(false); setPromoInput(""); setPromoError(""); }}
+                      className="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors shrink-0">
+                      <X className="w-3 h-3 text-gray-400" />
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text" value={promoInput}
+                      onChange={(e) => { setPromoInput(e.target.value.toUpperCase()); setPromoError(""); }}
+                      placeholder={t("hero.auth.promoPlaceholder")} autoFocus
+                      onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
+                      className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors"
+                      style={{ fontSize: "0.875rem", fontWeight: 600, letterSpacing: "0.05em" }}
+                    />
+                    <button onClick={handleApplyPromo} disabled={isRedeeming || !promoInput.trim()}
+                      className="px-4 py-2 bg-[#002a38] text-white rounded-xl hover:bg-[#003a50] disabled:opacity-50 transition-colors shrink-0"
+                      style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
+                      {isRedeeming ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "გამოყენება"}
+                    </button>
+                  </div>
+                  {promoError && <p className="mt-1.5 text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>}
+                </motion.div>
+              ) : (
+                <motion.button key="closed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  onClick={() => setPromoOpen(true)}
+                  className="flex items-center gap-1.5 text-[#0068ff] hover:text-[#0050cc] transition-colors"
+                  style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
+                  <Plus className="w-3.5 h-3.5" />
+                  + პრომო კოდის გამოყენება
+                </motion.button>
+              )}
+            </AnimatePresence>
+          </div>
+
           <div className="flex items-center justify-between mb-3">
             <p className="text-gray-400" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>{t("hero.swap.sell")}</p>
             {isAuthenticated && user && (
@@ -313,50 +362,6 @@ function VariantAPanel() {
                 {amt}
               </button>
             ))}
-          </div>
-
-          {/* Inline promo code boost */}
-          <div className="mt-3 border-t border-gray-50 pt-3">
-            <AnimatePresence mode="wait">
-              {promoSuccess !== null ? (
-                <motion.div key="success" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                  className="flex items-center gap-2 px-3 py-2 bg-[#f0fdf4] rounded-xl border border-[#86efac]">
-                  <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span className="text-green-700" style={{ fontSize: "0.8125rem", fontWeight: 600 }}>+{promoSuccess} stars added!</span>
-                </motion.div>
-              ) : promoOpen ? (
-                <motion.div key="open" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-                  <div className="flex gap-2">
-                    <input
-                      type="text" value={promoInput}
-                      onChange={(e) => { setPromoInput(e.target.value.toUpperCase()); setPromoError(""); }}
-                      placeholder={t("hero.auth.promoPlaceholder")} autoFocus
-                      onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
-                      className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors"
-                      style={{ fontSize: "0.875rem", fontWeight: 600, letterSpacing: "0.05em" }}
-                    />
-                    <button onClick={handleApplyPromo} disabled={isRedeeming || !promoInput.trim()}
-                      className="px-4 py-2 bg-[#002a38] text-white rounded-xl hover:bg-[#003a50] disabled:opacity-50 transition-colors shrink-0"
-                      style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
-                      {isRedeeming ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : t("hero.swap.redeemBtn")}
-                    </button>
-                    <button onClick={() => { setPromoOpen(false); setPromoInput(""); setPromoError(""); }}
-                      className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors shrink-0">
-                      <X className="w-4 h-4 text-gray-400" />
-                    </button>
-                  </div>
-                  {promoError && <p className="mt-1.5 text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>}
-                </motion.div>
-              ) : (
-                <motion.button key="closed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  onClick={() => setPromoOpen(true)}
-                  className="flex items-center gap-1.5 text-[#0068ff] hover:text-[#0050cc] transition-colors"
-                  style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
-                  <Plus className="w-3.5 h-3.5" />
-                  Enter promo code
-                </motion.button>
-              )}
-            </AnimatePresence>
           </div>
         </div>
 
@@ -418,6 +423,7 @@ function VariantBPanel() {
   const { isAuthenticated, redeemPromoCode } = useAuth();
   const { t } = useLanguage();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [starInput, setStarInput] = useState("");
   const [pickerOpen, setPickerOpen] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("register");
@@ -431,8 +437,8 @@ function VariantBPanel() {
   const { isPurchasing, confirmModal, setConfirmModal, successModal, setSuccessModal, openConfirm, handleConfirm, user } = usePurchaseFlow(selectedIndex);
 
   const selected = vouchers[selectedIndex];
-  const stars = user?.stars ?? 0;
-  const canAfford = isAuthenticated && stars >= selected.stars;
+  const typedAmount = parseInt(starInput, 10);
+  const amountMatches = !isNaN(typedAmount) && typedAmount === selected.stars;
 
   const handleApplyPromo = () => {
     if (!promoInput.trim()) return;
@@ -527,24 +533,38 @@ function VariantBPanel() {
           </div>
         </div>
 
-        {/* Card 2: Stars balance */}
+        {/* Card 2: Stars input */}
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
-          <p className="text-gray-400 mb-3" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>{t("hero.swap.sell")}</p>
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-gray-400" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>{t("hero.swap.sell")}</p>
+            {isAuthenticated && user && (
+              <p className="text-gray-400 flex items-center gap-1" style={{ fontSize: "0.6875rem", fontWeight: 600 }}>
+                {t("hero.swap.balance")}: <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" /> <span className="text-[#002a38]">{user.stars}</span>
+              </p>
+            )}
+          </div>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#DCEFD2] flex items-center justify-center shrink-0">
               <Star className="w-5 h-5 text-[#3FA62E] fill-[#3FA62E]" />
             </div>
-            <div>
-              <AnimatePresence mode="wait">
-                <motion.span key={stars} initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 6 }}
-                  className="text-[#002a38] block" style={{ fontSize: "2rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
-                  {isAuthenticated ? stars : "–"}
-                </motion.span>
-              </AnimatePresence>
-              <span className="text-gray-400" style={{ fontSize: "0.75rem" }}>
-                {isAuthenticated ? t("hero.swap.balance") : "Login to see your balance"}
-              </span>
-            </div>
+            <input
+              type="number" min="1" value={starInput} onChange={(e) => setStarInput(e.target.value)}
+              placeholder="e.g. 15, 20, 25"
+              className="flex-1 bg-transparent text-[#002a38] placeholder:text-gray-300 focus:outline-none"
+              style={{ fontSize: "1.75rem", fontWeight: 800, letterSpacing: "0.06em" }}
+            />
+          </div>
+          {/* Suggestion chips */}
+          <div className="flex flex-wrap gap-2 mt-3">
+            {[...new Set(vouchers.map((v) => v.stars))].map((amt) => (
+              <button key={amt} onClick={() => setStarInput(String(amt))}
+                className={`flex items-center gap-1 px-3 py-1 rounded-full border font-semibold transition-all duration-150 ${starInput === String(amt) ? "bg-[#DCEFD2] border-[#3FA62E] text-[#002a38]" : "bg-gray-50 border-gray-200 text-gray-500 hover:border-[#3FA62E] hover:text-[#002a38]"}`}
+                style={{ fontSize: "0.8125rem" }}
+              >
+                <Star className={`w-3 h-3 ${starInput === String(amt) ? "text-[#3FA62E] fill-[#3FA62E]" : "text-gray-400"}`} />
+                {amt}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -574,9 +594,9 @@ function VariantBPanel() {
             </div>
           </button>
           <AnimatePresence>
-            {isAuthenticated && !canAfford && (
+            {starInput && !isNaN(typedAmount) && !amountMatches && (
               <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-3 text-amber-500" style={{ fontSize: "0.75rem" }}>
-                Need {selected.stars - stars} more ★ for this voucher
+                This voucher costs {selected.stars} ★, you entered {typedAmount}.
               </motion.p>
             )}
           </AnimatePresence>
@@ -584,7 +604,7 @@ function VariantBPanel() {
 
         {/* Exchange button */}
         <div className="mt-3">
-          <button onClick={handleExchange} disabled={isPurchasing || (isAuthenticated && !canAfford)}
+          <button onClick={handleExchange} disabled={isPurchasing || !starInput || !amountMatches}
             className="w-full py-4 bg-[#002a38] text-white rounded-2xl hover:bg-[#003a50] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
             style={{ fontWeight: 600, fontSize: "0.9375rem" }}>
             {isPurchasing ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : t("hero.swap.exchangeBtn")}
