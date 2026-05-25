@@ -372,7 +372,7 @@ function ExchangePanel() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center"
+            className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center"
             onClick={() => setPickerOpen(false)}
           >
             <motion.div
@@ -386,25 +386,24 @@ function ExchangePanel() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: "100%", opacity: 0 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="relative w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl"
+              className="relative w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Header */}
-              <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-xl border-b border-gray-100 px-4 py-3 flex items-center justify-between rounded-t-3xl">
-                <div className="sm:hidden absolute top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-gray-200 rounded-full" />
-                <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>
-                  აირჩიე სასურველი ვაუჩერი
-                </h3>
-                <button
-                  onClick={() => setPickerOpen(false)}
-                  className="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-                >
-                  <X className="w-3.5 h-3.5 text-gray-500" />
-                </button>
+              {/* Drag handle (mobile only) */}
+              <div className="sm:hidden flex justify-center pt-3 pb-1">
+                <div className="w-8 h-1 bg-gray-200 rounded-full" />
               </div>
 
+              {/* Close button — floating top-right */}
+              <button
+                onClick={() => setPickerOpen(false)}
+                className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+              >
+                <X className="w-3.5 h-3.5 text-gray-500" />
+              </button>
+
               {/* Card grid — shows 2 full rows (4 cards) + peek of 5th */}
-              <div className="p-3 grid grid-cols-2 gap-2 overflow-y-auto pb-[env(safe-area-inset-bottom)] max-h-[29rem] sm:max-h-[38rem]">
+              <div className="p-3 pt-2 grid grid-cols-2 gap-2 overflow-y-auto pb-[env(safe-area-inset-bottom)] max-h-[29rem] sm:max-h-[38rem]">
                 {vouchers.map((v, i) => {
                   const isSelected = selectedIndex === i;
                   return (
