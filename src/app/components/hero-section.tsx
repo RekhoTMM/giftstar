@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Star, ArrowUpDown, ArrowDown, ChevronDown, ChevronRight, Check, X, Clock, Plus } from "lucide-react";
+import { Star, ArrowDown, ChevronDown, ChevronRight, Check, X, Clock, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useAuth } from "./auth-context";
@@ -283,55 +283,6 @@ function VariantAPanel() {
       >
         {/* SELL */}
         <div className="p-5 pb-4">
-          {/* Promo code boost — top of SELL */}
-          <div className="mb-3">
-            <AnimatePresence mode="wait">
-              {promoSuccess !== null ? (
-                <motion.div key="success" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                  className="flex items-center gap-2 px-3 py-2 bg-[#f0fdf4] rounded-xl border border-[#86efac]">
-                  <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span className="text-green-700" style={{ fontSize: "0.8125rem", fontWeight: 600 }}>+{promoSuccess} stars added!</span>
-                </motion.div>
-              ) : promoOpen ? (
-                <motion.div key="open" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-gray-400" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>
-                      შეიყვანეთ პრომო კოდი
-                    </p>
-                    <button onClick={() => { setPromoOpen(false); setPromoInput(""); setPromoError(""); }}
-                      className="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors shrink-0">
-                      <X className="w-3 h-3 text-gray-400" />
-                    </button>
-                  </div>
-                  <div className="flex gap-2">
-                    <input
-                      type="text" value={promoInput}
-                      onChange={(e) => { setPromoInput(e.target.value.toUpperCase()); setPromoError(""); }}
-                      placeholder={t("hero.auth.promoPlaceholder")} autoFocus
-                      onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
-                      className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors"
-                      style={{ fontSize: "0.875rem", fontWeight: 600, letterSpacing: "0.05em" }}
-                    />
-                    <button onClick={handleApplyPromo} disabled={isRedeeming || !promoInput.trim()}
-                      className="px-4 py-2 bg-[#002a38] text-white rounded-xl hover:bg-[#003a50] disabled:opacity-50 transition-colors shrink-0"
-                      style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
-                      {isRedeeming ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "გამოყენება"}
-                    </button>
-                  </div>
-                  {promoError && <p className="mt-1.5 text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>}
-                </motion.div>
-              ) : (
-                <motion.button key="closed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  onClick={() => setPromoOpen(true)}
-                  className="flex items-center gap-1.5 text-[#0068ff] hover:text-[#0050cc] transition-colors"
-                  style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
-                  <Plus className="w-3.5 h-3.5" />
-                  + პრომო კოდის გამოყენება
-                </motion.button>
-              )}
-            </AnimatePresence>
-          </div>
-
           <div className="flex items-center justify-between mb-3">
             <p className="text-gray-400" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>{t("hero.swap.sell")}</p>
             {isAuthenticated && user && (
@@ -363,18 +314,72 @@ function VariantAPanel() {
               </button>
             ))}
           </div>
-        </div>
 
-        {/* Divider */}
-        <div className="relative mx-5">
-          <div className="border-t border-gray-100" />
-          <div className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white border border-gray-100 shadow-sm flex items-center justify-center">
-            <ArrowUpDown className="w-3.5 h-3.5 text-gray-400" />
+          {/* Separator + promo code section */}
+          <div className="border-t border-gray-100 mt-4 pt-4">
+            <AnimatePresence mode="wait">
+              {promoSuccess !== null ? (
+                <motion.div key="success" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[#f0fdf4] flex items-center justify-center shrink-0">
+                    <Check className="w-5 h-5 text-green-500" />
+                  </div>
+                  <div>
+                    <p className="text-green-700" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>+{promoSuccess} stars added!</p>
+                    <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>Balance updated</p>
+                  </div>
+                </motion.div>
+              ) : promoOpen ? (
+                <motion.div key="open" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-gray-400" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>
+                      შეიყვანეთ პრომო კოდი
+                    </p>
+                    <button onClick={() => { setPromoOpen(false); setPromoInput(""); setPromoError(""); }}
+                      className="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors shrink-0">
+                      <X className="w-3 h-3 text-gray-400" />
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text" value={promoInput}
+                      onChange={(e) => { setPromoInput(e.target.value.toUpperCase()); setPromoError(""); }}
+                      placeholder={t("hero.auth.promoPlaceholder")} autoFocus
+                      onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
+                      className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors"
+                      style={{ fontSize: "0.875rem", fontWeight: 600, letterSpacing: "0.05em" }}
+                    />
+                    <button onClick={handleApplyPromo} disabled={isRedeeming || !promoInput.trim()}
+                      className="px-4 py-2 bg-[#002a38] text-white rounded-xl hover:bg-[#003a50] disabled:opacity-50 transition-colors shrink-0"
+                      style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
+                      {isRedeeming ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "გამოყენება"}
+                    </button>
+                  </div>
+                  {promoError && <p className="mt-1.5 text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>}
+                </motion.div>
+              ) : (
+                <motion.button key="closed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  onClick={() => setPromoOpen(true)} className="w-full flex items-center justify-between group">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gray-100 group-hover:bg-[#e6f0ff] flex items-center justify-center shrink-0 transition-colors">
+                      <Plus className="w-5 h-5 text-gray-400 group-hover:text-[#0068ff] transition-colors" />
+                    </div>
+                    <div className="text-left">
+                      <p className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 600 }}>პრომო კოდის გამოყენება</p>
+                      <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>ვარსკვლავების დასამატებლად</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-[#0068ff] transition-colors" />
+                </motion.button>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
+        {/* Divider */}
+        <div className="mx-5 border-t border-gray-100" />
+
         {/* BUY */}
-        <div className="p-5 pt-6 pb-5">
+        <div className="p-5 pt-5 pb-5">
           <p className="text-gray-400 mb-3" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>{t("hero.swap.buy")}</p>
           <button onClick={() => setPickerOpen(true)} className="w-full flex items-center justify-between gap-3 hover:bg-gray-50 rounded-xl px-2 py-1.5 -mx-2 transition-colors">
             <div className="flex items-center gap-3 min-w-0">
