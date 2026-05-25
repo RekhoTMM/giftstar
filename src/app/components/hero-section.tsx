@@ -386,25 +386,25 @@ function ExchangePanel() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: "100%", opacity: 0 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="relative w-full sm:max-w-2xl bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[90dvh] overflow-y-auto pb-[env(safe-area-inset-bottom)]"
+              className="relative w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[80dvh] overflow-y-auto pb-[env(safe-area-inset-bottom)]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-xl border-b border-gray-100 px-5 py-4 flex items-center justify-between rounded-t-3xl">
-                <div className="sm:hidden absolute top-2 left-1/2 -translate-x-1/2 w-10 h-1 bg-gray-200 rounded-full" />
-                <h3 className="text-[#002a38]" style={{ fontSize: "1.0625rem", fontWeight: 700 }}>
+              <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-xl border-b border-gray-100 px-4 py-3 flex items-center justify-between rounded-t-3xl">
+                <div className="sm:hidden absolute top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-gray-200 rounded-full" />
+                <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>
                   აირჩიე სასურველი ვაუჩერი
                 </h3>
                 <button
                   onClick={() => setPickerOpen(false)}
-                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                  className="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
                 >
-                  <X className="w-4 h-4 text-gray-500" />
+                  <X className="w-3.5 h-3.5 text-gray-500" />
                 </button>
               </div>
 
               {/* Card grid */}
-              <div className="p-5 grid grid-cols-2 gap-3">
+              <div className="p-3 grid grid-cols-2 gap-2">
                 {vouchers.map((v, i) => {
                   const isSelected = selectedIndex === i;
                   return (
@@ -414,16 +414,16 @@ function ExchangePanel() {
                       className="group text-left"
                     >
                       <div
-                        className={`rounded-2xl overflow-hidden transition-all duration-200 p-[1.5px] ${
+                        className={`rounded-xl overflow-hidden transition-all duration-200 p-[1.5px] ${
                           isSelected
-                            ? "shadow-lg shadow-[#0068ff]/20"
-                            : "hover:shadow-md hover:-translate-y-0.5"
+                            ? "shadow-md shadow-[#0068ff]/20"
+                            : "hover:shadow-sm hover:-translate-y-0.5"
                         }`}
                         style={{
                           background: isSelected ? "#0068ff" : "#e5e7eb",
                         }}
                       >
-                        <div className="relative bg-white rounded-[calc(1rem-1.5px)] overflow-hidden flex flex-col h-full">
+                        <div className="relative bg-white rounded-[calc(0.75rem-1.5px)] overflow-hidden flex flex-col h-full">
                           <div className="relative overflow-hidden bg-gray-50 aspect-[5/3]">
                             <ImageWithFallback
                               src={v.image}
@@ -431,30 +431,30 @@ function ExchangePanel() {
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                             {isSelected && (
-                              <div className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[#0068ff] flex items-center justify-center shadow-md">
-                                <Check className="w-4 h-4 text-white" />
+                              <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[#0068ff] flex items-center justify-center shadow-md">
+                                <Check className="w-3 h-3 text-white" />
                               </div>
                             )}
                           </div>
-                          <div className="p-3 flex flex-col flex-1">
-                            <div className="flex items-center gap-1 mb-1.5">
-                              <Clock className="w-3 h-3 text-gray-300 shrink-0" />
-                              <span className="text-gray-400" style={{ fontSize: "0.625rem", fontWeight: 500 }}>
+                          <div className="p-2 flex flex-col flex-1">
+                            <div className="flex items-center gap-1 mb-1">
+                              <Clock className="w-2.5 h-2.5 text-gray-300 shrink-0" />
+                              <span className="text-gray-400" style={{ fontSize: "0.5625rem", fontWeight: 500 }}>
                                 {t(`vouchers.cards.${v.translationKey}.expiry`)}
                               </span>
                             </div>
                             <h4
-                              className="text-[#002a38] mb-1"
-                              style={{ fontSize: "0.875rem", fontWeight: 700 }}
+                              className="text-[#002a38] mb-0.5"
+                              style={{ fontSize: "0.75rem", fontWeight: 700 }}
                             >
                               {t(`vouchers.cards.${v.translationKey}.name`)}
                             </h4>
-                            <p className="text-gray-400 mb-3" style={{ fontSize: "0.6875rem", lineHeight: 1.5 }}>
+                            <p className="text-gray-400 mb-2" style={{ fontSize: "0.625rem", lineHeight: 1.4 }}>
                               {t(`vouchers.cards.${v.translationKey}.desc`)}
                             </p>
                             <div className="flex items-center gap-1 mt-auto">
-                              <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
-                              <span className="text-[#002a38]" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
+                              <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
+                              <span className="text-[#002a38]" style={{ fontSize: "0.75rem", fontWeight: 700 }}>
                                 {v.stars}
                               </span>
                             </div>
