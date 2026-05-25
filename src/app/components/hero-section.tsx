@@ -386,7 +386,7 @@ function ExchangePanel() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: "100%", opacity: 0 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="relative w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[80dvh] overflow-y-auto pb-[env(safe-area-inset-bottom)]"
+              className="relative w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
@@ -403,8 +403,8 @@ function ExchangePanel() {
                 </button>
               </div>
 
-              {/* Card grid */}
-              <div className="p-3 grid grid-cols-2 gap-2">
+              {/* Card grid — fixed height shows 2 rows (4 cards) + peek of 5th */}
+              <div className="p-3 grid grid-cols-2 gap-2 overflow-y-auto pb-[env(safe-area-inset-bottom)]" style={{ maxHeight: "26rem" }}>
                 {vouchers.map((v, i) => {
                   const isSelected = selectedIndex === i;
                   return (
