@@ -360,7 +360,7 @@ function VariantAPanel() {
         {/* BUY */}
         <div className="p-5 pt-5 pb-5">
           <p className="text-gray-400 mb-3" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>{t("hero.swap.buy")}</p>
-          <button onClick={() => setPickerOpen(true)} className="w-full flex items-center justify-between gap-3 bg-gray-100 hover:bg-gray-200 rounded-xl px-2 py-1.5 -mx-2 transition-colors">
+          <button onClick={() => setPickerOpen(true)} className="w-full flex items-center justify-between gap-3 bg-gray-100 hover:bg-gray-200 rounded-xl px-3 py-2.5 transition-colors">
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-10 h-10 rounded-xl overflow-hidden bg-gray-100 shrink-0">
                 <ImageWithFallback src={selected.image} alt={t(`vouchers.cards.${selected.translationKey}.name`)} className="w-full h-full object-cover" />
@@ -562,7 +562,7 @@ function VariantBPanel() {
         {/* Card 3: Voucher selector */}
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
           <p className="text-gray-400 mb-3" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>{t("hero.swap.buy")}</p>
-          <button onClick={() => setPickerOpen(true)} className="w-full flex items-center justify-between gap-3 bg-gray-100 hover:bg-gray-200 rounded-xl px-2 py-1.5 -mx-2 transition-colors">
+          <button onClick={() => setPickerOpen(true)} className="w-full flex items-center justify-between gap-3 bg-gray-100 hover:bg-gray-200 rounded-xl px-3 py-2.5 transition-colors">
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-10 h-10 rounded-xl overflow-hidden bg-gray-100 shrink-0">
                 <ImageWithFallback src={selected.image} alt={t(`vouchers.cards.${selected.translationKey}.name`)} className="w-full h-full object-cover" />
