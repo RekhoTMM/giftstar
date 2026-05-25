@@ -246,43 +246,35 @@ function ExchangePanel() {
       >
         {/* SELL card */}
         <div className="p-5 pb-4">
-          <p
-            className="text-gray-400 mb-3"
-            style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}
-          >
-            {t("hero.swap.sell")}
-          </p>
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3 shrink-0">
-              <div className="w-10 h-10 rounded-full bg-[#DCEFD2] flex items-center justify-center shrink-0">
-                <Star className="w-5 h-5 text-[#3FA62E] fill-[#3FA62E]" />
-              </div>
-              <div>
-                <p className="text-[#002a38]" style={{ fontWeight: 700, fontSize: "1rem" }}>
-                  {t("hero.swap.starsLabel")}
-                </p>
-                {isAuthenticated && user && (
-                  <p className="text-gray-400" style={{ fontSize: "0.6875rem" }}>
-                    {t("hero.swap.balance")}: {user.stars}
-                  </p>
-                )}
-              </div>
-            </div>
-            <input
-              type="number"
-              min="1"
-              value={starInput}
-              onChange={(e) => {
-                setStarInput(e.target.value);
-                const val = parseInt(e.target.value, 10);
-                const idx = !isNaN(val) ? vouchers.findIndex((v) => v.stars === val) : -1;
-                if (idx !== -1) setSelectedIndex(idx);
-              }}
-              placeholder="0"
-              className="text-right bg-transparent text-[#002a38] placeholder:text-gray-200 focus:outline-none w-24"
-              style={{ fontSize: "2.25rem", fontWeight: 800, letterSpacing: "-0.02em" }}
-            />
+          <div className="flex items-center justify-between mb-3">
+            <p
+              className="text-gray-400"
+              style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}
+            >
+              {t("hero.swap.sell")}
+            </p>
+            {isAuthenticated && user && (
+              <p className="text-gray-400 flex items-center gap-1" style={{ fontSize: "0.6875rem", fontWeight: 600 }}>
+                {t("hero.swap.balance")}:
+                <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
+                <span className="text-[#002a38]">{user.stars}</span>
+              </p>
+            )}
           </div>
+          <input
+            type="number"
+            min="1"
+            value={starInput}
+            onChange={(e) => {
+              setStarInput(e.target.value);
+              const val = parseInt(e.target.value, 10);
+              const idx = !isNaN(val) ? vouchers.findIndex((v) => v.stars === val) : -1;
+              if (idx !== -1) setSelectedIndex(idx);
+            }}
+            placeholder="0"
+            className="w-full bg-transparent text-[#002a38] placeholder:text-gray-300 focus:outline-none tracking-widest"
+            style={{ fontSize: "1.75rem", fontWeight: 800, letterSpacing: "0.06em" }}
+          />
         </div>
 
         {/* Divider + swap icon */}
