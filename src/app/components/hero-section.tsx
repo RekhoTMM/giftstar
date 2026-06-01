@@ -21,7 +21,6 @@ interface HeroSectionProps {
 
 export function HeroSection({ onRegister: _onRegister }: HeroSectionProps) {
   const { t } = useLanguage();
-  const [variant, setVariant] = useState<"pill" | "title" | "button">("pill");
 
   return (
     <section
@@ -73,28 +72,7 @@ export function HeroSection({ onRegister: _onRegister }: HeroSectionProps) {
           </h1>
         </motion.div>
 
-        {/* Variant tabs */}
-        <div className="flex justify-center mb-5">
-          <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-gray-100">
-            {([
-              { id: "pill", label: "Pill in input" },
-              { id: "title", label: "Next to title" },
-              { id: "button", label: "Apply button" },
-            ] as const).map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setVariant(tab.id)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                  variant === tab.id ? "bg-[#002a38] text-white shadow-sm" : "text-gray-500 hover:text-[#002a38]"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <VariantAPanel variant={variant} />
+        <SwapPanel />
       </div>
     </section>
   );
@@ -238,9 +216,8 @@ function usePurchaseFlow(selectedIndex: number | null) {
   return { isPurchasing, confirmModal, setConfirmModal, successModal, setSuccessModal, openConfirm, handleConfirm, user };
 }
 
-/* ─── Single-step voucher-first panel ─── */
-type PromoVariant = "pill" | "title" | "button";
-function VariantAPanel({ variant }: { variant: PromoVariant }) {
+/* ─── Two-step swap panel ─── */
+function SwapPanel() {
   const { isAuthenticated, redeemPromoCode } = useAuth();
   const { t } = useLanguage();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -255,10 +232,7 @@ function VariantAPanel({ variant }: { variant: PromoVariant }) {
 
   const { isPurchasing, confirmModal, setConfirmModal, successModal, setSuccessModal, openConfirm, handleConfirm, user } = usePurchaseFlow(selectedIndex);
 
-  // Auto-collapse step 1 for returning users who already have stars
-  const [step1Collapsed, setStep1Collapsed] = useState(() => isAuthenticated && !!user && user.stars > 0);
   const previewStars = PROMO_STARS[promoInput.trim()];
-
   const selected = selectedIndex !== null ? vouchers[selectedIndex] : null;
 
   const handleApplyPromo = () => {
@@ -294,33 +268,11 @@ function VariantAPanel({ variant }: { variant: PromoVariant }) {
       >
         {/* Step 1: Promo code card */}
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
-          <div className="flex items-center justify-between gap-2 mb-3">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <span className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${promoSuccess !== null ? "bg-green-500 text-white" : "bg-[#002a38] text-white"}`} style={{ fontSize: "0.75rem", fontWeight: 800 }}>
-                {promoSuccess !== null ? <Check className="w-3.5 h-3.5" /> : "1"}
-              </span>
-              <h3 className="text-[#002a38] truncate" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>შეიყვანე პრომო კოდი და მიიღე ვარსკვლავები</h3>
-              {variant === "title" && previewStars && !step1Collapsed && promoSuccess === null && (
-                <motion.span
-                  key={previewStars}
-                  initial={{ opacity: 0, scale: 0.6 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="flex items-center gap-1 bg-[#DCEFD2] rounded-full px-2 py-0.5 shrink-0"
-                  style={{ fontSize: "0.75rem", fontWeight: 800 }}
-                >
-                  +<Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />{previewStars}
-                </motion.span>
-              )}
-            </div>
-            {promoSuccess === null && (
-              <button
-                onClick={() => setStep1Collapsed((c) => !c)}
-                className="text-gray-400 hover:text-[#0068ff] transition-colors shrink-0"
-                style={{ fontSize: "0.75rem", fontWeight: 600 }}
-              >
-                {step1Collapsed ? "გაქვს კოდი?" : "გამოტოვება"}
-              </button>
-            )}
+          <div className="flex items-center gap-2.5 mb-3">
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${promoSuccess !== null ? "bg-green-500 text-white" : "bg-[#002a38] text-white"}`} style={{ fontSize: "0.75rem", fontWeight: 800 }}>
+              {promoSuccess !== null ? <Check className="w-3.5 h-3.5" /> : "1"}
+            </span>
+            <h3 className="text-[#002a38] truncate" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>შეიყვანე პრომო კოდი და მიიღე ვარსკვლავები</h3>
           </div>
           <AnimatePresence mode="wait">
             {promoSuccess !== null ? (
@@ -333,10 +285,6 @@ function VariantAPanel({ variant }: { variant: PromoVariant }) {
                   <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>{t("hero.swap.promoBalanceUpdated")}</p>
                 </div>
               </motion.div>
-            ) : step1Collapsed ? (
-              <motion.p key="collapsed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-gray-400" style={{ fontSize: "0.8125rem" }}>
-                გამოტოვებულია — გადადი მე-2 ნაბიჯზე
-              </motion.p>
             ) : (
               <motion.div key="open" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <div className="flex gap-2">
@@ -346,10 +294,10 @@ function VariantAPanel({ variant }: { variant: PromoVariant }) {
                       onChange={(e) => { setPromoInput(e.target.value.toUpperCase()); setPromoError(""); }}
                       placeholder={t("hero.auth.promoPlaceholder")}
                       onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
-                      className={`w-full bg-gray-50 border border-gray-200 rounded-xl py-2 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors ${variant === "pill" && previewStars ? "pr-20 pl-3" : "px-3"}`}
+                      className={`w-full bg-gray-50 border border-gray-200 rounded-xl py-2 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors ${previewStars ? "pr-20 pl-3" : "px-3"}`}
                       style={{ fontSize: "0.875rem", fontWeight: 600, letterSpacing: "0.05em" }}
                     />
-                    {variant === "pill" && previewStars && (
+                    {previewStars && (
                       <motion.span
                         key={previewStars}
                         initial={{ opacity: 0, scale: 0.6 }}
@@ -366,14 +314,6 @@ function VariantAPanel({ variant }: { variant: PromoVariant }) {
                     style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
                     {isRedeeming ? (
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    ) : variant === "button" && previewStars ? (
-                      <>
-                        მიიღე
-                        <span className="flex items-center gap-0.5">
-                          <Star className="w-3 h-3 text-white fill-white" />
-                          {previewStars}
-                        </span>
-                      </>
                     ) : (
                       "გამოყენება"
                     )}
@@ -386,10 +326,8 @@ function VariantAPanel({ variant }: { variant: PromoVariant }) {
         </div>
 
         {/* Step connector */}
-        <div className="flex justify-center">
-          <div className="w-8 h-8 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center -my-1 z-10">
-            <ArrowDown className="w-3.5 h-3.5 text-gray-400" />
-          </div>
+        <div className="flex justify-center -my-1.5 z-10">
+          <ArrowDown className="w-4 h-4 text-gray-300" />
         </div>
 
         {/* Step 2: Voucher + CTA card */}
