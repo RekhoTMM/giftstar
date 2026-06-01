@@ -82,7 +82,7 @@ export function HeroSection({ onRegister: _onRegister }: HeroSectionProps) {
 interface VoucherPickerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedIndex: number;
+  selectedIndex: number | null;
   onSelect: (index: number) => void;
 }
 
@@ -178,25 +178,34 @@ function VoucherPickerModal({ isOpen, onClose, selectedIndex, onSelect }: Vouche
 }
 
 /* ─── Shared purchase hook logic ─── */
-function usePurchaseFlow(selectedIndex: number) {
+function usePurchaseFlow(selectedIndex: number | null) {
   const { user, purchaseVoucher } = useAuth();
   const { t } = useLanguage();
-  const selected = vouchers[selectedIndex];
+  const selected = selectedIndex !== null ? vouchers[selectedIndex] : null;
   const [isPurchasing, setIsPurchasing] = useState(false);
-  const [confirmModal, setConfirmModal] = useState({ isOpen: false, voucherId: "", name: "", stars: 0 });
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, voucherId: "", name: "", stars: 0, image: "", expiryKey: "" });
   const [successModal, setSuccessModal] = useState({ isOpen: false, name: "", code: "", image: "", expiry: "" });
 
-  const openConfirm = () =>
-    setConfirmModal({ isOpen: true, voucherId: selected.id, name: t(`vouchers.cards.${selected.translationKey}.name`), stars: selected.stars });
+  const openConfirm = () => {
+    if (!selected) return;
+    setConfirmModal({
+      isOpen: true,
+      voucherId: selected.id,
+      name: t(`vouchers.cards.${selected.translationKey}.name`),
+      stars: selected.stars,
+      image: selected.image,
+      expiryKey: selected.translationKey,
+    });
+  };
 
   const handleConfirm = () => {
-    const { voucherId, name, stars } = confirmModal;
+    const { voucherId, name, stars, image, expiryKey } = confirmModal;
     setConfirmModal((p) => ({ ...p, isOpen: false }));
     setIsPurchasing(true);
     setTimeout(() => {
       const result = purchaseVoucher(voucherId, name, stars);
       if (result.success) {
-        setSuccessModal({ isOpen: true, name, code: result.voucherCode!, image: selected.image, expiry: t(`vouchers.cards.${selected.translationKey}.expiry`) });
+        setSuccessModal({ isOpen: true, name, code: result.voucherCode!, image, expiry: t(`vouchers.cards.${expiryKey}.expiry`) });
       } else {
         toast.error(result.message);
       }
@@ -211,7 +220,7 @@ function usePurchaseFlow(selectedIndex: number) {
 function VariantAPanel() {
   const { isAuthenticated, redeemPromoCode } = useAuth();
   const { t } = useLanguage();
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("register");
@@ -223,7 +232,7 @@ function VariantAPanel() {
 
   const { isPurchasing, confirmModal, setConfirmModal, successModal, setSuccessModal, openConfirm, handleConfirm, user } = usePurchaseFlow(selectedIndex);
 
-  const selected = vouchers[selectedIndex];
+  const selected = selectedIndex !== null ? vouchers[selectedIndex] : null;
 
   const handleApplyPromo = () => {
     if (!promoInput.trim()) return;
@@ -313,33 +322,50 @@ function VariantAPanel() {
             )}
           </div>
           <button onClick={() => setPickerOpen(true)} className="w-full group text-left rounded-2xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all flex items-center gap-3 p-2 pr-3">
-            <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50 shrink-0">
-              <ImageWithFallback src={selected.image} alt={t(`vouchers.cards.${selected.translationKey}.name`)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h4 className="text-[#002a38] truncate" style={{ fontSize: "1rem", fontWeight: 700 }}>{t(`vouchers.cards.${selected.translationKey}.name`)}</h4>
-              <p className="text-gray-400 truncate" style={{ fontSize: "0.75rem" }}>{t(`vouchers.cards.${selected.translationKey}.desc`)}</p>
-              <div className="flex items-center gap-1 mt-1">
-                <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
-                <span className="text-[#002a38]" style={{ fontSize: "0.875rem", fontWeight: 800 }}>{selected.stars}</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-1 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" style={{ fontSize: "0.75rem", fontWeight: 600 }}>
-              შეცვლა <ChevronDown className="w-3.5 h-3.5" />
-            </div>
+            {selected ? (
+              <>
+                <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50 shrink-0">
+                  <ImageWithFallback src={selected.image} alt={t(`vouchers.cards.${selected.translationKey}.name`)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-[#002a38] truncate" style={{ fontSize: "1rem", fontWeight: 700 }}>{t(`vouchers.cards.${selected.translationKey}.name`)}</h4>
+                  <p className="text-gray-400 truncate" style={{ fontSize: "0.75rem" }}>{t(`vouchers.cards.${selected.translationKey}.desc`)}</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
+                    <span className="text-[#002a38]" style={{ fontSize: "0.875rem", fontWeight: 800 }}>{selected.stars}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" style={{ fontSize: "0.75rem", fontWeight: 600 }}>
+                  შეცვლა <ChevronDown className="w-3.5 h-3.5" />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="w-20 h-20 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                  <Star className="w-7 h-7 text-gray-300" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-[#002a38]" style={{ fontSize: "1rem", fontWeight: 700 }}>აირჩიე ვაუჩერი</h4>
+                  <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>დააჭირე ვაუჩერის ასარჩევად</p>
+                </div>
+                <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" />
+              </>
+            )}
           </button>
-          <button onClick={handleExchange} disabled={isPurchasing}
-            className="w-full mt-4 py-4 bg-[#0068ff] text-white rounded-2xl hover:bg-[#0050cc] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+          <button onClick={handleExchange} disabled={isPurchasing || !selected}
+            className="w-full mt-4 py-4 bg-[#0068ff] text-white rounded-2xl hover:bg-[#0050cc] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             style={{ fontWeight: 600, fontSize: "0.9375rem" }}>
             {isPurchasing ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
               <>
                 {t("hero.swap.exchangeBtn")}
-                <span className="flex items-center gap-1 bg-white/20 rounded-full px-2.5 py-0.5">
-                  <Star className="w-3.5 h-3.5 text-white fill-white" />
-                  <span style={{ fontSize: "0.875rem", fontWeight: 800 }}>{selected.stars}</span>
-                </span>
+                {selected && (
+                  <span className="flex items-center gap-1 bg-white/20 rounded-full px-2.5 py-0.5">
+                    <Star className="w-3.5 h-3.5 text-white fill-white" />
+                    <span style={{ fontSize: "0.875rem", fontWeight: 800 }}>{selected.stars}</span>
+                  </span>
+                )}
               </>
             )}
           </button>
