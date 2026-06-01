@@ -281,7 +281,7 @@ function VariantAPanel() {
             ) : (
               <motion.div key="open" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <p className="text-gray-400 mb-2" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>
-                  შეიყვანეთ პრომო კოდი
+                  შეიყვანეთ პრომო კოდი და მიიღეთ ვარსკვლავები
                 </p>
                 <div className="flex gap-2">
                   <input
