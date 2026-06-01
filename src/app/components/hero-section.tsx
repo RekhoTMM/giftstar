@@ -297,9 +297,9 @@ function VariantAPanel() {
 
         {/* "or" divider */}
         <div className="flex items-center gap-3 px-1">
-          <div className="flex-1 h-px bg-gray-100" />
+          <div className="flex-1 h-px bg-gray-200" />
           <span className="text-gray-400" style={{ fontSize: "0.75rem", fontWeight: 600 }}>ან</span>
-          <div className="flex-1 h-px bg-gray-100" />
+          <div className="flex-1 h-px bg-gray-200" />
         </div>
 
         {/* Voucher + CTA card */}
