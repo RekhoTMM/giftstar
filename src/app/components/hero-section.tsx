@@ -21,6 +21,7 @@ interface HeroSectionProps {
 
 export function HeroSection({ onRegister: _onRegister }: HeroSectionProps) {
   const { t } = useLanguage();
+  const [variant, setVariant] = useState<"pill" | "title" | "button">("pill");
 
   return (
     <section
@@ -72,7 +73,28 @@ export function HeroSection({ onRegister: _onRegister }: HeroSectionProps) {
           </h1>
         </motion.div>
 
-        <VariantAPanel />
+        {/* Variant tabs */}
+        <div className="flex justify-center mb-5">
+          <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-gray-100">
+            {([
+              { id: "pill", label: "Pill in input" },
+              { id: "title", label: "Next to title" },
+              { id: "button", label: "Apply button" },
+            ] as const).map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setVariant(tab.id)}
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                  variant === tab.id ? "bg-[#002a38] text-white shadow-sm" : "text-gray-500 hover:text-[#002a38]"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <VariantAPanel variant={variant} />
       </div>
     </section>
   );
@@ -217,7 +239,8 @@ function usePurchaseFlow(selectedIndex: number | null) {
 }
 
 /* ─── Single-step voucher-first panel ─── */
-function VariantAPanel() {
+type PromoVariant = "pill" | "title" | "button";
+function VariantAPanel({ variant }: { variant: PromoVariant }) {
   const { isAuthenticated, redeemPromoCode } = useAuth();
   const { t } = useLanguage();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -234,6 +257,7 @@ function VariantAPanel() {
 
   // Auto-collapse step 1 for returning users who already have stars
   const [step1Collapsed, setStep1Collapsed] = useState(() => isAuthenticated && !!user && user.stars > 0);
+  const previewStars = PROMO_STARS[promoInput.trim()];
 
   const selected = selectedIndex !== null ? vouchers[selectedIndex] : null;
 
@@ -271,16 +295,27 @@ function VariantAPanel() {
         {/* Step 1: Promo code card */}
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
           <div className="flex items-center justify-between gap-2 mb-3">
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5 min-w-0">
               <span className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${promoSuccess !== null ? "bg-green-500 text-white" : "bg-[#002a38] text-white"}`} style={{ fontSize: "0.75rem", fontWeight: 800 }}>
                 {promoSuccess !== null ? <Check className="w-3.5 h-3.5" /> : "1"}
               </span>
-              <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>შეიყვანე პრომო კოდი და მიიღე ვარსკვლავები</h3>
+              <h3 className="text-[#002a38] truncate" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>შეიყვანე პრომო კოდი და მიიღე ვარსკვლავები</h3>
+              {variant === "title" && previewStars && !step1Collapsed && promoSuccess === null && (
+                <motion.span
+                  key={previewStars}
+                  initial={{ opacity: 0, scale: 0.6 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex items-center gap-1 bg-[#DCEFD2] rounded-full px-2 py-0.5 shrink-0"
+                  style={{ fontSize: "0.75rem", fontWeight: 800 }}
+                >
+                  +<Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />{previewStars}
+                </motion.span>
+              )}
             </div>
             {promoSuccess === null && (
               <button
                 onClick={() => setStep1Collapsed((c) => !c)}
-                className="text-gray-400 hover:text-[#0068ff] transition-colors"
+                className="text-gray-400 hover:text-[#0068ff] transition-colors shrink-0"
                 style={{ fontSize: "0.75rem", fontWeight: 600 }}
               >
                 {step1Collapsed ? "გაქვს კოდი?" : "გამოტოვება"}
@@ -305,27 +340,46 @@ function VariantAPanel() {
             ) : (
               <motion.div key="open" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <div className="flex gap-2">
-                  <input
-                    type="text" value={promoInput}
-                    onChange={(e) => { setPromoInput(e.target.value.toUpperCase()); setPromoError(""); }}
-                    placeholder={t("hero.auth.promoPlaceholder")}
-                    onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
-                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors"
-                    style={{ fontSize: "0.875rem", fontWeight: 600, letterSpacing: "0.05em" }}
-                  />
+                  <div className="relative flex-1">
+                    <input
+                      type="text" value={promoInput}
+                      onChange={(e) => { setPromoInput(e.target.value.toUpperCase()); setPromoError(""); }}
+                      placeholder={t("hero.auth.promoPlaceholder")}
+                      onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
+                      className={`w-full bg-gray-50 border border-gray-200 rounded-xl py-2 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors ${variant === "pill" && previewStars ? "pr-20 pl-3" : "px-3"}`}
+                      style={{ fontSize: "0.875rem", fontWeight: 600, letterSpacing: "0.05em" }}
+                    />
+                    {variant === "pill" && previewStars && (
+                      <motion.span
+                        key={previewStars}
+                        initial={{ opacity: 0, scale: 0.6 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-[#DCEFD2] rounded-full px-2 py-0.5"
+                        style={{ fontSize: "0.75rem", fontWeight: 800 }}
+                      >
+                        +<Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />{previewStars}
+                      </motion.span>
+                    )}
+                  </div>
                   <button onClick={handleApplyPromo} disabled={isRedeeming || !promoInput.trim()}
-                    className="px-4 py-2 bg-[#002a38] text-white rounded-xl hover:bg-[#003a50] disabled:opacity-50 transition-colors shrink-0"
+                    className="px-4 py-2 bg-[#002a38] text-white rounded-xl hover:bg-[#003a50] disabled:opacity-50 transition-colors shrink-0 flex items-center gap-1.5"
                     style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
-                    {isRedeeming ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "გამოყენება"}
+                    {isRedeeming ? (
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : variant === "button" && previewStars ? (
+                      <>
+                        მიიღე
+                        <span className="flex items-center gap-0.5">
+                          <Star className="w-3 h-3 text-white fill-white" />
+                          {previewStars}
+                        </span>
+                      </>
+                    ) : (
+                      "გამოყენება"
+                    )}
                   </button>
                 </div>
-                {promoError ? (
-                  <p className="mt-1.5 text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>
-                ) : PROMO_STARS[promoInput.trim()] ? (
-                  <p className="mt-1.5 text-green-600 flex items-center gap-1" style={{ fontSize: "0.75rem", fontWeight: 600 }}>
-                    <Check className="w-3.5 h-3.5" /> მიიღებ <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" /> {PROMO_STARS[promoInput.trim()]} ვარსკვლავს
-                  </p>
-                ) : null}
+                {promoError && <p className="mt-1.5 text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>}
               </motion.div>
             )}
           </AnimatePresence>
