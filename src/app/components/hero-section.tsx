@@ -254,24 +254,23 @@ function VariantAPanel() {
     <>
       <motion.div
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
-        className="bg-white rounded-3xl border border-gray-100 shadow-sm lg:mx-auto"
+        className="flex flex-col gap-3 lg:mx-auto"
         style={{ maxWidth: "var(--size-2col-span, 100%)" }}
       >
-        <div className="p-5">
-          {/* Promo code section — top */}
-          <div className="pb-4 border-b border-gray-100 mb-4">
-            <AnimatePresence mode="wait">
-              {promoSuccess !== null ? (
-                <motion.div key="success" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#f0fdf4] flex items-center justify-center shrink-0">
-                    <Check className="w-5 h-5 text-green-500" />
-                  </div>
-                  <div>
-                    <p className="text-green-700" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>+{promoSuccess} {t("hero.swap.promoSuccessLabel")}</p>
-                    <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>{t("hero.swap.promoBalanceUpdated")}</p>
-                  </div>
-                </motion.div>
-              ) : promoOpen ? (
+        {/* Promo code card */}
+        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
+          <AnimatePresence mode="wait">
+            {promoSuccess !== null ? (
+              <motion.div key="success" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#f0fdf4] flex items-center justify-center shrink-0">
+                  <Check className="w-5 h-5 text-green-500" />
+                </div>
+                <div>
+                  <p className="text-green-700" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>+{promoSuccess} {t("hero.swap.promoSuccessLabel")}</p>
+                  <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>{t("hero.swap.promoBalanceUpdated")}</p>
+                </div>
+              </motion.div>
+            ) : promoOpen ? (
                 <motion.div key="open" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-gray-400" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>
@@ -300,24 +299,25 @@ function VariantAPanel() {
                   {promoError && <p className="mt-1.5 text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>}
                 </motion.div>
               ) : (
-                <motion.button key="closed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  onClick={() => setPromoOpen(true)} className="w-full flex items-center justify-between group">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gray-100 group-hover:bg-[#e6f0ff] flex items-center justify-center shrink-0 transition-colors">
-                      <Plus className="w-5 h-5 text-gray-400 group-hover:text-[#0068ff] transition-colors" />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 600 }}>გაქვს პრომო კოდი?</p>
-                      <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>გამოიყენე და მიიღე ვარსკვლავები</p>
-                    </div>
+              <motion.button key="closed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                onClick={() => setPromoOpen(true)} className="w-full flex items-center justify-between group">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gray-100 group-hover:bg-[#e6f0ff] flex items-center justify-center shrink-0 transition-colors">
+                    <Plus className="w-5 h-5 text-gray-400 group-hover:text-[#0068ff] transition-colors" />
                   </div>
-                  <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-[#0068ff] transition-colors" />
-                </motion.button>
-              )}
-            </AnimatePresence>
-          </div>
+                  <div className="text-left">
+                    <p className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 600 }}>გაქვს პრომო კოდი?</p>
+                    <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>გამოიყენე და მიიღე ვარსკვლავები</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-[#0068ff] transition-colors" />
+              </motion.button>
+            )}
+          </AnimatePresence>
+        </div>
 
-          {/* Voucher card — hero element */}
+        {/* Voucher + CTA card */}
+        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
           <div className="flex items-center justify-between mb-3">
             <p className="text-gray-400" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>{t("hero.swap.buy")}</p>
             {isAuthenticated && user && (
@@ -342,12 +342,8 @@ function VariantAPanel() {
               შეცვლა <ChevronDown className="w-3.5 h-3.5" />
             </div>
           </button>
-        </div>
-
-        {/* Exchange button */}
-        <div className="px-5 pb-5">
           <button onClick={handleExchange} disabled={isPurchasing}
-            className="w-full py-4 bg-[#0068ff] text-white rounded-2xl hover:bg-[#0050cc] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+            className="w-full mt-4 py-4 bg-[#0068ff] text-white rounded-2xl hover:bg-[#0050cc] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60"
             style={{ fontWeight: 600, fontSize: "0.9375rem" }}>
             {isPurchasing ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
