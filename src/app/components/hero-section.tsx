@@ -346,7 +346,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
               </p>
             )}
           </div>
-          <button onClick={() => setPickerOpen(true)} className="w-full group text-left rounded-2xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all">
+          <button onClick={() => setPickerOpen(true)} className={`w-full group text-left rounded-2xl overflow-hidden border transition-all ${selected ? "border-[#0068ff] shadow-md shadow-[#0068ff]/10 hover:shadow-lg hover:shadow-[#0068ff]/15" : "border-gray-200 hover:border-gray-300 hover:shadow-md"}`}>
             {selected ? (
               <div className="flex items-center gap-3 p-2 pr-3 min-h-[96px]">
                 <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50 shrink-0">
