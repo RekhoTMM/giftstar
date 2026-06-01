@@ -232,6 +232,9 @@ function VariantAPanel() {
 
   const { isPurchasing, confirmModal, setConfirmModal, successModal, setSuccessModal, openConfirm, handleConfirm, user } = usePurchaseFlow(selectedIndex);
 
+  // Auto-collapse step 1 for returning users who already have stars
+  const [step1Collapsed, setStep1Collapsed] = useState(() => isAuthenticated && !!user && user.stars > 0);
+
   const selected = selectedIndex !== null ? vouchers[selectedIndex] : null;
 
   const handleApplyPromo = () => {
@@ -267,11 +270,22 @@ function VariantAPanel() {
       >
         {/* Step 1: Promo code card */}
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
-          <div className="flex items-center gap-2.5 mb-3">
-            <span className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${promoSuccess !== null ? "bg-green-500 text-white" : "bg-[#002a38] text-white"}`} style={{ fontSize: "0.75rem", fontWeight: 800 }}>
-              {promoSuccess !== null ? <Check className="w-3.5 h-3.5" /> : "1"}
-            </span>
-            <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>მიიღე ვარსკვლავები</h3>
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <div className="flex items-center gap-2.5">
+              <span className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${promoSuccess !== null ? "bg-green-500 text-white" : "bg-[#002a38] text-white"}`} style={{ fontSize: "0.75rem", fontWeight: 800 }}>
+                {promoSuccess !== null ? <Check className="w-3.5 h-3.5" /> : "1"}
+              </span>
+              <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>მიიღე ვარსკვლავები</h3>
+            </div>
+            {promoSuccess === null && (
+              <button
+                onClick={() => setStep1Collapsed((c) => !c)}
+                className="text-gray-400 hover:text-[#0068ff] transition-colors"
+                style={{ fontSize: "0.75rem", fontWeight: 600 }}
+              >
+                {step1Collapsed ? "გაქვს კოდი?" : "გამოტოვება"}
+              </button>
+            )}
           </div>
           <AnimatePresence mode="wait">
             {promoSuccess !== null ? (
@@ -284,6 +298,10 @@ function VariantAPanel() {
                   <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>{t("hero.swap.promoBalanceUpdated")}</p>
                 </div>
               </motion.div>
+            ) : step1Collapsed ? (
+              <motion.p key="collapsed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-gray-400" style={{ fontSize: "0.8125rem" }}>
+                გამოტოვებულია — გადადი მე-2 ნაბიჯზე
+              </motion.p>
             ) : (
               <motion.div key="open" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <div className="flex gap-2">
