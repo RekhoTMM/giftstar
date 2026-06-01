@@ -216,7 +216,7 @@ function VariantAPanel() {
   const [showAuth, setShowAuth] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("register");
 
-  const [promoOpen, setPromoOpen] = useState(false);
+  const [promoOpen, setPromoOpen] = useState(true);
   const [promoInput, setPromoInput] = useState("");
   const [isRedeeming, setIsRedeeming] = useState(false);
   const [promoError, setPromoError] = useState("");
@@ -326,22 +326,20 @@ function VariantAPanel() {
               </p>
             )}
           </div>
-          <button onClick={() => setPickerOpen(true)} className="w-full group text-left rounded-2xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all">
-            <div className="relative aspect-[16/9] bg-gray-50 overflow-hidden">
+          <button onClick={() => setPickerOpen(true)} className="w-full group text-left rounded-2xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all flex items-center gap-3 p-2 pr-3">
+            <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50 shrink-0">
               <ImageWithFallback src={selected.image} alt={t(`vouchers.cards.${selected.translationKey}.name`)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              <div className="absolute top-3 right-3 flex items-center gap-1 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm">
+            </div>
+            <div className="min-w-0 flex-1">
+              <h4 className="text-[#002a38] truncate" style={{ fontSize: "1rem", fontWeight: 700 }}>{t(`vouchers.cards.${selected.translationKey}.name`)}</h4>
+              <p className="text-gray-400 truncate" style={{ fontSize: "0.75rem" }}>{t(`vouchers.cards.${selected.translationKey}.desc`)}</p>
+              <div className="flex items-center gap-1 mt-1">
                 <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
-                <span className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 800 }}>{selected.stars}</span>
+                <span className="text-[#002a38]" style={{ fontSize: "0.875rem", fontWeight: 800 }}>{selected.stars}</span>
               </div>
             </div>
-            <div className="p-4 flex items-center justify-between gap-3">
-              <div className="min-w-0">
-                <h4 className="text-[#002a38] truncate" style={{ fontSize: "1rem", fontWeight: 700 }}>{t(`vouchers.cards.${selected.translationKey}.name`)}</h4>
-                <p className="text-gray-400 truncate" style={{ fontSize: "0.75rem" }}>{t(`vouchers.cards.${selected.translationKey}.desc`)}</p>
-              </div>
-              <div className="flex items-center gap-1 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" style={{ fontSize: "0.75rem", fontWeight: 600 }}>
-                შეცვლა <ChevronDown className="w-3.5 h-3.5" />
-              </div>
+            <div className="flex items-center gap-1 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" style={{ fontSize: "0.75rem", fontWeight: 600 }}>
+              შეცვლა <ChevronDown className="w-3.5 h-3.5" />
             </div>
           </button>
         </div>
