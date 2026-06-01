@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Star, ChevronDown, Check, X, Clock } from "lucide-react";
+import { Star, ChevronDown, ArrowDown, Check, X, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useAuth } from "./auth-context";
@@ -265,8 +265,14 @@ function VariantAPanel() {
         className="flex flex-col gap-3 lg:mx-auto"
         style={{ maxWidth: "var(--size-2col-span, 100%)" }}
       >
-        {/* Promo code card */}
+        {/* Step 1: Promo code card */}
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
+          <div className="flex items-center gap-2.5 mb-3">
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${promoSuccess !== null ? "bg-green-500 text-white" : "bg-[#002a38] text-white"}`} style={{ fontSize: "0.75rem", fontWeight: 800 }}>
+              {promoSuccess !== null ? <Check className="w-3.5 h-3.5" /> : "1"}
+            </span>
+            <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>მიიღე ვარსკვლავები</h3>
+          </div>
           <AnimatePresence mode="wait">
             {promoSuccess !== null ? (
               <motion.div key="success" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
@@ -280,9 +286,6 @@ function VariantAPanel() {
               </motion.div>
             ) : (
               <motion.div key="open" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <p className="text-gray-400 mb-2" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>
-                  შეიყვანეთ პრომო კოდი და მიიღეთ ვარსკვლავები
-                </p>
                 <div className="flex gap-2">
                   <input
                     type="text" value={promoInput}
@@ -304,17 +307,22 @@ function VariantAPanel() {
           </AnimatePresence>
         </div>
 
-        {/* "or" divider */}
-        <div className="flex items-center gap-3 px-1">
-          <div className="flex-1 h-px bg-gray-200" />
-          <span className="text-gray-400" style={{ fontSize: "0.75rem", fontWeight: 600 }}>ან</span>
-          <div className="flex-1 h-px bg-gray-200" />
+        {/* Step connector */}
+        <div className="flex justify-center">
+          <div className="w-8 h-8 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center -my-1 z-10">
+            <ArrowDown className="w-3.5 h-3.5 text-gray-400" />
+          </div>
         </div>
 
-        {/* Voucher + CTA card */}
+        {/* Step 2: Voucher + CTA card */}
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-gray-400" style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em" }}>{t("hero.swap.buy")}</p>
+            <div className="flex items-center gap-2.5">
+              <span className="w-6 h-6 rounded-full bg-[#002a38] text-white flex items-center justify-center shrink-0" style={{ fontSize: "0.75rem", fontWeight: 800 }}>
+                2
+              </span>
+              <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>გადაცვალე ვაუჩერში</h3>
+            </div>
             {isAuthenticated && user && (
               <p className="text-gray-400 flex items-center gap-1" style={{ fontSize: "0.6875rem", fontWeight: 600 }}>
                 {t("hero.swap.balance")}: <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" /> <span className="text-[#002a38]">{user.stars}</span>
