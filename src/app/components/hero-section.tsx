@@ -326,8 +326,10 @@ function SwapPanel() {
         </div>
 
         {/* Step connector */}
-        <div className="flex justify-center -my-1.5 z-10">
-          <ArrowDown className="w-4 h-4 text-gray-300" />
+        <div className="flex justify-center -my-1 z-10">
+          <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center">
+            <ArrowDown className="w-3.5 h-3.5 text-gray-400" />
+          </div>
         </div>
 
         {/* Step 2: Voucher + CTA card */}
