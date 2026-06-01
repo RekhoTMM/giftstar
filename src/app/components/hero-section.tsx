@@ -341,12 +341,16 @@ function VariantAPanel() {
               </>
             ) : (
               <>
-                <div className="w-20 h-20 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
-                  <Star className="w-7 h-7 text-gray-300" />
+                <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 grid grid-cols-2 gap-0.5 bg-white">
+                  {vouchers.slice(0, 4).map((v) => (
+                    <div key={v.id} className="bg-gray-50 overflow-hidden">
+                      <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
+                    </div>
+                  ))}
                 </div>
                 <div className="min-w-0 flex-1">
                   <h4 className="text-[#002a38]" style={{ fontSize: "1rem", fontWeight: 700 }}>აირჩიე ვაუჩერი</h4>
-                  <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>დააჭირე ვაუჩერის ასარჩევად</p>
+                  <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>{vouchers.length} ვაუჩერი ხელმისაწვდომია</p>
                 </div>
                 <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" />
               </>
