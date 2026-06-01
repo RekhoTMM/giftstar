@@ -341,12 +341,18 @@ function VariantAPanel() {
               </>
             ) : (
               <>
-                <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 grid grid-cols-2 gap-0.5 bg-white">
-                  {vouchers.slice(0, 4).map((v) => (
-                    <div key={v.id} className="bg-gray-50 overflow-hidden">
-                      <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
-                    </div>
-                  ))}
+                <div className="w-20 h-20 flex items-center justify-center shrink-0">
+                  <div className="flex">
+                    {vouchers.slice(0, 3).map((v, i) => (
+                      <div
+                        key={v.id}
+                        className="w-12 h-12 rounded-full overflow-hidden bg-gray-50 border-[2.5px] border-white shadow-sm"
+                        style={{ marginLeft: i === 0 ? 0 : -18, zIndex: 3 - i }}
+                      >
+                        <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 <div className="min-w-0 flex-1">
                   <h4 className="text-[#002a38]" style={{ fontSize: "1rem", fontWeight: 700 }}>აირჩიე ვაუჩერი</h4>
