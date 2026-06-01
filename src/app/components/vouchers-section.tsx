@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Star, Sparkles, Info, Check, ShoppingBag, Clock, X } from "lucide-react";
+import { Star, Sparkles, Info, Check, Clock, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
@@ -199,7 +199,7 @@ export function VouchersSection({ selectedVoucherIndex, onSelectVoucher }: Vouch
                   if (!isPurchasing && !justPurchased) {
                     onSelectVoucher(i);
                     toast.success(`${t(`vouchers.cards.${voucher.translationKey}.name`)} არჩეულია`, {
-                      icon: <Check className="w-4 h-4 text-[#0068ff]" />,
+                      icon: <Check className="w-4 h-4 text-green-500" />,
                     });
                     const target = document.getElementById("hero-voucher-picker");
                     if (target) {
@@ -304,18 +304,18 @@ export function VouchersSection({ selectedVoucherIndex, onSelectVoucher }: Vouch
                       </div>
                       <div
                         className={`rounded-full w-8 h-8 flex items-center justify-center transition-all duration-200 ${
-                          isPurchasing
+                          selectedVoucherIndex === i
                             ? "bg-[#0068ff]"
                             : "bg-[#e6f0ff] group-hover:bg-[#0068ff]"
                         }`}
                       >
-                        {isPurchasing ? (
-                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        ) : (
-                          <ShoppingBag
-                            className="w-4 h-4 text-[#0068ff] group-hover:text-white transition-colors duration-200"
-                          />
-                        )}
+                        <Check
+                          className={`w-4 h-4 transition-colors duration-200 ${
+                            selectedVoucherIndex === i
+                              ? "text-white"
+                              : "text-[#0068ff] group-hover:text-white"
+                          }`}
+                        />
                       </div>
                     </div>
                   </div>

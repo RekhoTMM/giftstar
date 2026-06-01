@@ -225,6 +225,15 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
   const [pickerOpen, setPickerOpen] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("register");
+  const [pickerHighlight, setPickerHighlight] = useState(false);
+
+  useEffect(() => {
+    if (selectedIndex !== null) {
+      setPickerHighlight(true);
+      const timer = setTimeout(() => setPickerHighlight(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedIndex]);
 
   const [promoInput, setPromoInput] = useState("");
   const [isRedeeming, setIsRedeeming] = useState(false);
@@ -346,7 +355,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
               </p>
             )}
           </div>
-          <button onClick={() => setPickerOpen(true)} className={`w-full group text-left rounded-2xl overflow-hidden border transition-all ${selected ? "border-[#0068ff] shadow-md shadow-[#0068ff]/10 hover:shadow-lg hover:shadow-[#0068ff]/15" : "border-gray-200 hover:border-gray-300 hover:shadow-md"}`}>
+          <button onClick={() => setPickerOpen(true)} className={`w-full group text-left rounded-2xl overflow-hidden border transition-all duration-500 ${pickerHighlight ? "border-[#0068ff] shadow-md shadow-[#0068ff]/10" : "border-gray-200 hover:border-gray-300 hover:shadow-md"}`}>
             {selected ? (
               <div className="flex items-center gap-3 p-2 pr-3 min-h-[96px]">
                 <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50 shrink-0">
