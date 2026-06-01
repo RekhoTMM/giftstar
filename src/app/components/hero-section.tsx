@@ -323,7 +323,7 @@ function VariantAPanel() {
           </div>
           <button onClick={() => setPickerOpen(true)} className="w-full group text-left rounded-2xl overflow-hidden border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all">
             {selected ? (
-              <div className="flex items-center gap-3 p-2 pr-3">
+              <div className="flex items-center gap-3 p-2 pr-3 min-h-[96px]">
                 <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50 shrink-0">
                   <ImageWithFallback src={selected.image} alt={t(`vouchers.cards.${selected.translationKey}.name`)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
@@ -340,33 +340,31 @@ function VariantAPanel() {
                 </div>
               </div>
             ) : (
-              <div className="p-4">
-                <div className="flex items-start justify-between gap-3 mb-3">
-                  <div className="min-w-0 flex-1">
-                    <h4 className="text-[#002a38]" style={{ fontSize: "1rem", fontWeight: 700 }}>აირჩიე ვაუჩერი</h4>
-                    <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>{vouchers.length} ვაუჩერი ხელმისაწვდომია</p>
-                  </div>
-                  <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 mt-1 group-hover:text-[#0068ff] transition-colors" />
+              <div className="flex items-center gap-3 p-2 pr-3 min-h-[96px]">
+                <div className="min-w-0 flex-1 pl-2">
+                  <h4 className="text-[#002a38]" style={{ fontSize: "1rem", fontWeight: 700 }}>აირჩიე ვაუჩერი</h4>
+                  <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>{vouchers.length} ვაუჩერი ხელმისაწვდომია</p>
                 </div>
-                <div className="flex">
-                  {vouchers.slice(0, 4).map((v, i) => (
+                <div className="flex shrink-0">
+                  {vouchers.slice(0, 3).map((v, i) => (
                     <div
                       key={v.id}
-                      className="w-10 h-10 rounded-full overflow-hidden bg-gray-50 border-[2px] border-white shadow-sm"
-                      style={{ marginLeft: i === 0 ? 0 : -12, zIndex: 4 - i }}
+                      className="w-9 h-9 rounded-full overflow-hidden bg-gray-50 border-[2px] border-white shadow-sm"
+                      style={{ marginLeft: i === 0 ? 0 : -10, zIndex: 3 - i }}
                     >
                       <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
                     </div>
                   ))}
-                  {vouchers.length > 4 && (
+                  {vouchers.length > 3 && (
                     <div
-                      className="w-10 h-10 rounded-full bg-gray-100 border-[2px] border-white shadow-sm flex items-center justify-center"
-                      style={{ marginLeft: -12 }}
+                      className="w-9 h-9 rounded-full bg-gray-100 border-[2px] border-white shadow-sm flex items-center justify-center"
+                      style={{ marginLeft: -10 }}
                     >
-                      <span className="text-gray-500" style={{ fontSize: "0.6875rem", fontWeight: 700 }}>+{vouchers.length - 4}</span>
+                      <span className="text-gray-500" style={{ fontSize: "0.625rem", fontWeight: 700 }}>+{vouchers.length - 3}</span>
                     </div>
                   )}
                 </div>
+                <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" />
               </div>
             )}
           </button>
