@@ -24,7 +24,12 @@ const mysteryBoxPrizes: { nameKey: string; type: "image" | "voucher" | "star" | 
   { nameKey: "stars", type: "star" },
 ];
 
-export function VouchersSection() {
+interface VouchersSectionProps {
+  selectedVoucherIndex: number | null;
+  onSelectVoucher: (index: number | null) => void;
+}
+
+export function VouchersSection({ selectedVoucherIndex, onSelectVoucher }: VouchersSectionProps) {
   const { isAuthenticated, user, purchaseVoucher, addStars } = useAuth();
   const navigate = useNavigate();
   const { t, tArray } = useLanguage();
@@ -192,11 +197,15 @@ export function VouchersSection() {
                 style={{ width: "var(--voucher-card-width)" }}
                 onClick={() => {
                   if (!isPurchasing && !justPurchased) {
-                    openConfirmModal(voucher.id, t(`vouchers.cards.${voucher.translationKey}.name`), voucher.stars);
+                    onSelectVoucher(i);
+                    const target = document.getElementById("hero-voucher-picker");
+                    if (target) {
+                      target.scrollIntoView({ behavior: "smooth", block: "center" });
+                    }
                   }
                 }}
               >
-                <div className="voucher-card rounded-2xl overflow-hidden hover:shadow-lg hover:shadow-gray-200/80 hover:-translate-y-0.5 transition-all duration-200 flex flex-col h-full p-[1px]" style={{ background: "#e5e7eb" }}>
+                <div className={`voucher-card rounded-2xl overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col h-full p-[1px] ${selectedVoucherIndex === i ? "shadow-md shadow-[#0068ff]/20" : "hover:shadow-gray-200/80"}`} style={{ background: selectedVoucherIndex === i ? "#0068ff" : "#e5e7eb" }}>
                 <div className="relative bg-white rounded-[calc(1rem-1px)] overflow-hidden flex flex-col h-full">
                   {/* Info trigger — prize strip for Mystery BOX, info icon for others */}
                   {voucher.id.startsWith("mysteryBox") ? (

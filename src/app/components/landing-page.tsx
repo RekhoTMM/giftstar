@@ -15,6 +15,7 @@ export function LandingPage() {
   const [authMode, setAuthMode] = useState<"login" | "register">("register");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [copiedReferral, setCopiedReferral] = useState(false);
+  const [selectedVoucherIndex, setSelectedVoucherIndex] = useState<number | null>(null);
 
   const openRegister = () => {
     setAuthMode("register");
@@ -26,10 +27,10 @@ export function LandingPage() {
   return (
     <>
       {/* New Hero Section */}
-      <HeroSection onRegister={openRegister} />
+      <HeroSection onRegister={openRegister} selectedVoucherIndex={selectedVoucherIndex} onSelectVoucher={setSelectedVoucherIndex} />
 
       {/* Available Vouchers — right after hero */}
-      <VouchersSection />
+      <VouchersSection selectedVoucherIndex={selectedVoucherIndex} onSelectVoucher={setSelectedVoucherIndex} />
 
       <div style={{ maxWidth: "var(--size-container-max)", margin: "0 auto", width: "100%" }}>
 

@@ -17,9 +17,11 @@ const PROMO_STARS: Record<string, number> = {
 
 interface HeroSectionProps {
   onRegister: () => void;
+  selectedVoucherIndex: number | null;
+  onSelectVoucher: (index: number | null) => void;
 }
 
-export function HeroSection({ onRegister: _onRegister }: HeroSectionProps) {
+export function HeroSection({ onRegister: _onRegister, selectedVoucherIndex, onSelectVoucher }: HeroSectionProps) {
   const { t } = useLanguage();
 
   return (
@@ -72,7 +74,7 @@ export function HeroSection({ onRegister: _onRegister }: HeroSectionProps) {
           </h1>
         </motion.div>
 
-        <SwapPanel />
+        <SwapPanel selectedIndex={selectedVoucherIndex} onSelectVoucher={onSelectVoucher} />
       </div>
     </section>
   );
@@ -217,10 +219,9 @@ function usePurchaseFlow(selectedIndex: number | null) {
 }
 
 /* ─── Two-step swap panel ─── */
-function SwapPanel() {
+function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number | null; onSelectVoucher: (index: number | null) => void }) {
   const { isAuthenticated, redeemPromoCode } = useAuth();
   const { t } = useLanguage();
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("register");
@@ -331,7 +332,7 @@ function SwapPanel() {
         </div>
 
         {/* Step 2: Voucher + CTA card */}
-        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
+        <div id="hero-voucher-picker" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2.5">
               <span className="w-6 h-6 rounded-full bg-[#002a38] text-white flex items-center justify-center shrink-0" style={{ fontSize: "0.75rem", fontWeight: 800 }}>
@@ -412,7 +413,7 @@ function SwapPanel() {
         </div>
       </motion.div>
 
-      <VoucherPickerModal isOpen={pickerOpen} onClose={() => setPickerOpen(false)} selectedIndex={selectedIndex} onSelect={setSelectedIndex} />
+      <VoucherPickerModal isOpen={pickerOpen} onClose={() => setPickerOpen(false)} selectedIndex={selectedIndex} onSelect={onSelectVoucher} />
       <PurchaseConfirmationModal isOpen={confirmModal.isOpen} onClose={() => setConfirmModal((p) => ({ ...p, isOpen: false }))} onConfirm={handleConfirm} voucherName={confirmModal.name} voucherStars={confirmModal.stars} currentStars={user?.stars ?? 0} isLoading={isPurchasing} voucherId={confirmModal.voucherId} />
       <PurchaseSuccessModal isOpen={successModal.isOpen} onClose={() => setSuccessModal((p) => ({ ...p, isOpen: false }))} voucherName={successModal.name} voucherCode={successModal.code} voucherImage={successModal.image} expiryText={successModal.expiry} />
       <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} mode={authMode} onSwitchMode={(mode) => setAuthMode(mode)} />
