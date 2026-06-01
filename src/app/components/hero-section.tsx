@@ -275,7 +275,7 @@ function VariantAPanel() {
               <span className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${promoSuccess !== null ? "bg-green-500 text-white" : "bg-[#002a38] text-white"}`} style={{ fontSize: "0.75rem", fontWeight: 800 }}>
                 {promoSuccess !== null ? <Check className="w-3.5 h-3.5" /> : "1"}
               </span>
-              <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>მიიღე ვარსკვლავები</h3>
+              <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>შეიყვანე პრომო კოდი და მიიღე ვარსკვლავები</h3>
             </div>
             {promoSuccess === null && (
               <button
@@ -319,7 +319,13 @@ function VariantAPanel() {
                     {isRedeeming ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "გამოყენება"}
                   </button>
                 </div>
-                {promoError && <p className="mt-1.5 text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>}
+                {promoError ? (
+                  <p className="mt-1.5 text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>
+                ) : PROMO_STARS[promoInput.trim()] ? (
+                  <p className="mt-1.5 text-green-600 flex items-center gap-1" style={{ fontSize: "0.75rem", fontWeight: 600 }}>
+                    <Check className="w-3.5 h-3.5" /> მიიღებ <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" /> {PROMO_STARS[promoInput.trim()]} ვარსკვლავს
+                  </p>
+                ) : null}
               </motion.div>
             )}
           </AnimatePresence>
