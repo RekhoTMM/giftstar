@@ -252,7 +252,7 @@ function VoucherPickerModal({ isOpen, onClose, selectedIndex, onSelect }: Vouche
                 return (
                   <button key={v.id} onClick={() => { onSelect(i); onClose(); }} className="group text-left">
                     <div
-                      className={`rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-200 p-[1px] ${isSel ? "shadow-md shadow-[#0068ff]/20" : "hover:shadow-sm hover:-translate-y-0.5"}`}
+                      className={`rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-200 p-[1px] hover:shadow-lg hover:shadow-gray-200/80 hover:-translate-y-0.5 ${isSel ? "shadow-md shadow-[#0068ff]/20" : ""}`}
                       style={{ background: isSel ? "#0068ff" : "#e5e7eb" }}
                     >
                       <div className="relative bg-white rounded-[calc(1rem-1px)] overflow-hidden flex flex-col h-full">
@@ -471,7 +471,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
               </p>
             )}
           </div>
-          <button onClick={() => setPickerOpen(true)} className={`w-full group text-left rounded-2xl overflow-hidden border transition-all duration-500 ${pickerHighlight ? "border-[#0068ff] shadow-md shadow-[#0068ff]/10" : "border-gray-200 hover:border-gray-300 hover:shadow-md"}`}>
+          <button onClick={() => setPickerOpen(true)} className={`w-full group text-left rounded-2xl overflow-hidden border transition-all duration-200 hover:shadow-lg hover:shadow-gray-200/80 hover:-translate-y-0.5 ${pickerHighlight ? "border-[#0068ff] shadow-md shadow-[#0068ff]/10" : "border-gray-200"}`}>
             {selected ? (
               <div className="flex items-center gap-3 p-2 pr-3 min-h-[96px]">
                 <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50 shrink-0">
