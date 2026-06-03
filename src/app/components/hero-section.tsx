@@ -78,48 +78,87 @@ export function HeroSection({ onRegister, selectedVoucherIndex, onSelectVoucher 
         {isAuthenticated ? (
           <SwapPanel selectedIndex={selectedVoucherIndex} onSelectVoucher={onSelectVoucher} />
         ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.15 }}
-            className="text-center flex flex-col items-center"
-          >
-            <p
-              className="text-gray-500 max-w-md mb-7"
-              style={{ fontSize: "1rem", lineHeight: 1.6 }}
-            >
-              {t("hero.guest.subtitle")}
-            </p>
-
-            <GuestSwapIllustration />
-
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              whileHover={{ scale: 1.03 }}
-              onClick={onRegister}
-              className="px-10 py-4 bg-[#0068ff] text-white rounded-full shadow-lg shadow-[#0068ff]/25 hover:bg-[#0050cc] hover:shadow-xl hover:shadow-[#0068ff]/30 transition-all mt-8"
-              style={{ fontWeight: 600, fontSize: "1rem" }}
-            >
-              {t("hero.guest.cta")}
-            </motion.button>
-          </motion.div>
+          <GuestHero onRegister={onRegister} />
         )}
       </div>
     </section>
   );
 }
 
-/* ─── Guest swap illustration ─── */
-function GuestSwapIllustration() {
+/* ─── Guest hero (variant comparison) ─── */
+type IllustrationVariant = "cards" | "demo" | "fan" | "marquee";
+
+function GuestHero({ onRegister }: { onRegister: () => void }) {
+  const { t } = useLanguage();
+  const [variant, setVariant] = useState<IllustrationVariant>("cards");
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.15 }}
+      className="text-center flex flex-col items-center"
+    >
+      <p className="text-gray-500 max-w-md mb-5" style={{ fontSize: "1rem", lineHeight: 1.6 }}>
+        {t("hero.guest.subtitle")}
+      </p>
+
+      {/* Variant tabs */}
+      <div className="flex justify-center mb-5">
+        <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-gray-100 gap-0.5 flex-wrap">
+          {([
+            { id: "cards", label: "Cards" },
+            { id: "demo", label: "Live demo" },
+            { id: "fan", label: "Fan" },
+            { id: "marquee", label: "Marquee" },
+          ] as const).map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setVariant(tab.id)}
+              className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${
+                variant === tab.id ? "bg-[#002a38] text-white shadow-sm" : "text-gray-500 hover:text-[#002a38]"
+              }`}
+              style={{ fontSize: "0.75rem", fontWeight: 600 }}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="w-full flex justify-center min-h-[160px] items-center">
+        <AnimatePresence mode="wait">
+          {variant === "cards" && <IllustrationCards key="cards" />}
+          {variant === "demo" && <IllustrationDemo key="demo" />}
+          {variant === "fan" && <IllustrationFan key="fan" />}
+          {variant === "marquee" && <IllustrationMarquee key="marquee" />}
+        </AnimatePresence>
+      </div>
+
+      <motion.button
+        whileTap={{ scale: 0.97 }}
+        whileHover={{ scale: 1.03 }}
+        onClick={onRegister}
+        className="px-10 py-4 bg-[#0068ff] text-white rounded-full shadow-lg shadow-[#0068ff]/25 hover:bg-[#0050cc] hover:shadow-xl hover:shadow-[#0068ff]/30 transition-all mt-8"
+        style={{ fontWeight: 600, fontSize: "1rem" }}
+      >
+        {t("hero.guest.cta")}
+      </motion.button>
+    </motion.div>
+  );
+}
+
+/* Variant A — original two-card swap */
+function IllustrationCards() {
   const { t } = useLanguage();
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, delay: 0.25 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{ duration: 0.3 }}
       className="w-full max-w-md flex items-center justify-center gap-2 sm:gap-3"
     >
-      {/* Stars chip */}
       <motion.div
         animate={{ y: [0, -4, 0] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -133,7 +172,6 @@ function GuestSwapIllustration() {
         </span>
       </motion.div>
 
-      {/* Arrow */}
       <motion.div
         animate={{ x: [0, 4, 0] }}
         transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
@@ -142,7 +180,6 @@ function GuestSwapIllustration() {
         <ArrowRight className="w-4 h-4 text-white" />
       </motion.div>
 
-      {/* Voucher stack */}
       <motion.div
         animate={{ y: [0, -4, 0] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
@@ -171,6 +208,197 @@ function GuestSwapIllustration() {
           {vouchers.length} {t("hero.swap.buy").toLowerCase()}
         </span>
       </motion.div>
+    </motion.div>
+  );
+}
+
+/* Variant B — auto-playing swap demo */
+function IllustrationDemo() {
+  const { t } = useLanguage();
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    const i = setInterval(() => setIdx((n) => (n + 1) % vouchers.length), 2200);
+    return () => clearInterval(i);
+  }, []);
+
+  const v = vouchers[idx];
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{ duration: 0.3 }}
+      className="w-full max-w-sm bg-white rounded-3xl border border-gray-100 shadow-md p-4 flex items-center gap-3"
+    >
+      {/* Stars side */}
+      <div className="flex flex-col items-center gap-1 shrink-0">
+        <div className="w-12 h-12 rounded-2xl bg-[#DCEFD2] flex items-center justify-center">
+          <Star className="w-6 h-6 text-[#3FA62E] fill-[#3FA62E]" />
+        </div>
+        <motion.span
+          key={v.stars}
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-[#002a38]"
+          style={{ fontSize: "0.9375rem", fontWeight: 800 }}
+        >
+          {v.stars}
+        </motion.span>
+      </div>
+
+      <motion.div
+        animate={{ x: [0, 4, 0] }}
+        transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        className="w-7 h-7 rounded-full bg-[#0068ff] flex items-center justify-center shadow-md shadow-[#0068ff]/30 shrink-0"
+      >
+        <ArrowRight className="w-3.5 h-3.5 text-white" />
+      </motion.div>
+
+      {/* Voucher side */}
+      <div className="flex items-center gap-2 flex-1 min-w-0 bg-gray-50 rounded-2xl p-2">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={v.id}
+            initial={{ opacity: 0, x: 12 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -12 }}
+            transition={{ duration: 0.25 }}
+            className="w-12 h-12 rounded-xl overflow-hidden bg-white shrink-0"
+          >
+            <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
+          </motion.div>
+        </AnimatePresence>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={v.id + "-text"}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="min-w-0 flex-1 text-left"
+          >
+            <h4 className="text-[#002a38] truncate" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
+              {t(`vouchers.cards.${v.translationKey}.name`)}
+            </h4>
+            <p className="text-gray-400 truncate" style={{ fontSize: "0.6875rem" }}>
+              {t(`vouchers.cards.${v.translationKey}.desc`)}
+            </p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  );
+}
+
+/* Variant C — fan of voucher cards + star burst */
+function IllustrationFan() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{ duration: 0.3 }}
+      className="relative w-full max-w-md h-[180px] flex items-center justify-center"
+    >
+      {/* Fanned cards */}
+      <div className="relative w-44 h-32">
+        {vouchers.slice(0, 5).map((v, i) => {
+          const total = Math.min(vouchers.length, 5);
+          const center = (total - 1) / 2;
+          const angle = (i - center) * 12;
+          const offset = (i - center) * 18;
+          return (
+            <motion.div
+              key={v.id}
+              initial={{ opacity: 0, y: 20, rotate: 0 }}
+              animate={{ opacity: 1, y: 0, rotate: angle }}
+              transition={{ duration: 0.5, delay: 0.05 * i }}
+              className="absolute top-0 left-1/2 w-24 h-32 rounded-2xl overflow-hidden bg-white shadow-lg border border-gray-100"
+              style={{
+                transform: `translateX(calc(-50% + ${offset}px)) rotate(${angle}deg)`,
+                transformOrigin: "bottom center",
+                zIndex: i,
+              }}
+            >
+              <div className="w-full h-2/3 overflow-hidden bg-gray-50">
+                <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
+              </div>
+              <div className="flex items-center justify-center gap-1 h-1/3">
+                <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
+                <span className="text-[#002a38]" style={{ fontSize: "0.6875rem", fontWeight: 800 }}>{v.stars}</span>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Star burst overlay */}
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.35, type: "spring" }}
+        className="absolute -top-2 right-6 sm:right-10"
+      >
+        <motion.div
+          animate={{ rotate: [0, 8, 0, -8, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#DCEFD2] to-[#B0E89F] flex items-center justify-center shadow-lg shadow-green-300/40"
+        >
+          <Star className="w-7 h-7 text-[#3FA62E] fill-[#3FA62E]" />
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* Variant D — horizontal marquee */
+function IllustrationMarquee() {
+  const { t } = useLanguage();
+  const items = [...vouchers, ...vouchers];
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="w-full max-w-md flex flex-col items-center gap-3"
+    >
+      <div className="flex items-center gap-2 bg-white rounded-full border border-gray-100 shadow-sm px-3 py-1.5">
+        <Star className="w-4 h-4 text-[#3FA62E] fill-[#3FA62E]" />
+        <span className="text-[#002a38]" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
+          {t("hero.swap.starsLabel")}
+        </span>
+        <ArrowRight className="w-3.5 h-3.5 text-[#0068ff]" />
+        <span className="text-gray-500" style={{ fontSize: "0.75rem", fontWeight: 600 }}>
+          {vouchers.length}+ {t("hero.swap.buy").toLowerCase()}
+        </span>
+      </div>
+
+      <div className="relative w-full overflow-hidden" style={{ maskImage: "linear-gradient(90deg, transparent, black 12%, black 88%, transparent)", WebkitMaskImage: "linear-gradient(90deg, transparent, black 12%, black 88%, transparent)" }}>
+        <motion.div
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+          className="flex gap-3 w-max"
+        >
+          {items.map((v, i) => (
+            <div key={`${v.id}-${i}`} className="flex items-center gap-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-2 pr-3 shrink-0">
+              <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-50">
+                <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
+              </div>
+              <div className="flex flex-col text-left">
+                <span className="text-[#002a38]" style={{ fontSize: "0.75rem", fontWeight: 700 }}>
+                  {t(`vouchers.cards.${v.translationKey}.name`)}
+                </span>
+                <span className="flex items-center gap-0.5">
+                  <Star className="w-2.5 h-2.5 text-[#3FA62E] fill-[#3FA62E]" />
+                  <span className="text-[#002a38]" style={{ fontSize: "0.6875rem", fontWeight: 700 }}>{v.stars}</span>
+                </span>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
     </motion.div>
   );
 }
