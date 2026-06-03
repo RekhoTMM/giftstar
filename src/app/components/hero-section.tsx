@@ -134,15 +134,15 @@ function IllustrationDemo() {
       className="w-full max-w-sm bg-white rounded-3xl border border-gray-100 shadow-md p-4 flex items-center gap-3"
     >
       <div className="flex flex-col items-center gap-1 shrink-0">
-        <div className="w-12 h-12 rounded-2xl bg-[#DCEFD2] flex items-center justify-center">
-          <Star className="w-6 h-6 text-[#3FA62E] fill-[#3FA62E]" />
+        <div className="w-10 h-10 rounded-xl bg-[#DCEFD2] flex items-center justify-center">
+          <Star className="w-5 h-5 text-[#3FA62E] fill-[#3FA62E]" />
         </div>
         <motion.span
           key={v.stars}
           initial={{ opacity: 0, y: -4 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-[#002a38]"
-          style={{ fontSize: "0.9375rem", fontWeight: 800 }}
+          style={{ fontSize: "0.875rem", fontWeight: 800 }}
         >
           {v.stars}
         </motion.span>
