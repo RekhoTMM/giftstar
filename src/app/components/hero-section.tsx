@@ -485,29 +485,28 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-3 p-2 pr-3 min-h-[96px]">
-                <div className="min-w-0 flex-1 pl-2">
-                  <h4 className="text-[#002a38]" style={{ fontSize: "1rem", fontWeight: 700 }}>აირჩიე ვაუჩერი</h4>
-                  <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>{vouchers.length} ვაუჩერი ხელმისაწვდომია</p>
-                </div>
-                <div className="flex shrink-0">
-                  {vouchers.slice(0, 3).map((v, i) => (
-                    <div
-                      key={v.id}
-                      className="w-7 h-7 rounded-full overflow-hidden bg-gray-50 border-[2px] border-white shadow-sm"
-                      style={{ marginLeft: i === 0 ? 0 : -6, zIndex: 3 - i }}
-                    >
-                      <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
-                    </div>
-                  ))}
-                  {vouchers.length > 3 && (
-                    <div
-                      className="w-7 h-7 rounded-full bg-gray-100 border-[2px] border-white shadow-sm flex items-center justify-center"
-                      style={{ marginLeft: -6 }}
-                    >
-                      <span className="text-gray-500" style={{ fontSize: "0.625rem", fontWeight: 700 }}>+{vouchers.length - 3}</span>
-                    </div>
-                  )}
+              <div className="flex items-center gap-3 p-3 pr-4 min-h-[96px]">
+                <div className="min-w-0 flex-1 flex flex-col gap-2">
+                  <h4 className="text-[#002a38] whitespace-nowrap" style={{ fontSize: "1rem", fontWeight: 700 }}>აირჩიე ვაუჩერი</h4>
+                  <div className="flex">
+                    {vouchers.slice(0, 3).map((v, i) => (
+                      <div
+                        key={v.id}
+                        className="w-7 h-7 rounded-full overflow-hidden bg-gray-50 border-[2px] border-white shadow-sm"
+                        style={{ marginLeft: i === 0 ? 0 : -6, zIndex: 3 - i }}
+                      >
+                        <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                    {vouchers.length > 3 && (
+                      <div
+                        className="w-7 h-7 rounded-full bg-gray-100 border-[2px] border-white shadow-sm flex items-center justify-center"
+                        style={{ marginLeft: -6 }}
+                      >
+                        <span className="text-gray-500" style={{ fontSize: "0.625rem", fontWeight: 700 }}>+{vouchers.length - 3}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" />
               </div>
