@@ -494,16 +494,16 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                   {vouchers.slice(0, 3).map((v, i) => (
                     <div
                       key={v.id}
-                      className="w-9 h-9 rounded-full overflow-hidden bg-gray-50 border-[2px] border-white shadow-sm"
-                      style={{ marginLeft: i === 0 ? 0 : -10, zIndex: 3 - i }}
+                      className="w-7 h-7 rounded-full overflow-hidden bg-gray-50 border-[2px] border-white shadow-sm"
+                      style={{ marginLeft: i === 0 ? 0 : -6, zIndex: 3 - i }}
                     >
                       <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
                     </div>
                   ))}
                   {vouchers.length > 3 && (
                     <div
-                      className="w-9 h-9 rounded-full bg-gray-100 border-[2px] border-white shadow-sm flex items-center justify-center"
-                      style={{ marginLeft: -10 }}
+                      className="w-7 h-7 rounded-full bg-gray-100 border-[2px] border-white shadow-sm flex items-center justify-center"
+                      style={{ marginLeft: -6 }}
                     >
                       <span className="text-gray-500" style={{ fontSize: "0.625rem", fontWeight: 700 }}>+{vouchers.length - 3}</span>
                     </div>
