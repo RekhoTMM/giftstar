@@ -271,9 +271,14 @@ function VoucherPickerModal({ isOpen, onClose, selectedIndex, onSelect }: Vouche
                           </div>
                           <h4 className="text-[#002a38] mb-0.5" style={{ fontSize: "0.75rem", fontWeight: 700 }}>{t(`vouchers.cards.${v.translationKey}.name`)}</h4>
                           <p className="text-gray-400 mb-2" style={{ fontSize: "0.625rem", lineHeight: 1.4 }}>{t(`vouchers.cards.${v.translationKey}.desc`)}</p>
-                          <div className="flex items-center gap-1 mt-auto">
-                            <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
-                            <span className="text-[#002a38]" style={{ fontSize: "0.75rem", fontWeight: 700 }}>{v.stars}</span>
+                          <div className="flex items-center justify-between mt-auto">
+                            <div className="flex items-center gap-1">
+                              <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
+                              <span className="text-[#002a38]" style={{ fontSize: "0.75rem", fontWeight: 700 }}>{v.stars}</span>
+                            </div>
+                            <div className={`rounded-full w-7 h-7 flex items-center justify-center transition-all duration-200 ${isSel ? "bg-[#0068ff]" : "bg-[#e6f0ff] group-hover:bg-[#0068ff]"}`}>
+                              <Check className={`w-3.5 h-3.5 transition-colors duration-200 ${isSel ? "text-white" : "text-[#0068ff] group-hover:text-white"}`} />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -480,8 +485,8 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                     <span className="text-[#002a38]" style={{ fontSize: "0.875rem", fontWeight: 800 }}>{selected.stars}</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" style={{ fontSize: "0.75rem", fontWeight: 600 }}>
-                  შეცვლა <ChevronDown className="w-3.5 h-3.5" />
+                <div className="rounded-full w-8 h-8 flex items-center justify-center transition-all duration-200 bg-[#e6f0ff] group-hover:bg-[#0068ff] shrink-0">
+                  <Check className="w-4 h-4 text-[#0068ff] group-hover:text-white transition-colors duration-200" />
                 </div>
               </div>
             ) : (
