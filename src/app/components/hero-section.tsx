@@ -156,7 +156,7 @@ function IllustrationDemo() {
         <ArrowRight className="w-3.5 h-3.5 text-white" />
       </motion.div>
 
-      <div className="flex items-center gap-2 flex-1 min-w-0 bg-gray-50 rounded-2xl p-2">
+      <div className="flex items-center gap-2 flex-1 min-w-0 bg-gray-100 rounded-2xl p-2">
         <AnimatePresence mode="wait">
           <motion.div
             key={v.id}
