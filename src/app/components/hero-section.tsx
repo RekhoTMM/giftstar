@@ -151,9 +151,9 @@ function IllustrationDemo() {
       <motion.div
         animate={{ x: [0, 4, 0] }}
         transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-        className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center shrink-0"
+        className="w-7 h-7 rounded-full bg-[#002a38] flex items-center justify-center shrink-0"
       >
-        <ArrowRight className="w-3.5 h-3.5 text-gray-500" />
+        <ArrowRight className="w-3.5 h-3.5 text-white" />
       </motion.div>
 
       <div className="flex items-center gap-2 flex-1 min-w-0 bg-gray-100 rounded-2xl p-2">
