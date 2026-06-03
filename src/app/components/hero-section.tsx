@@ -133,30 +133,30 @@ function IllustrationDemo() {
       transition={{ duration: 0.4 }}
       className="w-full max-w-sm bg-white rounded-3xl border border-gray-100 shadow-md p-4 flex items-center gap-3"
     >
-      <div className="flex flex-col items-center gap-1 shrink-0">
-        <div className="w-12 h-12 rounded-2xl bg-[#DCEFD2] flex items-center justify-center">
-          <Star className="w-6 h-6 text-[#3FA62E] fill-[#3FA62E]" />
+      <div className="bg-[#DCEFD2]/50 rounded-2xl p-2 flex flex-col items-center justify-center gap-1 shrink-0 self-stretch min-w-[64px]">
+        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm">
+          <Star className="w-5 h-5 text-[#3FA62E] fill-[#3FA62E]" />
         </div>
         <motion.span
           key={v.stars}
           initial={{ opacity: 0, y: -4 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-[#002a38]"
-          style={{ fontSize: "0.9375rem", fontWeight: 800 }}
+          style={{ fontSize: "0.875rem", fontWeight: 800 }}
         >
           {v.stars}
         </motion.span>
       </div>
 
       <motion.div
-        animate={{ x: [0, 4, 0] }}
-        transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-        className="w-7 h-7 rounded-full bg-[#0068ff] flex items-center justify-center shadow-md shadow-[#0068ff]/30 shrink-0"
+        animate={{ x: [0, 3, 0] }}
+        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+        className="shrink-0"
       >
-        <ArrowRight className="w-3.5 h-3.5 text-white" />
+        <ArrowRight className="w-4 h-4 text-gray-300" />
       </motion.div>
 
-      <div className="flex items-center gap-2 flex-1 min-w-0 bg-gray-50 rounded-2xl p-2">
+      <div className="flex items-center gap-2 flex-1 min-w-0 bg-gray-100 rounded-2xl p-2 self-stretch">
         <AnimatePresence mode="wait">
           <motion.div
             key={v.id}
