@@ -21,8 +21,9 @@ interface HeroSectionProps {
   onSelectVoucher: (index: number | null) => void;
 }
 
-export function HeroSection({ onRegister: _onRegister, selectedVoucherIndex, onSelectVoucher }: HeroSectionProps) {
+export function HeroSection({ onRegister, selectedVoucherIndex, onSelectVoucher }: HeroSectionProps) {
   const { t } = useLanguage();
+  const { isAuthenticated } = useAuth();
 
   return (
     <section
@@ -74,7 +75,32 @@ export function HeroSection({ onRegister: _onRegister, selectedVoucherIndex, onS
           </h1>
         </motion.div>
 
-        <SwapPanel selectedIndex={selectedVoucherIndex} onSelectVoucher={onSelectVoucher} />
+        {isAuthenticated ? (
+          <SwapPanel selectedIndex={selectedVoucherIndex} onSelectVoucher={onSelectVoucher} />
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+            className="text-center flex flex-col items-center"
+          >
+            <p
+              className="text-gray-500 max-w-md mb-7"
+              style={{ fontSize: "1rem", lineHeight: 1.6 }}
+            >
+              {t("hero.guest.subtitle")}
+            </p>
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              whileHover={{ scale: 1.03 }}
+              onClick={onRegister}
+              className="px-10 py-4 bg-[#0068ff] text-white rounded-full shadow-lg shadow-[#0068ff]/25 hover:bg-[#0050cc] hover:shadow-xl hover:shadow-[#0068ff]/30 transition-all"
+              style={{ fontWeight: 600, fontSize: "1rem" }}
+            >
+              {t("hero.guest.cta")}
+            </motion.button>
+          </motion.div>
+        )}
       </div>
     </section>
   );
