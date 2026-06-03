@@ -258,11 +258,6 @@ function VoucherPickerModal({ isOpen, onClose, selectedIndex, onSelect }: Vouche
                       <div className="relative bg-white rounded-[calc(1rem-1px)] overflow-hidden flex flex-col h-full">
                         <div className="relative overflow-hidden bg-gray-50 aspect-[5/3]">
                           <ImageWithFallback src={v.image} alt={t(`vouchers.cards.${v.translationKey}.name`)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                          {isSel && (
-                            <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[#0068ff] flex items-center justify-center shadow-md">
-                              <Check className="w-3 h-3 text-white" />
-                            </div>
-                          )}
                         </div>
                         <div className="p-3.5 flex flex-col flex-1">
                           <div className="flex items-center gap-1 mb-1">
