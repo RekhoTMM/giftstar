@@ -393,7 +393,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
             <span className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${promoSuccess !== null ? "bg-green-500 text-white" : "bg-[#002a38] text-white"}`} style={{ fontSize: "0.75rem", fontWeight: 800 }}>
               {promoSuccess !== null ? <Check className="w-3.5 h-3.5" /> : "1"}
             </span>
-            <h3 className="text-[#002a38] truncate" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>შეიყვანე პრომო კოდი და მიიღე ვარსკვლავები</h3>
+            <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>შეიყვანე პრომო კოდი და მიიღე ვარსკვლავები</h3>
           </div>
           <AnimatePresence mode="wait">
             {promoSuccess !== null ? (
@@ -408,14 +408,14 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
               </motion.div>
             ) : (
               <motion.div key="open" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <div className="relative flex-1">
                     <input
                       type="text" value={promoInput}
                       onChange={(e) => { setPromoInput(e.target.value.toUpperCase()); setPromoError(""); }}
                       placeholder={t("hero.auth.promoPlaceholder")}
                       onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
-                      className={`w-full bg-gray-50 border border-gray-200 rounded-xl py-2 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors ${previewStars ? "pr-20 pl-3" : "px-3"}`}
+                      className={`w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors ${previewStars ? "pr-20 pl-3.5" : "px-3.5"}`}
                       style={{ fontSize: "0.875rem", fontWeight: 600, letterSpacing: "0.05em" }}
                     />
                     {previewStars && (
@@ -431,7 +431,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                     )}
                   </div>
                   <button onClick={handleApplyPromo} disabled={isRedeeming || !promoInput.trim()}
-                    className="px-4 py-2 bg-[#002a38] text-white rounded-xl hover:bg-[#003a50] disabled:opacity-50 transition-colors shrink-0 flex items-center gap-1.5"
+                    className="w-full sm:w-auto px-5 py-3 bg-[#002a38] text-white rounded-xl hover:bg-[#003a50] disabled:opacity-50 transition-colors shrink-0 flex items-center justify-center gap-1.5"
                     style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
                     {isRedeeming ? (
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
