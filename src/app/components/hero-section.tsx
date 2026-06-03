@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Star, ChevronDown, ArrowDown, Check, X, Clock } from "lucide-react";
+import { Star, ChevronDown, ArrowDown, ArrowRight, Check, X, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useAuth } from "./auth-context";
@@ -90,11 +90,14 @@ export function HeroSection({ onRegister, selectedVoucherIndex, onSelectVoucher 
             >
               {t("hero.guest.subtitle")}
             </p>
+
+            <GuestSwapIllustration />
+
             <motion.button
               whileTap={{ scale: 0.97 }}
               whileHover={{ scale: 1.03 }}
               onClick={onRegister}
-              className="px-10 py-4 bg-[#0068ff] text-white rounded-full shadow-lg shadow-[#0068ff]/25 hover:bg-[#0050cc] hover:shadow-xl hover:shadow-[#0068ff]/30 transition-all"
+              className="px-10 py-4 bg-[#0068ff] text-white rounded-full shadow-lg shadow-[#0068ff]/25 hover:bg-[#0050cc] hover:shadow-xl hover:shadow-[#0068ff]/30 transition-all mt-8"
               style={{ fontWeight: 600, fontSize: "1rem" }}
             >
               {t("hero.guest.cta")}
@@ -103,6 +106,72 @@ export function HeroSection({ onRegister, selectedVoucherIndex, onSelectVoucher 
         )}
       </div>
     </section>
+  );
+}
+
+/* ─── Guest swap illustration ─── */
+function GuestSwapIllustration() {
+  const { t } = useLanguage();
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, delay: 0.25 }}
+      className="w-full max-w-md flex items-center justify-center gap-2 sm:gap-3"
+    >
+      {/* Stars chip */}
+      <motion.div
+        animate={{ y: [0, -4, 0] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className="flex-1 bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sm:p-4 flex flex-col items-center gap-1.5"
+      >
+        <div className="w-10 h-10 rounded-xl bg-[#DCEFD2] flex items-center justify-center">
+          <Star className="w-5 h-5 text-[#3FA62E] fill-[#3FA62E]" />
+        </div>
+        <span className="text-[#002a38]" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
+          {t("hero.swap.starsLabel")}
+        </span>
+      </motion.div>
+
+      {/* Arrow */}
+      <motion.div
+        animate={{ x: [0, 4, 0] }}
+        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+        className="w-8 h-8 rounded-full bg-[#0068ff] flex items-center justify-center shadow-md shadow-[#0068ff]/30 shrink-0"
+      >
+        <ArrowRight className="w-4 h-4 text-white" />
+      </motion.div>
+
+      {/* Voucher stack */}
+      <motion.div
+        animate={{ y: [0, -4, 0] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+        className="flex-1 bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sm:p-4 flex flex-col items-center gap-1.5"
+      >
+        <div className="flex items-center">
+          {vouchers.slice(0, 3).map((v, i) => (
+            <div
+              key={v.id}
+              className="w-9 h-9 rounded-full overflow-hidden bg-gray-50 border-[2px] border-white shadow-sm"
+              style={{ marginLeft: i === 0 ? 0 : -10, zIndex: 3 - i }}
+            >
+              <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
+            </div>
+          ))}
+          <div
+            className="h-9 px-2 rounded-full bg-[#e6f0ff] border-[2px] border-white shadow-sm flex items-center justify-center"
+            style={{ marginLeft: -10 }}
+          >
+            <span className="text-[#0068ff]" style={{ fontSize: "0.6875rem", fontWeight: 800 }}>
+              +{vouchers.length - 3}
+            </span>
+          </div>
+        </div>
+        <span className="text-[#002a38]" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
+          {vouchers.length} {t("hero.swap.buy").toLowerCase()}
+        </span>
+      </motion.div>
+    </motion.div>
   );
 }
 
