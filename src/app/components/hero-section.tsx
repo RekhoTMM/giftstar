@@ -474,7 +474,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                 </div>
                 <div className="min-w-0 flex-1">
                   <h4 className="text-[#002a38] truncate" style={{ fontSize: "1rem", fontWeight: 700 }}>{t(`vouchers.cards.${selected.translationKey}.name`)}</h4>
-                  <p className="text-gray-400 truncate" style={{ fontSize: "0.75rem" }}>{t(`vouchers.cards.${selected.translationKey}.desc`)}</p>
+                  <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>{t(`vouchers.cards.${selected.translationKey}.desc`)}</p>
                 </div>
                 <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" />
               </div>
