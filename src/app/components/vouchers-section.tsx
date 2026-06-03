@@ -196,15 +196,19 @@ export function VouchersSection({ selectedVoucherIndex, onSelectVoucher }: Vouch
                 className="voucher-card-wrapper group cursor-pointer"
                 style={{ width: "var(--voucher-card-width)" }}
                 onClick={() => {
-                  if (!isPurchasing && !justPurchased) {
-                    onSelectVoucher(i);
-                    toast.success(`${t(`vouchers.cards.${voucher.translationKey}.name`)} არჩეულია`, {
-                      icon: <Check className="w-4 h-4 text-green-500" />,
-                    });
-                    const target = document.getElementById("hero-voucher-picker");
-                    if (target) {
-                      target.scrollIntoView({ behavior: "smooth", block: "center" });
-                    }
+                  if (isPurchasing || justPurchased) return;
+                  if (!isAuthenticated) {
+                    setAuthMode("register");
+                    setShowAuth(true);
+                    return;
+                  }
+                  onSelectVoucher(i);
+                  toast.success(`${t(`vouchers.cards.${voucher.translationKey}.name`)} არჩეულია`, {
+                    icon: <Check className="w-4 h-4 text-green-500" />,
+                  });
+                  const target = document.getElementById("hero-voucher-picker");
+                  if (target) {
+                    target.scrollIntoView({ behavior: "smooth", block: "center" });
                   }
                 }}
               >
