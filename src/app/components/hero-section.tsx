@@ -458,7 +458,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
               <span className="w-6 h-6 rounded-full bg-[#002a38] text-white flex items-center justify-center shrink-0" style={{ fontSize: "0.75rem", fontWeight: 800 }}>
                 2
               </span>
-              <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>გადაცვალე ვაუჩერში</h3>
+              <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>გადაცვალე ვარსკვლავები ვაუჩერში</h3>
             </div>
             {isAuthenticated && user && (
               <p className="text-gray-400 flex items-center gap-1" style={{ fontSize: "0.6875rem", fontWeight: 600 }}>
