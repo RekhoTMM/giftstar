@@ -475,14 +475,8 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                 <div className="min-w-0 flex-1">
                   <h4 className="text-[#002a38] truncate" style={{ fontSize: "1rem", fontWeight: 700 }}>{t(`vouchers.cards.${selected.translationKey}.name`)}</h4>
                   <p className="text-gray-400 truncate" style={{ fontSize: "0.75rem" }}>{t(`vouchers.cards.${selected.translationKey}.desc`)}</p>
-                  <div className="flex items-center gap-1 mt-1">
-                    <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
-                    <span className="text-[#002a38]" style={{ fontSize: "0.875rem", fontWeight: 800 }}>{selected.stars}</span>
-                  </div>
                 </div>
-                <div className="flex items-center gap-1 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" style={{ fontSize: "0.75rem", fontWeight: 600 }}>
-                  შეცვლა <ChevronDown className="w-3.5 h-3.5" />
-                </div>
+                <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" />
               </div>
             ) : (
               <div className="flex items-center gap-3 p-3 pr-4 min-h-[96px]">
