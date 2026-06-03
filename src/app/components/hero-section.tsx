@@ -446,6 +446,9 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                   </button>
                 </div>
                 {promoError && <p className="mt-1.5 text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>}
+                <p className="mt-2.5 text-gray-400" style={{ fontSize: "0.75rem", lineHeight: 1.5 }}>
+                  ასევე პრომო კოდის გარდა შეგიძლიათ გამოიყენოთ ვაუჩერის კოდიც ვარსკვლავების მისაღებად
+                </p>
               </motion.div>
             )}
           </AnimatePresence>
