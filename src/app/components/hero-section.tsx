@@ -423,7 +423,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                         key={previewStars}
                         initial={{ opacity: 0, scale: 0.6 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-[#DCEFD2] rounded-full px-2 py-0.5"
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-[#DCEFD2] rounded-full px-2.5 py-1.5"
                         style={{ fontSize: "0.75rem", fontWeight: 800 }}
                       >
                         +<Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />{previewStars}
@@ -441,9 +441,6 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                   </button>
                 </div>
                 {promoError && <p className="mt-1.5 text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>}
-                <p className="mt-2.5 text-gray-400" style={{ fontSize: "0.75rem", lineHeight: 1.5 }}>
-                  ასევე პრომო კოდის გარდა შეგიძლიათ გამოიყენოთ ვაუჩერის კოდიც ვარსკვლავების მისაღებად
-                </p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -456,7 +453,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
 
         {/* Step 2: Voucher + CTA card */}
         <div id="hero-voucher-picker" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
-          <div className="flex items-center justify-between mb-3">
+          <div className="mb-3">
             <div className="flex items-center gap-2.5">
               <span className="w-6 h-6 rounded-full bg-[#002a38] text-white flex items-center justify-center shrink-0" style={{ fontSize: "0.75rem", fontWeight: 800 }}>
                 2
@@ -464,7 +461,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
               <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>გადაცვალე ვარსკვლავები ვაუჩერში</h3>
             </div>
             {isAuthenticated && user && (
-              <p className="text-gray-400 flex items-center gap-1" style={{ fontSize: "0.6875rem", fontWeight: 600 }}>
+              <p className="mt-2 ml-8.5 text-gray-400 flex items-center gap-1" style={{ fontSize: "0.6875rem", fontWeight: 600, marginLeft: "2.125rem" }}>
                 {t("hero.swap.balance")}: <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" /> <span className="text-[#002a38]">{user.stars}</span>
               </p>
             )}
