@@ -208,7 +208,7 @@ export function VouchersSection({ selectedVoucherIndex, onSelectVoucher }: Vouch
                   }
                 }}
               >
-                <div className="voucher-card rounded-2xl overflow-hidden hover:shadow-lg hover:shadow-gray-200/80 hover:-translate-y-0.5 transition-all duration-200 flex flex-col h-full p-[1px]" style={{ background: "#e5e7eb" }}>
+                <div className={`voucher-card rounded-2xl overflow-hidden hover:shadow-lg hover:shadow-gray-200/80 hover:-translate-y-0.5 transition-all duration-200 flex flex-col h-full p-[1px] ${selectedVoucherIndex === i ? "shadow-md shadow-[#0068ff]/20" : ""}`} style={{ background: selectedVoucherIndex === i ? "#0068ff" : "#e5e7eb" }}>
                 <div className="relative bg-white rounded-[calc(1rem-1px)] overflow-hidden flex flex-col h-full">
                   {/* Info trigger — prize strip for Mystery BOX, info icon for others */}
                   {voucher.id.startsWith("mysteryBox") ? (
