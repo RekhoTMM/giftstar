@@ -237,7 +237,7 @@ function VoucherPickerModal({ isOpen, onClose, selectedIndex, onSelect }: Vouche
             className="relative w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-xl border-b border-gray-100 px-4 py-3 flex items-center justify-between">
+            <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-xl border-b border-gray-100 px-6 sm:px-8 py-4 flex items-center justify-between">
               <div className="sm:hidden absolute top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-gray-200 rounded-full" />
               <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>
                 აირჩიე სასურველი ვაუჩერი
@@ -246,7 +246,7 @@ function VoucherPickerModal({ isOpen, onClose, selectedIndex, onSelect }: Vouche
                 <X className="w-3.5 h-3.5 text-gray-500" />
               </button>
             </div>
-            <div className="p-3 grid grid-cols-2 gap-2 overflow-y-auto pb-[env(safe-area-inset-bottom)] max-h-[29rem] sm:max-h-[38rem]">
+            <div className="p-6 sm:p-8 grid grid-cols-2 gap-3 overflow-y-auto pb-[max(1.5rem,env(safe-area-inset-bottom))] max-h-[29rem] sm:max-h-[38rem]">
               {vouchers.map((v, i) => {
                 const isSel = selectedIndex === i;
                 return (
