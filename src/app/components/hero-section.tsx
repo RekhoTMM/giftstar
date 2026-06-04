@@ -305,7 +305,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                         onChange={(e) => { setPromoInput(e.target.value.toUpperCase()); setPromoError(""); }}
                         placeholder={t("hero.auth.promoPlaceholder")}
                         onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
-                        className={`w-full bg-gray-50 border rounded-xl py-3.5 text-[#002a38] placeholder:text-gray-300 focus:outline-none transition-colors ${previewStars ? "border-[#3FA62E] focus:border-[#3FA62E] pr-11 pl-3.5" : "border-gray-200 focus:border-[#0068ff] px-3.5"}`}
+                        className={`w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors ${previewStars ? "pr-10 pl-3.5" : "px-3.5"}`}
                         style={{ fontSize: "0.875rem", fontWeight: 600, letterSpacing: "0.05em" }}
                       />
                       {previewStars && (
@@ -313,9 +313,9 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                           key={previewStars}
                           initial={{ opacity: 0, scale: 0.6 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-[#3FA62E] flex items-center justify-center"
+                          className="absolute right-3 top-1/2 -translate-y-1/2"
                         >
-                          <Check className="w-3.5 h-3.5 text-white" />
+                          <Check className="w-4 h-4 text-[#3FA62E]" />
                         </motion.span>
                       )}
                     </div>
