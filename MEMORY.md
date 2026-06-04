@@ -6,9 +6,10 @@ GiftStar / GiftMe.ge is a Georgian loyalty/rewards platform where users collect 
 
 Branch strategy:
 - `main` — production (Netlify auto-deploys)
-- `v3` — current iteration of the hero redesign (active)
+- `v3` — hero redesign iteration (complete, merged once into `main`)
+- `v4` — current iteration; branched from the `v3` tip (active)
 
-This document captures everything built on `v3`.
+This document captures everything built on `v3` and continues with `v4`.
 
 ## Stack
 
@@ -128,7 +129,20 @@ New keys added to `ka.json`, `en.json`, `ru.json`:
 
 `main` is wired to Netlify. The v3 hero was merged into `main` and deployed once (commit `2fe2c75`). Further v3 work continues on the branch until the next merge.
 
+## What v4 changed
+
+### 1. Bundle code-splitting (resolved the Vite size warning)
+
+- `routes.ts`: secondary routes (`dashboard`, `rules`, `voucher-rules`) now use React Router's route-level `lazy: async () => ({ Component: ... })` dynamic imports. `Layout` and the index `LandingPage` stay eager for first paint.
+- `vite.config.ts`: added `build.rollupOptions.output.manualChunks` splitting `react`/`react-dom`/`react-router` and `motion` into separate vendor chunks.
+- Result: the single ~561 kB JS chunk became app shell ~216 kB + `react` ~230 kB + `motion` ~96 kB + lazy page chunks (13/7/2 kB). The >500 kB warning is gone.
+
+### 2. Promo casing fix (`hero-section.tsx`)
+
+`previewStars` now reads `PROMO_STARS[promoInput.trim().toUpperCase()]`, matching the apply path. Previously the live preview used the raw (non-uppercased) value — harmless today because input is force-uppercased on change, but a latent trap for paste/autofill/programmatic sets.
+
 ## Outstanding considerations
 
-- 559 kB JS bundle warning from Vite — not blocking
-- Auth modal's `intent` + `onAuthSuccess` plumbing was tried and reverted — could be revisited if pre-signup interaction needs to carry through
+- Auth modal's `intent` + `onAuthSuccess` plumbing was tried and reverted on `v3` — could be revisited if pre-signup interaction needs to carry through. (Guest taps apply/exchange → auth modal opens but typed promo / selected voucher is dropped.)
+- No `tsconfig.json` / lint / typecheck script (Figma Make export) — static safety relies on the esbuild pass during `vite build` only.
+- Dead `ml-8.5` className on the balance line in `hero-section.tsx` (the inline `marginLeft` is what actually applies).

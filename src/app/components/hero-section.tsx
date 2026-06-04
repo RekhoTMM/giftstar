@@ -242,7 +242,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
 
   const { isPurchasing, confirmModal, setConfirmModal, successModal, setSuccessModal, openConfirm, handleConfirm, user } = usePurchaseFlow(selectedIndex);
 
-  const previewStars = PROMO_STARS[promoInput.trim()];
+  const previewStars = PROMO_STARS[promoInput.trim().toUpperCase()];
   const selected = selectedIndex !== null ? vouchers[selectedIndex] : null;
 
   const handleApplyPromo = () => {

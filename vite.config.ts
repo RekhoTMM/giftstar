@@ -19,4 +19,17 @@ export default defineConfig({
 
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
+
+  build: {
+    rollupOptions: {
+      output: {
+        // Split heavy, rarely-changing dependencies into their own chunks so
+        // the app shell stays small and vendor code can be cached separately.
+        manualChunks: {
+          react: ['react', 'react-dom', 'react-router'],
+          motion: ['motion'],
+        },
+      },
+    },
+  },
 })
