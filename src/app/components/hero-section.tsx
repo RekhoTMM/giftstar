@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Star, ChevronDown, ArrowDown, ArrowRight, Check, X, Clock } from "lucide-react";
+import { Star, ChevronDown, ArrowDown, Check, X, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useAuth } from "./auth-context";
@@ -21,9 +21,8 @@ interface HeroSectionProps {
   onSelectVoucher: (index: number | null) => void;
 }
 
-export function HeroSection({ onRegister, selectedVoucherIndex, onSelectVoucher }: HeroSectionProps) {
+export function HeroSection({ onRegister: _onRegister, selectedVoucherIndex, onSelectVoucher }: HeroSectionProps) {
   const { t } = useLanguage();
-  const { isAuthenticated } = useAuth();
 
   return (
     <section
@@ -75,119 +74,9 @@ export function HeroSection({ onRegister, selectedVoucherIndex, onSelectVoucher 
           </h1>
         </motion.div>
 
-        {isAuthenticated ? (
-          <SwapPanel selectedIndex={selectedVoucherIndex} onSelectVoucher={onSelectVoucher} />
-        ) : (
-          <GuestHero onRegister={onRegister} />
-        )}
+        <SwapPanel selectedIndex={selectedVoucherIndex} onSelectVoucher={onSelectVoucher} />
       </div>
     </section>
-  );
-}
-
-/* ─── Guest hero ─── */
-function GuestHero({ onRegister }: { onRegister: () => void }) {
-  const { t } = useLanguage();
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.15 }}
-      className="text-center flex flex-col items-center"
-    >
-      <p className="text-gray-500 max-w-md mb-7" style={{ fontSize: "1rem", lineHeight: 1.6 }}>
-        {t("hero.guest.subtitle")}
-      </p>
-
-      <IllustrationDemo />
-
-      <motion.button
-        whileTap={{ scale: 0.97 }}
-        whileHover={{ scale: 1.03 }}
-        onClick={onRegister}
-        className="px-10 py-4 bg-[#0068ff] text-white rounded-full shadow-lg shadow-[#0068ff]/25 hover:bg-[#0050cc] hover:shadow-xl hover:shadow-[#0068ff]/30 transition-all mt-8"
-        style={{ fontWeight: 600, fontSize: "1rem" }}
-      >
-        {t("hero.guest.cta")}
-      </motion.button>
-    </motion.div>
-  );
-}
-
-/* Auto-playing swap demo */
-function IllustrationDemo() {
-  const { t } = useLanguage();
-  const [idx, setIdx] = useState(0);
-
-  useEffect(() => {
-    const i = setInterval(() => setIdx((n) => (n + 1) % vouchers.length), 2200);
-    return () => clearInterval(i);
-  }, []);
-
-  const v = vouchers[idx];
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4 }}
-      className="w-full max-w-sm bg-white rounded-3xl border border-gray-100 shadow-md p-4 flex items-center gap-3"
-    >
-      <div className="flex flex-col items-center gap-1 shrink-0">
-        <div className="w-10 h-10 rounded-xl bg-[#DCEFD2] flex items-center justify-center">
-          <Star className="w-5 h-5 text-[#3FA62E] fill-[#3FA62E]" />
-        </div>
-        <motion.span
-          key={v.stars}
-          initial={{ opacity: 0, y: -4 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-[#002a38]"
-          style={{ fontSize: "0.875rem", fontWeight: 800 }}
-        >
-          {v.stars}
-        </motion.span>
-      </div>
-
-      <motion.div
-        animate={{ x: [0, 4, 0] }}
-        transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-        className="w-7 h-7 rounded-full bg-[#002a38] flex items-center justify-center shrink-0"
-      >
-        <ArrowRight className="w-3.5 h-3.5 text-white" />
-      </motion.div>
-
-      <div className="flex items-center gap-2 flex-1 min-w-0 bg-gray-100 rounded-2xl p-2">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={v.id}
-            initial={{ opacity: 0, x: 12 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -12 }}
-            transition={{ duration: 0.25 }}
-            className="w-12 h-12 rounded-xl overflow-hidden bg-white shrink-0"
-          >
-            <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
-          </motion.div>
-        </AnimatePresence>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={v.id + "-text"}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="min-w-0 flex-1 text-left"
-          >
-            <h4 className="text-[#002a38] truncate" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
-              {t(`vouchers.cards.${v.translationKey}.name`)}
-            </h4>
-            <p className="text-gray-400 truncate" style={{ fontSize: "0.6875rem" }}>
-              {t(`vouchers.cards.${v.translationKey}.desc`)}
-            </p>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </motion.div>
   );
 }
 
