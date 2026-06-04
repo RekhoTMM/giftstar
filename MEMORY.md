@@ -133,9 +133,8 @@ New keys added to `ka.json`, `en.json`, `ru.json`:
 
 ### 1. Bundle code-splitting (resolved the Vite size warning)
 
-- `routes.ts`: secondary routes (`dashboard`, `rules`, `voucher-rules`) now use React Router's route-level `lazy: async () => ({ Component: ... })` dynamic imports. `Layout` and the index `LandingPage` stay eager for first paint.
-- `vite.config.ts`: added `build.rollupOptions.output.manualChunks` splitting `react`/`react-dom`/`react-router` and `motion` into separate vendor chunks.
-- Result: the single ~561 kB JS chunk became app shell ~216 kB + `react` ~230 kB + `motion` ~96 kB + lazy page chunks (13/7/2 kB). The >500 kB warning is gone.
+- `vite.config.ts`: added `build.rollupOptions.output.manualChunks` splitting `react`/`react-dom`/`react-router` and `motion` into separate vendor chunks. This alone drops the main chunk below 500 kB: app shell ~231 kB + `react` ~230 kB + `motion` ~96 kB. The >500 kB warning is gone.
+- **Reverted:** an earlier attempt also made the secondary routes (`dashboard`, `rules`, `voucher-rules`) use React Router route-level `lazy()` dynamic imports. That triggered a **Vite dev-only** runtime error — "useLanguage must be used within LanguageProvider" thrown by `Footer` (React Router's default error page) — even though the production bundle rendered fine (confirmed via an esbuild+jsdom render harness). Routes are back to eager `Component:` imports. The lazy split only saved ~22 kB on top of `manualChunks`, so it wasn't worth the dev breakage. If route splitting is revisited, prefer `React.lazy` + a `Suspense` boundary *inside* `Layout` (so the providers always stay mounted) and verify in `vite dev`.
 
 ### 2. Promo casing fix (`hero-section.tsx`)
 
