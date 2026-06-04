@@ -161,6 +161,16 @@ The inline selector is a **vertical list with progressive disclosure** (iterated
 - The "გადაცვალე" CTA + star cost badge are unchanged.
 - `VoucherPickerModal` is **kept defined but unused** (tree-shaken out of the bundle) for easy A/B revert. New i18n keys: `hero.swap.showMore`, `hero.swap.showLess` (ka/en/ru).
 
+### 4. Vouchers section made informational (`vouchers-section.tsx`)
+
+The "available vouchers" grid below the hero is now a **read-only showcase** of what voucher types exist — the hero is the sole place to select/exchange. Removed: card click-to-select (+ scroll-to-hero + toast), the blue selection stroke, the select-affordance `Check` badge in the card footer, and the whole purchase/auth/mystery-box/success machinery (state, handlers, and the `PurchaseConfirmationModal` / `PurchaseSuccessModal` / `MysteryBoxAnimation` / `AuthModal` renders).
+
+**Kept:** the info modal (image, star cost, description, details list, and the Mystery BOX prize list) — opened via the info icon / mystery-box prize strip on each card. Removed only the modal's sticky **"გადაცვალე" purchase CTA**, so the modal is purely informational.
+
+`VouchersSection` no longer takes `selectedVoucherIndex` / `onSelectVoucher` props; `landing-page.tsx` renders `<VouchersSection />`. The shared `selectedVoucherIndex` state still drives the hero.
+
+Side effect: `MysteryBoxAnimation` is now unreferenced (the reveal animation was only reachable from this section's purchase flow). It's tree-shaken out. If the mystery-box reveal should survive, it needs wiring into the hero's `usePurchaseFlow`.
+
 ## Outstanding considerations
 
 - Auth modal's `intent` + `onAuthSuccess` plumbing was tried and reverted on `v3` — could be revisited if pre-signup interaction needs to carry through. (Guest taps apply/exchange → auth modal opens but typed promo / selected voucher is dropped.)

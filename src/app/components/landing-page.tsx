@@ -29,8 +29,8 @@ export function LandingPage() {
       {/* New Hero Section */}
       <HeroSection onRegister={openRegister} selectedVoucherIndex={selectedVoucherIndex} onSelectVoucher={setSelectedVoucherIndex} />
 
-      {/* Available Vouchers — right after hero */}
-      <VouchersSection selectedVoucherIndex={selectedVoucherIndex} onSelectVoucher={setSelectedVoucherIndex} />
+      {/* Available Vouchers — informational showcase */}
+      <VouchersSection />
 
       <div style={{ maxWidth: "var(--size-container-max)", margin: "0 auto", width: "100%" }}>
 
