@@ -239,21 +239,21 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
   const [isRedeeming, setIsRedeeming] = useState(false);
   const [promoError, setPromoError] = useState("");
   const [promoSuccess, setPromoSuccess] = useState<number | null>(null);
-  const [pendingPromo, setPendingPromo] = useState<string | null>(null);
-  const [pendingExchange, setPendingExchange] = useState(false);
 
   const { isPurchasing, confirmModal, setConfirmModal, successModal, setSuccessModal, openConfirm, handleConfirm, user } = usePurchaseFlow(selectedIndex);
 
   const previewStars = PROMO_STARS[promoInput.trim()];
   const selected = selectedIndex !== null ? vouchers[selectedIndex] : null;
 
-  const redeemNow = (code: string) => {
+  const handleApplyPromo = () => {
+    if (!promoInput.trim()) return;
+    if (!isAuthenticated) { setAuthMode("register"); setShowAuth(true); return; }
     setIsRedeeming(true);
     setPromoError("");
     setTimeout(() => {
-      const result = redeemPromoCode(code);
+      const result = redeemPromoCode(promoInput);
       if (result.success) {
-        const earned = PROMO_STARS[code.trim().toUpperCase()] ?? 0;
+        const earned = PROMO_STARS[promoInput.trim().toUpperCase()] ?? 0;
         setPromoSuccess(earned);
         setPromoInput("");
         setTimeout(() => setPromoSuccess(null), 2500);
@@ -264,42 +264,10 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
     }, 800);
   };
 
-  const handleApplyPromo = () => {
-    const code = promoInput.trim();
-    if (!code) return;
-    if (!isAuthenticated) {
-      setPendingPromo(code.toUpperCase());
-      setAuthMode("register");
-      setShowAuth(true);
-      return;
-    }
-    redeemNow(code);
-  };
-
   const handleExchange = () => {
-    if (!isAuthenticated) {
-      if (selected) setPendingExchange(true);
-      setAuthMode("register");
-      setShowAuth(true);
-      return;
-    }
+    if (!isAuthenticated) { setAuthMode("register"); setShowAuth(true); return; }
     openConfirm();
   };
-
-  const handleAuthSuccess = () => {
-    if (pendingPromo) {
-      const code = pendingPromo;
-      setPendingPromo(null);
-      setTimeout(() => redeemNow(code), 250);
-    }
-    if (pendingExchange) {
-      setPendingExchange(false);
-      setTimeout(() => openConfirm(), pendingPromo ? 1500 : 250);
-    }
-  };
-
-  const intentVoucherName = selected && pendingExchange ? t(`vouchers.cards.${selected.translationKey}.name`) : undefined;
-  const intentPromoStars = pendingPromo ? PROMO_STARS[pendingPromo] : undefined;
 
   return (
     <>
@@ -477,14 +445,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
       <VoucherPickerModal isOpen={pickerOpen} onClose={() => setPickerOpen(false)} selectedIndex={selectedIndex} onSelect={onSelectVoucher} />
       <PurchaseConfirmationModal isOpen={confirmModal.isOpen} onClose={() => setConfirmModal((p) => ({ ...p, isOpen: false }))} onConfirm={handleConfirm} voucherName={confirmModal.name} voucherStars={confirmModal.stars} currentStars={user?.stars ?? 0} isLoading={isPurchasing} voucherId={confirmModal.voucherId} />
       <PurchaseSuccessModal isOpen={successModal.isOpen} onClose={() => setSuccessModal((p) => ({ ...p, isOpen: false }))} voucherName={successModal.name} voucherCode={successModal.code} voucherImage={successModal.image} expiryText={successModal.expiry} />
-      <AuthModal
-        isOpen={showAuth}
-        onClose={() => { setShowAuth(false); setPendingPromo(null); setPendingExchange(false); }}
-        mode={authMode}
-        onSwitchMode={(mode) => setAuthMode(mode)}
-        intent={pendingPromo || intentVoucherName ? { promoCode: pendingPromo ?? undefined, promoStars: intentPromoStars, voucherName: intentVoucherName } : undefined}
-        onAuthSuccess={handleAuthSuccess}
-      />
+      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} mode={authMode} onSwitchMode={(mode) => setAuthMode(mode)} />
     </>
   );
 }

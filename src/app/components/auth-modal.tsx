@@ -1,27 +1,20 @@
 import { useState, useEffect, useRef } from "react";
-import { X, Star, Phone, User, Calendar, Gift, ArrowLeft, Check } from "lucide-react";
+import { X, Star, Phone, User, Calendar, Gift, ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useAuth } from "./auth-context";
 import { useLanguage } from "../../i18n/language-context";
 import logoSvg from "../../assets/logo.svg";
 
-export interface AuthIntent {
-  promoCode?: string;
-  promoStars?: number;
-  voucherName?: string;
-}
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   mode: "login" | "register";
   onSwitchMode: (mode: "login" | "register") => void;
-  intent?: AuthIntent;
-  onAuthSuccess?: () => void;
 }
 
-export function AuthModal({ isOpen, onClose, mode, onSwitchMode, intent, onAuthSuccess }: AuthModalProps) {
+export function AuthModal({ isOpen, onClose, mode, onSwitchMode }: AuthModalProps) {
   const { login, register } = useAuth();
   const { t } = useLanguage();
 
@@ -122,7 +115,6 @@ export function AuthModal({ isOpen, onClose, mode, onSwitchMode, intent, onAuthS
         setFormData({ firstName: "", lastName: "", phone: "", birthDate: "", promoCode: "" });
         setOtpMode(false);
         setOtpCode(["", "", "", ""]);
-        onAuthSuccess?.();
         onClose();
         // User stays on current page
       }
@@ -169,7 +161,6 @@ export function AuthModal({ isOpen, onClose, mode, onSwitchMode, intent, onAuthS
       if (success) {
         toast.success(t("auth.loginSuccess"));
         setLoginPhone("");
-        onAuthSuccess?.();
         onClose();
         // User stays on current page
       } else {
@@ -312,7 +303,7 @@ export function AuthModal({ isOpen, onClose, mode, onSwitchMode, intent, onAuthS
               ) : (
               <>
               {/* Header */}
-              <div className="text-center mb-6">
+              <div className="text-center mb-8">
                 <img src={logoSvg} alt="GiftMe.ge" className="w-16 h-16 mx-auto mb-4" style={{ filter: "drop-shadow(0 8px 24px rgba(0,104,255,0.35))" }} />
                 <h2 className="text-[#002a38] mb-1" style={{ fontSize: '1.5rem', fontWeight: 700 }}>
                   {mode === "register" ? t("auth.registerTitle") : t("auth.loginTitle")}
@@ -323,38 +314,6 @@ export function AuthModal({ isOpen, onClose, mode, onSwitchMode, intent, onAuthS
                     : t("auth.loginSubtitle")}
                 </p>
               </div>
-
-              {intent && (intent.promoCode || intent.voucherName) && (
-                <div className="mb-5 rounded-2xl border border-[#B0E89F] bg-[#f4faef] p-4">
-                  <p className="text-[#1a6b0f] mb-2.5" style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase" }}>
-                    შენი მოგება
-                  </p>
-                  <ul className="space-y-1.5">
-                    {intent.promoCode && intent.promoStars !== undefined && intent.promoStars > 0 && (
-                      <li className="flex items-center gap-2">
-                        <div className="w-5 h-5 rounded-full bg-[#3FA62E] flex items-center justify-center shrink-0">
-                          <Check className="w-3 h-3 text-white" />
-                        </div>
-                        <span className="text-[#002a38] flex items-center gap-1" style={{ fontSize: "0.875rem", fontWeight: 700 }}>
-                          +{intent.promoStars}
-                          <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
-                          <span className="text-gray-500" style={{ fontWeight: 500 }}>({intent.promoCode})</span>
-                        </span>
-                      </li>
-                    )}
-                    {intent.voucherName && (
-                      <li className="flex items-center gap-2">
-                        <div className="w-5 h-5 rounded-full bg-[#0068ff] flex items-center justify-center shrink-0">
-                          <Check className="w-3 h-3 text-white" />
-                        </div>
-                        <span className="text-[#002a38]" style={{ fontSize: "0.875rem", fontWeight: 700 }}>
-                          {intent.voucherName} ვაუჩერი
-                        </span>
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              )}
 
               {mode === "register" ? (
                 <form onSubmit={handleRegister} className="space-y-4">
