@@ -72,13 +72,9 @@ export function VouchersSection() {
               style={{ width: "var(--voucher-card-width)" }}
             >
               <div className="voucher-card relative bg-white rounded-2xl overflow-hidden border border-gray-200 flex flex-col h-full transition-shadow duration-200 hover:shadow-md hover:shadow-gray-200/70">
-                {/* Info trigger — prize strip for Mystery BOX, info icon for others */}
-                {voucher.id.startsWith("mysteryBox") ? (
-                  <button
-                    onClick={() => setInfoVoucher(voucher)}
-                    aria-label="Info"
-                    className="absolute top-2 right-2 h-8 flex items-center bg-white/90 rounded-full px-1.5 hover:bg-white transition-colors z-10"
-                  >
+                {/* Mystery BOX prize strip — informational, non-interactive */}
+                {voucher.id.startsWith("mysteryBox") && (
+                  <div className="absolute top-2 right-2 h-8 flex items-center bg-white/90 rounded-full px-1.5 z-10">
                     {mysteryBoxPrizes.filter(p => p.type === "image").slice(0, 3).map((prize, idx) => (
                       <div
                         key={prize.nameKey}
@@ -94,16 +90,7 @@ export function VouchersSection() {
                     >
                       <span className="text-gray-600">+{mysteryBoxPrizes.length - 3}</span>
                     </span>
-                    <Info className="w-4.5 h-4.5 text-gray-600 ml-1.5 flex-shrink-0" />
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setInfoVoucher(voucher)}
-                    aria-label="Info"
-                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center hover:bg-white transition-colors z-10"
-                  >
-                    <Info className="w-4.5 h-4.5 text-gray-600" />
-                  </button>
+                  </div>
                 )}
                 {/* Image */}
                 <div className="voucher-card-image relative overflow-hidden bg-gray-50 aspect-[5/3]">
@@ -134,13 +121,14 @@ export function VouchersSection() {
                   >
                     {t(`vouchers.cards.${voucher.translationKey}.desc`)}
                   </p>
-                  <div className="voucher-card-footer flex items-center mt-auto">
-                    <div className="flex items-center gap-1.5">
-                      <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
-                      <span className="text-[#002a38]" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
-                        {voucher.stars}
-                      </span>
-                    </div>
+                  <div className="voucher-card-footer flex items-center justify-end mt-auto">
+                    <button
+                      onClick={() => setInfoVoucher(voucher)}
+                      aria-label="Info"
+                      className="group/info w-8 h-8 rounded-full bg-[#e6f0ff] hover:bg-[#0068ff] flex items-center justify-center transition-colors"
+                    >
+                      <Info className="w-4 h-4 text-[#0068ff] group-hover/info:text-white transition-colors" />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -224,13 +212,6 @@ export function VouchersSection() {
 
               {/* Content */}
               <div className="px-6 py-5">
-                {/* Star cost */}
-                <div className="flex items-center gap-1.5 mb-1">
-                  <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
-                  <span className="text-[#002a38]" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
-                    {infoVoucher.stars}
-                  </span>
-                </div>
                 <h3
                   className="text-[#002a38] mb-1"
                   style={{ fontSize: "1.25rem", fontWeight: 800 }}
