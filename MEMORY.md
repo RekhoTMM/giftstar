@@ -134,7 +134,15 @@ New keys added to `ka.json`, `en.json`, `ru.json`:
 ### 1. Bundle code-splitting (resolved the Vite size warning)
 
 - `vite.config.ts`: added `build.rollupOptions.output.manualChunks` splitting `react`/`react-dom`/`react-router` and `motion` into separate vendor chunks. This alone drops the main chunk below 500 kB: app shell ~231 kB + `react` ~230 kB + `motion` ~96 kB. The >500 kB warning is gone.
-- **Reverted:** an earlier attempt also made the secondary routes (`dashboard`, `rules`, `voucher-rules`) use React Router route-level `lazy()` dynamic imports. That triggered a **Vite dev-only** runtime error — "useLanguage must be used within LanguageProvider" thrown by `Footer` (React Router's default error page) — even though the production bundle rendered fine (confirmed via an esbuild+jsdom render harness). Routes are back to eager `Component:` imports. The lazy split only saved ~22 kB on top of `manualChunks`, so it wasn't worth the dev breakage. If route splitting is revisited, prefer `React.lazy` + a `Suspense` boundary *inside* `Layout` (so the providers always stay mounted) and verify in `vite dev`.
+- **Reverted:** an earlier attempt also made the secondary routes (`dashboard`, `rules`, `voucher-rules`) use React Router route-level `lazy()` dynamic imports. Routes are back to eager `Component:` imports — the lazy split only saved ~22 kB on top of `manualChunks` and wasn't worth complicating the graph. If revisited, prefer `React.lazy` + a `Suspense` boundary *inside* `Layout`.
+
+### 1b. HMR stale-context fix (`vite.config.ts`)
+
+Symptom: **dev-only** runtime error "useLanguage must be used within LanguageProvider" thrown by `Footer`, with HMR `?t=<timestamp>` queries on the module URLs in the stack. The production bundle always rendered fine (confirmed via an esbuild + jsdom render harness), so it was never a code bug.
+
+Cause: the context providers (`LanguageProvider`, `AuthProvider`) are created once and captured by `createBrowserRouter` at module load. Partial HMR can re-evaluate `language-context.tsx`, minting a **new** `LanguageContext` object, while the already-mounted provider (held by the stale router) still uses the old one. A freshly hot-swapped `Footer` then reads the new context and finds no matching provider. This fired constantly because the local dev workflow live-pulls cloud commits into a running dev server.
+
+Fix: a tiny `full-reload-on-change` Vite plugin whose `handleHotUpdate` sends `{ type: 'full-reload' }` and returns `[]`, so every change does a full page reload (one consistent module graph) instead of partial HMR. Suits the live-pull workflow; only affects `vite dev`, not the build. A hard browser refresh clears any already-broken state.
 
 ### 2. Promo casing fix (`hero-section.tsx`)
 
