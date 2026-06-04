@@ -143,13 +143,16 @@ New keys added to `ka.json`, `en.json`, `ru.json`:
 
 ### 3. Inline voucher selector replaces the picker modal (`hero-section.tsx`)
 
-Step 2 no longer opens a modal. The picker button + placeholder (title/subtitle/avatar stack) was replaced with an inline **horizontal snap-scroll row** of compact voucher chips (`w-[7.5rem]`, `aspect-[5/3]` image + name + star cost). Rationale: removes a tap + context switch, keeps step 2 compact, and avoids duplicating the full grid that already lives in `vouchers-section.tsx` below the hero.
+Step 2 no longer opens a modal. The picker button + placeholder (title/subtitle/avatar stack) was replaced with an inline selector. Rationale: removes a tap + context switch, keeps step 2 compact, and avoids duplicating the full grid that already lives in `vouchers-section.tsx` below the hero.
 
-- Selecting a chip calls `onSelectVoucher(i)` directly (same lifted state); the selected chip gets the blue 1px stroke + filled blue `Check` badge (matches grid/modal styling). Unselected chips show a translucent badge that fills blue on hover.
-- `pickerHighlight` (2s pulse on selection from the grid below) now renders as a `ring` on the selected chip, and a `selectedChipRef` + `scrollIntoView({ inline: "center" })` scrolls the chosen chip into view within the scroller.
-- Scrollbar hidden via `[scrollbar-width:none]` + `[&::-webkit-scrollbar]:hidden`; `snap-x snap-mandatory` for tidy paging.
+The inline selector is a **vertical list with progressive disclosure** (iterated from a first-pass horizontal snap-scroll row, which was replaced for readability + discoverability):
+
+- Full-width rows via `renderVoucherRow(v, i)`: 56px thumbnail + name + star cost + circular `Check` badge. Selected row: blue border + `bg-[#f5f9ff]` + filled blue badge (matches grid/modal styling). Unselected badge fills blue on hover.
+- Shows `COLLAPSED_COUNT = 3` rows; the rest live in a framer-motion `AnimatePresence` block animating `height: 0 ↔ auto`. Toggle button reads `hero.swap.showMore (+N)` / `hero.swap.showLess` with a rotating `ChevronDown`.
+- Selecting a row calls `onSelectVoucher(i)` directly (same lifted state).
+- `pickerHighlight` (2s pulse on selection from the grid below) renders as a `ring` on the selected row. If that selection is a collapsed item (`index >= COLLAPSED_COUNT`) the list **auto-expands**; a separate effect then `scrollIntoView`s the selected row once rendered (`selectedChipRef`).
 - The "გადაცვალე" CTA + star cost badge are unchanged.
-- `VoucherPickerModal` is **kept defined but unused** (tree-shaken out of the bundle) for easy A/B revert; `ChevronDown` import dropped. `pickerOpen` state removed.
+- `VoucherPickerModal` is **kept defined but unused** (tree-shaken out of the bundle) for easy A/B revert. New i18n keys: `hero.swap.showMore`, `hero.swap.showLess` (ka/en/ru).
 
 ## Outstanding considerations
 

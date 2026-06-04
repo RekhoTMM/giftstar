@@ -19,7 +19,9 @@
       "redeemOutput": "ЗВЁЗДЫ",
       "redeemBtn": "Погасить",
       "promoSuccessLabel": "звёзд добавлено!",
-      "promoBalanceUpdated": "Баланс обновлён"
+      "promoBalanceUpdated": "Баланс обновлён",
+      "showMore": "Показать ещё",
+      "showLess": "Скрыть"
     },
     "guest": {
       "headline1": "Обменяй",

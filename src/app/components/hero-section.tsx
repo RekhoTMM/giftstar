@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Star, ArrowDown, Check, X, Clock } from "lucide-react";
+import { Star, ChevronDown, ArrowDown, Check, X, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useAuth } from "./auth-context";
@@ -225,18 +225,28 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
   const [showAuth, setShowAuth] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("register");
   const [pickerHighlight, setPickerHighlight] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const selectedChipRef = useRef<HTMLButtonElement>(null);
+  const COLLAPSED_COUNT = 3;
 
   useEffect(() => {
     if (selectedIndex !== null) {
       setPickerHighlight(true);
-      // Bring the chosen chip into view within the horizontal scroller
-      // (e.g. when selection comes from the grid section below the hero).
-      selectedChipRef.current?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      // If the selection (e.g. from the grid below the hero) is one of the
+      // collapsed items, expand the list so it becomes visible.
+      if (selectedIndex >= COLLAPSED_COUNT) setExpanded(true);
       const timer = setTimeout(() => setPickerHighlight(false), 2000);
       return () => clearTimeout(timer);
     }
   }, [selectedIndex]);
+
+  // Scroll the selected row into view once it is actually rendered (after any
+  // expansion has applied).
+  useEffect(() => {
+    if (selectedIndex !== null && (selectedIndex < COLLAPSED_COUNT || expanded)) {
+      selectedChipRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [selectedIndex, expanded]);
 
   const [promoInput, setPromoInput] = useState("");
   const [isRedeeming, setIsRedeeming] = useState(false);
@@ -270,6 +280,33 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
   const handleExchange = () => {
     if (!isAuthenticated) { setAuthMode("register"); setShowAuth(true); return; }
     openConfirm();
+  };
+
+  const renderVoucherRow = (v: (typeof vouchers)[number], i: number) => {
+    const isSel = selectedIndex === i;
+    return (
+      <button
+        key={v.id}
+        ref={isSel ? selectedChipRef : undefined}
+        onClick={() => onSelectVoucher(i)}
+        aria-pressed={isSel}
+        className={`group flex items-center gap-3 w-full text-left rounded-2xl border p-2 pr-3 transition-all duration-200 hover:shadow-md hover:shadow-gray-200/70 ${isSel ? "border-[#0068ff] bg-[#f5f9ff] shadow-sm shadow-[#0068ff]/10" : "border-gray-200 bg-white"} ${isSel && pickerHighlight ? "ring-2 ring-[#0068ff]/30" : ""}`}
+      >
+        <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-gray-50 shrink-0">
+          <ImageWithFallback src={v.image} alt={t(`vouchers.cards.${v.translationKey}.name`)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h4 className="text-[#002a38] truncate" style={{ fontSize: "0.875rem", fontWeight: 700 }}>{t(`vouchers.cards.${v.translationKey}.name`)}</h4>
+          <div className="flex items-center gap-1 mt-0.5">
+            <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
+            <span className="text-[#002a38]" style={{ fontSize: "0.75rem", fontWeight: 700 }}>{v.stars}</span>
+          </div>
+        </div>
+        <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all duration-200 ${isSel ? "bg-[#0068ff]" : "bg-[#e6f0ff] group-hover:bg-[#0068ff]"}`}>
+          <Check className={`w-3.5 h-3.5 transition-colors duration-200 ${isSel ? "text-white" : "text-[#0068ff] group-hover:text-white"}`} />
+        </div>
+      </button>
+    );
   };
 
   return (
@@ -373,42 +410,34 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
               </p>
             )}
           </div>
-          {/* Inline voucher selector — horizontal snap-scroll row */}
-          <div className="flex gap-2.5 overflow-x-auto snap-x snap-mandatory -mx-1 px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {vouchers.map((v, i) => {
-              const isSel = selectedIndex === i;
-              return (
-                <button
-                  key={v.id}
-                  ref={isSel ? selectedChipRef : undefined}
-                  onClick={() => onSelectVoucher(i)}
-                  aria-pressed={isSel}
-                  className="group shrink-0 snap-start text-left w-[7.5rem]"
+          {/* Inline voucher selector — vertical list with progressive disclosure */}
+          <div className="flex flex-col gap-2">
+            {vouchers.slice(0, COLLAPSED_COUNT).map((v, i) => renderVoucherRow(v, i))}
+            <AnimatePresence initial={false}>
+              {expanded && (
+                <motion.div
+                  key="more"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                  className="overflow-hidden flex flex-col gap-2"
                 >
-                  <div
-                    className={`rounded-2xl p-[1px] transition-all duration-200 ${isSel ? "shadow-md shadow-[#0068ff]/20" : ""} ${isSel && pickerHighlight ? "ring-2 ring-[#0068ff]/30 ring-offset-1" : ""}`}
-                    style={{ background: isSel ? "#0068ff" : "#e5e7eb" }}
-                  >
-                    <div className="relative bg-white rounded-[calc(1rem-1px)] overflow-hidden transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:shadow-gray-200/80">
-                      <div className="relative aspect-[5/3] bg-gray-50 overflow-hidden">
-                        <ImageWithFallback src={v.image} alt={t(`vouchers.cards.${v.translationKey}.name`)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <div className={`absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200 ${isSel ? "bg-[#0068ff] shadow" : "bg-white/70 group-hover:bg-[#0068ff]"}`}>
-                          <Check className={`w-3 h-3 transition-colors duration-200 ${isSel ? "text-white" : "text-[#0068ff] group-hover:text-white"}`} />
-                        </div>
-                      </div>
-                      <div className="p-2">
-                        <h4 className="text-[#002a38] truncate" style={{ fontSize: "0.75rem", fontWeight: 700 }}>{t(`vouchers.cards.${v.translationKey}.name`)}</h4>
-                        <div className="flex items-center gap-1 mt-0.5">
-                          <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
-                          <span className="text-[#002a38]" style={{ fontSize: "0.6875rem", fontWeight: 700 }}>{v.stars}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
+                  {vouchers.slice(COLLAPSED_COUNT).map((v, i) => renderVoucherRow(v, i + COLLAPSED_COUNT))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
+          {vouchers.length > COLLAPSED_COUNT && (
+            <button
+              onClick={() => setExpanded((e) => !e)}
+              className="w-full mt-2 py-2 flex items-center justify-center gap-1 text-[#0068ff] hover:text-[#0050cc] transition-colors"
+              style={{ fontSize: "0.8125rem", fontWeight: 600 }}
+            >
+              {expanded ? t("hero.swap.showLess") : `${t("hero.swap.showMore")} (+${vouchers.length - COLLAPSED_COUNT})`}
+              <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`} />
+            </button>
+          )}
           <button onClick={handleExchange} disabled={isPurchasing || !selected}
             className="w-full mt-4 py-4 bg-[#0068ff] text-white rounded-2xl hover:bg-[#0050cc] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             style={{ fontWeight: 600, fontSize: "0.9375rem" }}>

@@ -19,7 +19,9 @@
       "redeemOutput": "ვარსკვლავები",
       "redeemBtn": "გამოსყიდვა",
       "promoSuccessLabel": "ვარსკვლავი დაემატა!",
-      "promoBalanceUpdated": "ბალანსი განახლდა"
+      "promoBalanceUpdated": "ბალანსი განახლდა",
+      "showMore": "მეტის ნახვა",
+      "showLess": "ნაკლების ნახვა"
     },
     "guest": {
       "headline1": "გადაცვალე",
