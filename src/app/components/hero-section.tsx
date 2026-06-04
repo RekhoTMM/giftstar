@@ -227,7 +227,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
   const [pickerHighlight, setPickerHighlight] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const selectedChipRef = useRef<HTMLButtonElement>(null);
-  const COLLAPSED_COUNT = 3;
+  const COLLAPSED_COUNT = 2;
 
   useEffect(() => {
     if (selectedIndex !== null) {
