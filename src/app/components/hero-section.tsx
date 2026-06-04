@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Star, ChevronDown, ArrowDown, Check, X, Clock } from "lucide-react";
+import { Star, ArrowDown, Check, X, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useAuth } from "./auth-context";
@@ -222,14 +222,17 @@ function usePurchaseFlow(selectedIndex: number | null) {
 function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number | null; onSelectVoucher: (index: number | null) => void }) {
   const { isAuthenticated, redeemPromoCode } = useAuth();
   const { t } = useLanguage();
-  const [pickerOpen, setPickerOpen] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("register");
   const [pickerHighlight, setPickerHighlight] = useState(false);
+  const selectedChipRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (selectedIndex !== null) {
       setPickerHighlight(true);
+      // Bring the chosen chip into view within the horizontal scroller
+      // (e.g. when selection comes from the grid section below the hero).
+      selectedChipRef.current?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
       const timer = setTimeout(() => setPickerHighlight(false), 2000);
       return () => clearTimeout(timer);
     }
@@ -370,73 +373,42 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
               </p>
             )}
           </div>
-          <button onClick={() => setPickerOpen(true)} className={`w-full group text-left rounded-2xl overflow-hidden border transition-all duration-200 hover:shadow-lg hover:shadow-gray-200/80 hover:-translate-y-0.5 ${pickerHighlight ? "border-[#0068ff] shadow-md shadow-[#0068ff]/10" : "border-gray-200"}`}>
-            {selected ? (
-              <div className="flex items-center gap-3 p-2 pr-3 min-h-[96px]">
-                <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50 shrink-0">
-                  <ImageWithFallback src={selected.image} alt={t(`vouchers.cards.${selected.translationKey}.name`)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h4 className="text-[#002a38] truncate" style={{ fontSize: "1rem", fontWeight: 700 }}>{t(`vouchers.cards.${selected.translationKey}.name`)}</h4>
-                  <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>{t(`vouchers.cards.${selected.translationKey}.desc`)}</p>
-                </div>
-                <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" />
-              </div>
-            ) : (
-              <div className="flex items-center gap-3 p-3 pr-4 min-h-[96px]">
-                {/* Mobile: title + avatars stacked */}
-                <div className="min-w-0 flex-1 flex flex-col gap-2 sm:hidden">
-                  <h4 className="text-[#002a38] whitespace-nowrap" style={{ fontSize: "1rem", fontWeight: 700 }}>აირჩიე ვაუჩერი</h4>
-                  <div className="flex">
-                    {vouchers.slice(0, 3).map((v, i) => (
-                      <div
-                        key={v.id}
-                        className="w-7 h-7 rounded-full overflow-hidden bg-gray-50 border-[2px] border-white shadow-sm"
-                        style={{ marginLeft: i === 0 ? 0 : -6, zIndex: 3 - i }}
-                      >
-                        <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
+          {/* Inline voucher selector — horizontal snap-scroll row */}
+          <div className="flex gap-2.5 overflow-x-auto snap-x snap-mandatory -mx-1 px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {vouchers.map((v, i) => {
+              const isSel = selectedIndex === i;
+              return (
+                <button
+                  key={v.id}
+                  ref={isSel ? selectedChipRef : undefined}
+                  onClick={() => onSelectVoucher(i)}
+                  aria-pressed={isSel}
+                  className="group shrink-0 snap-start text-left w-[7.5rem]"
+                >
+                  <div
+                    className={`rounded-2xl p-[1px] transition-all duration-200 ${isSel ? "shadow-md shadow-[#0068ff]/20" : ""} ${isSel && pickerHighlight ? "ring-2 ring-[#0068ff]/30 ring-offset-1" : ""}`}
+                    style={{ background: isSel ? "#0068ff" : "#e5e7eb" }}
+                  >
+                    <div className="relative bg-white rounded-[calc(1rem-1px)] overflow-hidden transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:shadow-gray-200/80">
+                      <div className="relative aspect-[5/3] bg-gray-50 overflow-hidden">
+                        <ImageWithFallback src={v.image} alt={t(`vouchers.cards.${v.translationKey}.name`)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div className={`absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200 ${isSel ? "bg-[#0068ff] shadow" : "bg-white/70 group-hover:bg-[#0068ff]"}`}>
+                          <Check className={`w-3 h-3 transition-colors duration-200 ${isSel ? "text-white" : "text-[#0068ff] group-hover:text-white"}`} />
+                        </div>
                       </div>
-                    ))}
-                    {vouchers.length > 3 && (
-                      <div
-                        className="w-7 h-7 rounded-full bg-gray-100 border-[2px] border-white shadow-sm flex items-center justify-center"
-                        style={{ marginLeft: -6 }}
-                      >
-                        <span className="text-gray-500" style={{ fontSize: "0.625rem", fontWeight: 700 }}>+{vouchers.length - 3}</span>
+                      <div className="p-2">
+                        <h4 className="text-[#002a38] truncate" style={{ fontSize: "0.75rem", fontWeight: 700 }}>{t(`vouchers.cards.${v.translationKey}.name`)}</h4>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
+                          <span className="text-[#002a38]" style={{ fontSize: "0.6875rem", fontWeight: 700 }}>{v.stars}</span>
+                        </div>
                       </div>
-                    )}
+                    </div>
                   </div>
-                </div>
-
-                {/* Desktop: title + subtitle on left, avatars on right */}
-                <div className="min-w-0 flex-1 pl-2 hidden sm:block">
-                  <h4 className="text-[#002a38]" style={{ fontSize: "1rem", fontWeight: 700 }}>აირჩიე ვაუჩერი</h4>
-                  <p className="text-gray-400" style={{ fontSize: "0.75rem" }}>{vouchers.length} ვაუჩერი ხელმისაწვდომია</p>
-                </div>
-                <div className="hidden sm:flex shrink-0">
-                  {vouchers.slice(0, 3).map((v, i) => (
-                    <div
-                      key={`d-${v.id}`}
-                      className="w-7 h-7 rounded-full overflow-hidden bg-gray-50 border-[2px] border-white shadow-sm"
-                      style={{ marginLeft: i === 0 ? 0 : -6, zIndex: 3 - i }}
-                    >
-                      <ImageWithFallback src={v.image} alt="" className="w-full h-full object-cover" />
-                    </div>
-                  ))}
-                  {vouchers.length > 3 && (
-                    <div
-                      className="w-7 h-7 rounded-full bg-gray-100 border-[2px] border-white shadow-sm flex items-center justify-center"
-                      style={{ marginLeft: -6 }}
-                    >
-                      <span className="text-gray-500" style={{ fontSize: "0.625rem", fontWeight: 700 }}>+{vouchers.length - 3}</span>
-                    </div>
-                  )}
-                </div>
-
-                <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 group-hover:text-[#0068ff] transition-colors" />
-              </div>
-            )}
-          </button>
+                </button>
+              );
+            })}
+          </div>
           <button onClick={handleExchange} disabled={isPurchasing || !selected}
             className="w-full mt-4 py-4 bg-[#0068ff] text-white rounded-2xl hover:bg-[#0050cc] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             style={{ fontWeight: 600, fontSize: "0.9375rem" }}>
@@ -457,7 +429,6 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
         </div>
       </motion.div>
 
-      <VoucherPickerModal isOpen={pickerOpen} onClose={() => setPickerOpen(false)} selectedIndex={selectedIndex} onSelect={onSelectVoucher} />
       <PurchaseConfirmationModal isOpen={confirmModal.isOpen} onClose={() => setConfirmModal((p) => ({ ...p, isOpen: false }))} onConfirm={handleConfirm} voucherName={confirmModal.name} voucherStars={confirmModal.stars} currentStars={user?.stars ?? 0} isLoading={isPurchasing} voucherId={confirmModal.voucherId} />
       <PurchaseSuccessModal isOpen={successModal.isOpen} onClose={() => setSuccessModal((p) => ({ ...p, isOpen: false }))} voucherName={successModal.name} voucherCode={successModal.code} voucherImage={successModal.image} expiryText={successModal.expiry} />
       <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} mode={authMode} onSwitchMode={(mode) => setAuthMode(mode)} />

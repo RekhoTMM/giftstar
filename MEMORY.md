@@ -141,6 +141,16 @@ New keys added to `ka.json`, `en.json`, `ru.json`:
 
 `previewStars` now reads `PROMO_STARS[promoInput.trim().toUpperCase()]`, matching the apply path. Previously the live preview used the raw (non-uppercased) value — harmless today because input is force-uppercased on change, but a latent trap for paste/autofill/programmatic sets.
 
+### 3. Inline voucher selector replaces the picker modal (`hero-section.tsx`)
+
+Step 2 no longer opens a modal. The picker button + placeholder (title/subtitle/avatar stack) was replaced with an inline **horizontal snap-scroll row** of compact voucher chips (`w-[7.5rem]`, `aspect-[5/3]` image + name + star cost). Rationale: removes a tap + context switch, keeps step 2 compact, and avoids duplicating the full grid that already lives in `vouchers-section.tsx` below the hero.
+
+- Selecting a chip calls `onSelectVoucher(i)` directly (same lifted state); the selected chip gets the blue 1px stroke + filled blue `Check` badge (matches grid/modal styling). Unselected chips show a translucent badge that fills blue on hover.
+- `pickerHighlight` (2s pulse on selection from the grid below) now renders as a `ring` on the selected chip, and a `selectedChipRef` + `scrollIntoView({ inline: "center" })` scrolls the chosen chip into view within the scroller.
+- Scrollbar hidden via `[scrollbar-width:none]` + `[&::-webkit-scrollbar]:hidden`; `snap-x snap-mandatory` for tidy paging.
+- The "გადაცვალე" CTA + star cost badge are unchanged.
+- `VoucherPickerModal` is **kept defined but unused** (tree-shaken out of the bundle) for easy A/B revert; `ChevronDown` import dropped. `pickerOpen` state removed.
+
 ## Outstanding considerations
 
 - Auth modal's `intent` + `onAuthSuccess` plumbing was tried and reverted on `v3` — could be revisited if pre-signup interaction needs to carry through. (Guest taps apply/exchange → auth modal opens but typed promo / selected voucher is dropped.)
