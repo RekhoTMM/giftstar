@@ -330,6 +330,20 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                   </button>
                 </div>
                 {promoError && <p className="mt-1.5 text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>}
+                <div className="mt-2.5 flex items-center justify-between gap-2 flex-wrap">
+                  <span className="text-gray-400" style={{ fontSize: "0.75rem" }}>1 ვაუჩერი = 1 ₾</span>
+                  {previewStars && (
+                    <motion.span
+                      key={`hint-${previewStars}`}
+                      initial={{ opacity: 0, y: -2 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-center gap-1 text-[#3FA62E]"
+                      style={{ fontSize: "0.75rem", fontWeight: 700 }}
+                    >
+                      მიიღებ +<Star className="w-3 h-3 fill-[#3FA62E]" />{previewStars} ვარსკვლავი
+                    </motion.span>
+                  )}
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
