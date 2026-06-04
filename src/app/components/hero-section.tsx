@@ -331,7 +331,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                           className="flex items-center gap-1 text-[#3FA62E]"
                           style={{ fontSize: "0.75rem", fontWeight: 700 }}
                         >
-                          მიიღებ +<Star className="w-3 h-3 fill-[#3FA62E]" />{previewStars} ვარსკვლავი
+                          მიიღებ <Star className="w-3 h-3 fill-[#3FA62E]" />{previewStars} ვარსკვლავს
                         </motion.span>
                       )}
                     </div>
