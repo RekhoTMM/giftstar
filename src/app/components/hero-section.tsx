@@ -353,13 +353,13 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                   key={type}
                   onClick={() => setCodeType(type)}
                   aria-pressed={active}
-                  className={`flex items-center gap-2.5 rounded-2xl border p-3 transition-all duration-200 ${active ? "border-[#0068ff] bg-[#f5f9ff] shadow-sm shadow-[#0068ff]/10" : "border-gray-200 bg-white hover:border-gray-300"}`}
+                  className={`relative flex items-center gap-2.5 rounded-xl border p-3 pr-7 text-left transition-all duration-200 ${active ? "border-[#0068ff] bg-[#f5f9ff] shadow-sm shadow-[#0068ff]/10" : "border-gray-200 bg-white hover:border-gray-300"}`}
                 >
                   <span className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${active ? "bg-[#0068ff] text-white" : "bg-gray-100 text-gray-500"}`}>
                     <Icon className="w-4 h-4" />
                   </span>
-                  <span className="text-[#002a38] text-left leading-tight" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>{t(key)}</span>
-                  {active && <Check className="w-4 h-4 text-[#0068ff] ml-auto shrink-0" />}
+                  <span className="text-[#002a38] leading-tight" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>{t(key)}</span>
+                  {active && <Check className="w-4 h-4 text-[#0068ff] absolute top-2.5 right-2.5 shrink-0" />}
                 </button>
               );
             })}
