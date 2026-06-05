@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Star, ChevronDown, ArrowDown, Check, X, Clock, Lock } from "lucide-react";
+import { Star, ChevronDown, ArrowDown, Check, X, Clock, Lock, Ticket, Gift } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useAuth } from "./auth-context";
@@ -248,6 +248,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
     }
   }, [selectedIndex, expanded]);
 
+  const [codeType, setCodeType] = useState<"promo" | "voucher">("promo");
   const [promoInput, setPromoInput] = useState("");
   const [isRedeeming, setIsRedeeming] = useState(false);
   const [promoError, setPromoError] = useState("");
@@ -338,13 +339,45 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
         className="flex flex-col gap-3 lg:mx-auto"
         style={{ maxWidth: "var(--size-2col-span, 100%)" }}
       >
-        {/* Step 1: Promo code card */}
+        {/* Step 1: Code type chooser */}
+        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
+          <div className="flex items-center gap-2.5 mb-3">
+            <span className="w-6 h-6 rounded-full bg-[#002a38] text-white flex items-center justify-center shrink-0" style={{ fontSize: "0.75rem", fontWeight: 800 }}>1</span>
+            <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>{t("hero.swap.codeTypeTitle")}</h3>
+          </div>
+          <div className="grid grid-cols-2 gap-2.5">
+            {([["promo", "hero.swap.promoCode", Ticket], ["voucher", "hero.swap.voucherCode", Gift]] as const).map(([type, key, Icon]) => {
+              const active = codeType === type;
+              return (
+                <button
+                  key={type}
+                  onClick={() => setCodeType(type)}
+                  aria-pressed={active}
+                  className={`flex items-center gap-2.5 rounded-2xl border p-3 transition-all duration-200 ${active ? "border-[#0068ff] bg-[#f5f9ff] shadow-sm shadow-[#0068ff]/10" : "border-gray-200 bg-white hover:border-gray-300"}`}
+                >
+                  <span className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors ${active ? "bg-[#0068ff] text-white" : "bg-gray-100 text-gray-500"}`}>
+                    <Icon className="w-4.5 h-4.5" />
+                  </span>
+                  <span className="text-[#002a38] text-left min-w-0 truncate" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>{t(key)}</span>
+                  {active && <Check className="w-4 h-4 text-[#0068ff] ml-auto shrink-0" />}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Step connector */}
+        <div className="flex justify-center -my-1 z-10">
+          <ArrowDown className="w-4 h-4 text-gray-400" />
+        </div>
+
+        {/* Step 2: Promo / voucher code card */}
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
           <div className="flex items-center gap-2.5 mb-3">
             <span className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${promoSuccess !== null ? "bg-green-500 text-white" : "bg-[#002a38] text-white"}`} style={{ fontSize: "0.75rem", fontWeight: 800 }}>
-              {promoSuccess !== null ? <Check className="w-3.5 h-3.5" /> : "1"}
+              {promoSuccess !== null ? <Check className="w-3.5 h-3.5" /> : "2"}
             </span>
-            <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>შეიყვანე პრომო კოდი და მიიღე ვარსკვლავები</h3>
+            <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>{t(codeType === "voucher" ? "hero.swap.enterVoucher" : "hero.swap.enterPromo")}</h3>
           </div>
           <AnimatePresence mode="wait">
             {promoSuccess !== null ? (
@@ -365,7 +398,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                       <input
                         type="text" value={promoInput}
                         onChange={(e) => { setPromoInput(e.target.value.toUpperCase()); setPromoError(""); }}
-                        placeholder={t("hero.auth.promoPlaceholder")}
+                        placeholder={t(codeType === "voucher" ? "hero.swap.voucherPlaceholder" : "hero.auth.promoPlaceholder")}
                         onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
                         className={`w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors ${previewStars ? "pr-10 pl-3.5" : "px-3.5"}`}
                         style={{ fontSize: "0.875rem", fontWeight: 600, letterSpacing: "0.05em" }}
@@ -417,12 +450,12 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
           <ArrowDown className="w-4 h-4 text-gray-400" />
         </div>
 
-        {/* Step 2: Voucher + CTA card */}
+        {/* Step 3: Voucher + CTA card */}
         <div id="hero-voucher-picker" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
           <div className="mb-3">
             <div className="flex items-center gap-2.5">
               <span className="w-6 h-6 rounded-full bg-[#002a38] text-white flex items-center justify-center shrink-0" style={{ fontSize: "0.75rem", fontWeight: 800 }}>
-                2
+                3
               </span>
               <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>გადაცვალე ვარსკვლავები ვაუჩერში</h3>
             </div>

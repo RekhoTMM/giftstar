@@ -188,6 +188,16 @@ Vouchers section (`vouchers-section.tsx`):
 Landing page (`landing-page.tsx`):
 - Section order is now **Hero → Invite friend → Voucher types → FAQ** (invite moved directly below the hero, with `var(--space-2xl)` top spacing to match other sections).
 
+## What v5 changed
+
+### 1. Code-type chooser as hero step 1 (`hero-section.tsx`)
+
+The two-step swap hero is now **three steps**. A new **step 1** asks "which type of code do you have?" (`hero.swap.codeTypeTitle`) with two toggle buttons — **Promo code** (`Ticket` icon) and **Voucher code** (`Gift` icon) — driven by `codeType: "promo" | "voucher"` state (default `promo`). The previous steps shift down: the code-input card is now **step 2**, the voucher picker is **step 3** (badges renumbered, with a step connector added between steps 1 and 2).
+
+Step 2 adapts to the choice: its title uses `hero.swap.enterPromo` / `hero.swap.enterVoucher` and the input placeholder uses `hero.auth.promoPlaceholder` / `hero.swap.voucherPlaceholder`. The apply/redeem logic itself is unchanged (still `redeemPromoCode`); promo-only live preview (`PROMO_STARS`) only shows for known promo codes. New i18n keys in ka/en/ru: `codeTypeTitle`, `promoCode`, `voucherCode`, `enterPromo`, `enterVoucher`, `voucherPlaceholder`.
+
+Note: voucher-code redemption has no distinct backend behavior yet — it's the same mock flow as promo. If voucher codes should resolve differently (e.g. a dedicated lookup/validation), that needs wiring into `handleApplyPromo`.
+
 ## Outstanding considerations
 
 - Auth modal's `intent` + `onAuthSuccess` plumbing was tried and reverted on `v3` — could be revisited if pre-signup interaction needs to carry through. (Guest taps apply/exchange → auth modal opens but typed promo / selected voucher is dropped.)

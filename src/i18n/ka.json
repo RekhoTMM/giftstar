@@ -22,7 +22,13 @@
       "promoBalanceUpdated": "ბალანსი განახლდა",
       "showMore": "მეტის ნახვა",
       "showLess": "ნაკლების ნახვა",
-      "insufficient": "ბალანსი არ არის საკმარისი"
+      "insufficient": "ბალანსი არ არის საკმარისი",
+      "codeTypeTitle": "რომელი ტიპის კოდი გაქვს?",
+      "promoCode": "პრომო კოდი",
+      "voucherCode": "ვაუჩერ კოდი",
+      "enterPromo": "შეიყვანე პრომო კოდი და მიიღე ვარსკვლავები",
+      "enterVoucher": "შეიყვანე ვაუჩერ კოდი და მიიღე ვარსკვლავები",
+      "voucherPlaceholder": "ვაუჩერ კოდი"
     },
     "guest": {
       "headline1": "გადაცვალე",

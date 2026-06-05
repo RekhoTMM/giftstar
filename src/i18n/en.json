@@ -22,7 +22,13 @@
       "promoBalanceUpdated": "Balance updated",
       "showMore": "Show more",
       "showLess": "Show less",
-      "insufficient": "Not enough balance"
+      "insufficient": "Not enough balance",
+      "codeTypeTitle": "Which type of code do you have?",
+      "promoCode": "Promo code",
+      "voucherCode": "Voucher code",
+      "enterPromo": "Enter a promo code and get stars",
+      "enterVoucher": "Enter a voucher code and get stars",
+      "voucherPlaceholder": "VOUCHER CODE"
     },
     "guest": {
       "headline1": "Exchange",

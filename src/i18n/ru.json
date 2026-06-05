@@ -22,7 +22,13 @@
       "promoBalanceUpdated": "Баланс обновлён",
       "showMore": "Показать ещё",
       "showLess": "Скрыть",
-      "insufficient": "Недостаточно баланса"
+      "insufficient": "Недостаточно баланса",
+      "codeTypeTitle": "Какой у тебя тип кода?",
+      "promoCode": "Промокод",
+      "voucherCode": "Ваучер-код",
+      "enterPromo": "Введи промокод и получи звёзды",
+      "enterVoucher": "Введи ваучер-код и получи звёзды",
+      "voucherPlaceholder": "ВАУЧЕР-КОД"
     },
     "guest": {
       "headline1": "Обменяй",
