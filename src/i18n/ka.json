@@ -25,10 +25,10 @@
       "insufficient": "ბალანსი არ არის საკმარისი",
       "codeTypeTitle": "რომელი ტიპის კოდი გაქვს?",
       "promoCode": "პრომო კოდი",
-      "voucherCode": "ვაუჩერ კოდი",
+      "voucherCode": "ვაუჩერის კოდი",
       "enterPromo": "შეიყვანე პრომო კოდი და მიიღე ვარსკვლავები",
-      "enterVoucher": "შეიყვანე ვაუჩერ კოდი და მიიღე ვარსკვლავები",
-      "voucherPlaceholder": "ვაუჩერ კოდი"
+      "enterVoucher": "შეიყვანე ვაუჩერის კოდი და მიიღე ვარსკვლავები",
+      "voucherPlaceholder": "ვაუჩერის კოდი"
     },
     "guest": {
       "headline1": "გადაცვალე",
