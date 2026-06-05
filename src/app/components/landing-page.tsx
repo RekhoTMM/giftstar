@@ -18,7 +18,7 @@ export function LandingPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [copiedReferral, setCopiedReferral] = useState(false);
   const [selectedVoucherIndex, setSelectedVoucherIndex] = useState<number | null>(null);
-  const [variant, setVariant] = useState<1 | 2>(() => (localStorage.getItem("giftstar-variant") === "1" ? 1 : 2));
+  const [variant, setVariant] = useState<1 | 2>(() => (localStorage.getItem("giftstar-variant") === "2" ? 2 : 1));
 
   const changeVariant = (v: 1 | 2) => {
     setVariant(v);
