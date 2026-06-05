@@ -109,9 +109,9 @@ export function VouchersSection() {
                   >
                     {t(`vouchers.cards.${voucher.translationKey}.name`)}
                   </h3>
-                  <div className="flex items-end justify-between gap-2 mt-auto">
+                  <div className="flex items-center justify-between gap-2.5 mt-auto">
                     <p
-                      className="text-gray-400 flex-1"
+                      className="text-gray-400 flex-1 min-w-0"
                       style={{ fontSize: "0.6875rem", lineHeight: 1.5 }}
                     >
                       {t(`vouchers.cards.${voucher.translationKey}.desc`)}
