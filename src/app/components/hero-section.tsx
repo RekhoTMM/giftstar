@@ -297,9 +297,15 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
         </div>
         <div className="min-w-0 flex-1">
           <h4 className="text-[#002a38] truncate" style={{ fontSize: "0.875rem", fontWeight: 700 }}>{t(`vouchers.cards.${v.translationKey}.name`)}</h4>
-          <div className="flex items-center gap-1 mt-0.5">
-            <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
-            <span className="text-[#002a38]" style={{ fontSize: "0.75rem", fontWeight: 700 }}>{v.stars}</span>
+          <div className="flex items-center gap-2 mt-0.5">
+            <span className="flex items-center gap-1">
+              <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
+              <span className="text-[#002a38]" style={{ fontSize: "0.75rem", fontWeight: 700 }}>{v.stars}</span>
+            </span>
+            <span className="flex items-center gap-1 min-w-0">
+              <Clock className="w-3 h-3 text-gray-300 shrink-0" />
+              <span className="text-gray-400 truncate" style={{ fontSize: "0.6875rem", fontWeight: 500 }}>{t(`vouchers.cards.${v.translationKey}.expiry`)}</span>
+            </span>
           </div>
         </div>
         <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all duration-200 ${isSel ? "bg-[#0068ff]" : "bg-[#e6f0ff] group-hover:bg-[#0068ff]"}`}>
