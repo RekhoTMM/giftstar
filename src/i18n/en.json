@@ -21,7 +21,9 @@
       "promoSuccessLabel": "stars added!",
       "promoBalanceUpdated": "Balance updated",
       "showMore": "Show more",
-      "showLess": "Show less"
+      "showLess": "Show less",
+      "insufficient": "Not enough balance",
+      "needMore": "Need"
     },
     "guest": {
       "headline1": "Exchange",

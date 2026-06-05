@@ -21,7 +21,9 @@
       "promoSuccessLabel": "ვარსკვლავი დაემატა!",
       "promoBalanceUpdated": "ბალანსი განახლდა",
       "showMore": "მეტის ნახვა",
-      "showLess": "ნაკლების ნახვა"
+      "showLess": "ნაკლების ნახვა",
+      "insufficient": "ბალანსი არ არის საკმარისი",
+      "needMore": "გჭირდება კიდევ"
     },
     "guest": {
       "headline1": "გადაცვალე",

@@ -258,6 +258,10 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
   const previewStars = PROMO_STARS[promoInput.trim().toUpperCase()];
   const selected = selectedIndex !== null ? vouchers[selectedIndex] : null;
 
+  // Authenticated users with a selection that costs more than their balance.
+  const isShort = isAuthenticated && !!selected && !!user && user.stars < selected.stars;
+  const shortfall = isShort && selected && user ? selected.stars - user.stars : 0;
+
   const handleApplyPromo = () => {
     if (!promoInput.trim()) return;
     if (!isAuthenticated) { setAuthMode("register"); setShowAuth(true); return; }
@@ -279,6 +283,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
 
   const handleExchange = () => {
     if (!isAuthenticated) { setAuthMode("register"); setShowAuth(true); return; }
+    if (isShort) return;
     openConfirm();
   };
 
@@ -444,11 +449,20 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
               <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`} />
             </button>
           )}
-          <button onClick={handleExchange} disabled={isPurchasing || !selected}
-            className="w-full mt-4 py-4 bg-[#0068ff] text-white rounded-2xl hover:bg-[#0050cc] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+          <button onClick={handleExchange} disabled={isPurchasing || !selected || isShort}
+            className={`w-full mt-4 py-4 rounded-2xl active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:cursor-not-allowed ${isShort ? "bg-gray-100 text-gray-400 disabled:opacity-100" : "bg-[#0068ff] text-white hover:bg-[#0050cc] disabled:opacity-60"}`}
             style={{ fontWeight: 600, fontSize: "0.9375rem" }}>
             {isPurchasing ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : isShort ? (
+              <>
+                {t("hero.swap.insufficient")}
+                <span className="flex items-center gap-1 bg-gray-200/80 rounded-full px-2.5 py-0.5 text-gray-500">
+                  {t("hero.swap.needMore")}
+                  <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
+                  <span style={{ fontSize: "0.875rem", fontWeight: 800 }}>{shortfall}</span>
+                </span>
+              </>
             ) : (
               <>
                 {t("hero.swap.exchangeBtn")}

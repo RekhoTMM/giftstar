@@ -21,7 +21,9 @@
       "promoSuccessLabel": "звёзд добавлено!",
       "promoBalanceUpdated": "Баланс обновлён",
       "showMore": "Показать ещё",
-      "showLess": "Скрыть"
+      "showLess": "Скрыть",
+      "insufficient": "Недостаточно баланса",
+      "needMore": "Не хватает"
     },
     "guest": {
       "headline1": "Обменяй",
