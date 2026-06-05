@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Star, Info, Clock, X } from "lucide-react";
+import { Star, Info, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useLanguage } from "../../i18n/language-context";
@@ -103,29 +103,23 @@ export function VouchersSection() {
 
                 {/* Content */}
                 <div className="voucher-card-content p-3.5 flex flex-col flex-1">
-                  <div className="voucher-card-expiry flex items-center gap-1 mb-1.5">
-                    <Clock className="w-3 h-3 text-gray-300 shrink-0" />
-                    <span className="text-gray-400" style={{ fontSize: "0.625rem", fontWeight: 500 }}>
-                      {t(`vouchers.cards.${voucher.translationKey}.expiry`)}
-                    </span>
-                  </div>
                   <h3
                     className="text-[#002a38] mb-1"
                     style={{ fontSize: "0.9375rem", fontWeight: 700 }}
                   >
                     {t(`vouchers.cards.${voucher.translationKey}.name`)}
                   </h3>
-                  <p
-                    className="text-gray-400 mb-3"
-                    style={{ fontSize: "0.6875rem", lineHeight: 1.5 }}
-                  >
-                    {t(`vouchers.cards.${voucher.translationKey}.desc`)}
-                  </p>
-                  <div className="voucher-card-footer flex items-center justify-end mt-auto">
+                  <div className="flex items-end justify-between gap-2 mt-auto">
+                    <p
+                      className="text-gray-400 flex-1"
+                      style={{ fontSize: "0.6875rem", lineHeight: 1.5 }}
+                    >
+                      {t(`vouchers.cards.${voucher.translationKey}.desc`)}
+                    </p>
                     <button
                       onClick={() => setInfoVoucher(voucher)}
                       aria-label="Info"
-                      className="group/info w-8 h-8 rounded-full bg-[#e6f0ff] hover:bg-[#0068ff] flex items-center justify-center transition-colors"
+                      className="group/info w-8 h-8 rounded-full bg-[#e6f0ff] hover:bg-[#0068ff] flex items-center justify-center transition-colors shrink-0"
                     >
                       <Info className="w-4 h-4 text-[#0068ff] group-hover/info:text-white transition-colors" />
                     </button>
