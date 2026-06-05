@@ -1,0 +1,15 @@
+# Netlify build configuration for GiftStar (Vite + React SPA)
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA fallback — react-router uses createBrowserRouter (client-side routes
+# like /dashboard, /rules, /voucher-rules). Without this, deep links / refresh
+# would 404. Serve index.html for any path that isn't a real file.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
