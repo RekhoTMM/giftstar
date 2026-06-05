@@ -22,8 +22,7 @@
       "promoBalanceUpdated": "ბალანსი განახლდა",
       "showMore": "მეტის ნახვა",
       "showLess": "ნაკლების ნახვა",
-      "insufficient": "ბალანსი არ არის საკმარისი",
-      "needMore": "გჭირდება კიდევ"
+      "insufficient": "ბალანსი არ არის საკმარისი"
     },
     "guest": {
       "headline1": "გადაცვალე",

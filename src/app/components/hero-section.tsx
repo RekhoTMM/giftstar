@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Star, ChevronDown, ArrowDown, Check, X, Clock } from "lucide-react";
+import { Star, ChevronDown, ArrowDown, Check, X, Clock, Lock } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useAuth } from "./auth-context";
@@ -258,9 +258,8 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
   const previewStars = PROMO_STARS[promoInput.trim().toUpperCase()];
   const selected = selectedIndex !== null ? vouchers[selectedIndex] : null;
 
-  // Authenticated users with a selection that costs more than their balance.
-  const isShort = isAuthenticated && !!selected && !!user && user.stars < selected.stars;
-  const shortfall = isShort && selected && user ? selected.stars - user.stars : 0;
+  // An authenticated user can only afford vouchers within their star balance.
+  const canAfford = (v: (typeof vouchers)[number]) => !isAuthenticated || !user || user.stars >= v.stars;
 
   const handleApplyPromo = () => {
     if (!promoInput.trim()) return;
@@ -283,29 +282,35 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
 
   const handleExchange = () => {
     if (!isAuthenticated) { setAuthMode("register"); setShowAuth(true); return; }
-    if (isShort) return;
     openConfirm();
   };
 
   const renderVoucherRow = (v: (typeof vouchers)[number], i: number) => {
     const isSel = selectedIndex === i;
+    const affordable = canAfford(v);
     return (
       <button
         key={v.id}
         ref={isSel ? selectedChipRef : undefined}
-        onClick={() => onSelectVoucher(i)}
+        onClick={() => { if (affordable) onSelectVoucher(i); }}
+        disabled={!affordable}
         aria-pressed={isSel}
-        className={`group flex items-center gap-3 w-full text-left rounded-2xl border p-2 pr-3 transition-all duration-200 hover:shadow-md hover:shadow-gray-200/70 ${isSel ? "border-[#0068ff] bg-[#f5f9ff] shadow-sm shadow-[#0068ff]/10" : "border-gray-200 bg-white"} ${isSel && pickerHighlight ? "ring-2 ring-[#0068ff]/30" : ""}`}
+        title={!affordable ? t("hero.swap.insufficient") : undefined}
+        className={`group flex items-center gap-3 w-full text-left rounded-2xl border p-2 pr-3 transition-all duration-200 ${
+          !affordable
+            ? "border-gray-200 bg-gray-50 opacity-60 cursor-not-allowed"
+            : `hover:shadow-md hover:shadow-gray-200/70 ${isSel ? "border-[#0068ff] bg-[#f5f9ff] shadow-sm shadow-[#0068ff]/10" : "border-gray-200 bg-white"} ${isSel && pickerHighlight ? "ring-2 ring-[#0068ff]/30" : ""}`
+        }`}
       >
         <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-gray-50 shrink-0">
-          <ImageWithFallback src={v.image} alt={t(`vouchers.cards.${v.translationKey}.name`)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <ImageWithFallback src={v.image} alt={t(`vouchers.cards.${v.translationKey}.name`)} className={`w-full h-full object-cover transition-transform duration-500 ${affordable ? "group-hover:scale-105" : "grayscale"}`} />
         </div>
         <div className="min-w-0 flex-1">
           <h4 className="text-[#002a38] truncate" style={{ fontSize: "0.875rem", fontWeight: 700 }}>{t(`vouchers.cards.${v.translationKey}.name`)}</h4>
           <div className="flex items-center gap-2 mt-0.5">
             <span className="flex items-center gap-1">
-              <Star className="w-3 h-3 text-[#3FA62E] fill-[#3FA62E]" />
-              <span className="text-[#002a38]" style={{ fontSize: "0.75rem", fontWeight: 700 }}>{v.stars}</span>
+              <Star className={`w-3 h-3 ${affordable ? "text-[#3FA62E] fill-[#3FA62E]" : "text-gray-300 fill-gray-300"}`} />
+              <span className={affordable ? "text-[#002a38]" : "text-red-400"} style={{ fontSize: "0.75rem", fontWeight: 700 }}>{v.stars}</span>
             </span>
             <span className="flex items-center gap-1 min-w-0">
               <Clock className="w-3 h-3 text-gray-300 shrink-0" />
@@ -313,9 +318,15 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
             </span>
           </div>
         </div>
-        <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all duration-200 ${isSel ? "bg-[#0068ff]" : "bg-[#e6f0ff] group-hover:bg-[#0068ff]"}`}>
-          <Check className={`w-3.5 h-3.5 transition-colors duration-200 ${isSel ? "text-white" : "text-[#0068ff] group-hover:text-white"}`} />
-        </div>
+        {affordable ? (
+          <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all duration-200 ${isSel ? "bg-[#0068ff]" : "bg-[#e6f0ff] group-hover:bg-[#0068ff]"}`}>
+            <Check className={`w-3.5 h-3.5 transition-colors duration-200 ${isSel ? "text-white" : "text-[#0068ff] group-hover:text-white"}`} />
+          </div>
+        ) : (
+          <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center shrink-0">
+            <Lock className="w-3 h-3 text-gray-400" />
+          </div>
+        )}
       </button>
     );
   };
@@ -449,20 +460,11 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
               <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`} />
             </button>
           )}
-          <button onClick={handleExchange} disabled={isPurchasing || !selected || isShort}
-            className={`w-full mt-4 py-4 rounded-2xl active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:cursor-not-allowed ${isShort ? "bg-gray-100 text-gray-400 disabled:opacity-100" : "bg-[#0068ff] text-white hover:bg-[#0050cc] disabled:opacity-60"}`}
+          <button onClick={handleExchange} disabled={isPurchasing || !selected}
+            className="w-full mt-4 py-4 bg-[#0068ff] text-white rounded-2xl hover:bg-[#0050cc] active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             style={{ fontWeight: 600, fontSize: "0.9375rem" }}>
             {isPurchasing ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            ) : isShort ? (
-              <>
-                {t("hero.swap.insufficient")}
-                <span className="flex items-center gap-1 bg-gray-200/80 rounded-full px-2.5 py-0.5 text-gray-500">
-                  {t("hero.swap.needMore")}
-                  <Star className="w-3.5 h-3.5 text-[#3FA62E] fill-[#3FA62E]" />
-                  <span style={{ fontSize: "0.875rem", fontWeight: 800 }}>{shortfall}</span>
-                </span>
-              </>
             ) : (
               <>
                 {t("hero.swap.exchangeBtn")}

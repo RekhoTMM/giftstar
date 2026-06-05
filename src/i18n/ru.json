@@ -22,8 +22,7 @@
       "promoBalanceUpdated": "Баланс обновлён",
       "showMore": "Показать ещё",
       "showLess": "Скрыть",
-      "insufficient": "Недостаточно баланса",
-      "needMore": "Не хватает"
+      "insufficient": "Недостаточно баланса"
     },
     "guest": {
       "headline1": "Обменяй",

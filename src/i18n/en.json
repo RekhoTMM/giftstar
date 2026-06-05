@@ -22,8 +22,7 @@
       "promoBalanceUpdated": "Balance updated",
       "showMore": "Show more",
       "showLess": "Show less",
-      "insufficient": "Not enough balance",
-      "needMore": "Need"
+      "insufficient": "Not enough balance"
     },
     "guest": {
       "headline1": "Exchange",
