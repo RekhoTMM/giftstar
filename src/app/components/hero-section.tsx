@@ -336,7 +336,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
     <>
       <motion.div
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
-        className="bg-white rounded-3xl border border-gray-100 shadow-sm divide-y divide-gray-100 overflow-hidden lg:mx-auto"
+        className="bg-white rounded-3xl border border-gray-100 shadow-sm divide-y divide-gray-200 overflow-hidden lg:mx-auto"
         style={{ maxWidth: "var(--size-2col-span, 100%)" }}
       >
         {/* Step 1: Code type chooser */}
