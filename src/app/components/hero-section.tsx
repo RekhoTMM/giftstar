@@ -292,7 +292,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
       <button
         key={v.id}
         ref={isSel ? selectedChipRef : undefined}
-        onClick={() => { if (affordable) onSelectVoucher(i); }}
+        onClick={() => { if (affordable) onSelectVoucher(isSel ? null : i); }}
         disabled={!affordable}
         aria-pressed={isSel}
         title={!affordable ? t("hero.swap.insufficient") : undefined}
