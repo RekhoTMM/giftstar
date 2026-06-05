@@ -29,12 +29,9 @@ export function LandingPage() {
       {/* New Hero Section */}
       <HeroSection onRegister={openRegister} selectedVoucherIndex={selectedVoucherIndex} onSelectVoucher={setSelectedVoucherIndex} />
 
-      {/* Available Vouchers — informational showcase */}
-      <VouchersSection />
-
       <div style={{ maxWidth: "var(--size-container-max)", margin: "0 auto", width: "100%" }}>
 
-        {/* Invite Friend Section — shown after vouchers when authenticated */}
+        {/* Invite Friend Section — shown right below the hero when authenticated */}
         {isAuthenticated && user && (
           <section className="px-5" style={{ width: "100%", paddingBottom: "80px" }}>
             <motion.div
@@ -182,7 +179,12 @@ export function LandingPage() {
             </motion.div>
           </section>
         )}
+      </div>
 
+      {/* Available Vouchers — informational showcase */}
+      <VouchersSection />
+
+      <div style={{ maxWidth: "var(--size-container-max)", margin: "0 auto", width: "100%" }}>
         {/* FAQ */}
         <section className="faq-section flex flex-col lg:flex-row lg:gap-12 lg:items-start" style={{ padding: "0 var(--space-lg) 80px", width: "100%" }}>
           <div className="lg:w-1/3 lg:shrink-0 mb-6 lg:mb-0 lg:sticky lg:top-24">
