@@ -59,7 +59,7 @@ export function VouchersSection() {
           </p>
         </motion.div>
 
-        {/* Voucher Cards — informational only; tap the info icon to learn more */}
+        {/* Voucher Cards — informational only; tap a card to learn more */}
         <div className="voucher-cards-grid flex flex-wrap mb-4" style={{ width: "100%", gap: "var(--size-card-gap)" }}>
           {vouchers.map((voucher, i) => (
             <motion.div
@@ -71,7 +71,12 @@ export function VouchersSection() {
               className="voucher-card-wrapper group"
               style={{ width: "var(--voucher-card-width)" }}
             >
-              <div className="voucher-card relative bg-white rounded-2xl overflow-hidden border border-gray-200 flex flex-col h-full transition-shadow duration-200 hover:shadow-md hover:shadow-gray-200/70">
+              <button
+                type="button"
+                onClick={() => setInfoVoucher(voucher)}
+                aria-label={t(`vouchers.cards.${voucher.translationKey}.name`)}
+                className="voucher-card relative w-full text-left bg-white rounded-2xl overflow-hidden border border-gray-200 flex flex-col h-full cursor-pointer transition-shadow duration-200 hover:shadow-md hover:shadow-gray-200/70"
+              >
                 {/* Mystery BOX prize strip — informational, non-interactive */}
                 {voucher.id.startsWith("mysteryBox") && (
                   <div className="absolute top-2 right-2 h-8 flex items-center bg-white/90 rounded-full px-1.5 z-10">
@@ -116,16 +121,15 @@ export function VouchersSection() {
                     >
                       {t(`vouchers.cards.${voucher.translationKey}.desc`)}
                     </p>
-                    <button
-                      onClick={() => setInfoVoucher(voucher)}
-                      aria-label="Info"
-                      className="group/info w-8 h-8 rounded-full bg-[#e6f0ff] hover:bg-[#0068ff] flex items-center justify-center transition-colors shrink-0"
+                    <div
+                      aria-hidden="true"
+                      className="w-8 h-8 rounded-full bg-[#e6f0ff] group-hover:bg-[#0068ff] flex items-center justify-center transition-colors shrink-0"
                     >
-                      <Info className="w-4 h-4 text-[#0068ff] group-hover/info:text-white transition-colors" />
-                    </button>
+                      <Info className="w-4 h-4 text-[#0068ff] group-hover:text-white transition-colors" />
+                    </div>
                   </div>
                 </div>
-              </div>
+              </button>
             </motion.div>
           ))}
           {/* Fill remaining slots in last row with gradient placeholders */}
