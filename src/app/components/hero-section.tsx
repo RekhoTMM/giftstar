@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Star, ChevronDown, ArrowDown, Check, X, Clock, Lock, Ticket, Gift } from "lucide-react";
+import { Star, ChevronDown, Check, X, Clock, Lock, Ticket, Gift } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useAuth } from "./auth-context";
@@ -336,11 +336,11 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
     <>
       <motion.div
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
-        className="flex flex-col gap-3 lg:mx-auto"
+        className="bg-white rounded-3xl border border-gray-100 shadow-sm divide-y divide-gray-100 overflow-hidden lg:mx-auto"
         style={{ maxWidth: "var(--size-2col-span, 100%)" }}
       >
         {/* Step 1: Code type chooser */}
-        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
+        <div className="p-5">
           <div className="flex items-center gap-2.5 mb-3">
             <span className="w-6 h-6 rounded-full bg-[#002a38] text-white flex items-center justify-center shrink-0" style={{ fontSize: "0.75rem", fontWeight: 800 }}>1</span>
             <h3 className="text-[#002a38]" style={{ fontSize: "0.9375rem", fontWeight: 700 }}>{t("hero.swap.codeTypeTitle")}</h3>
@@ -366,13 +366,8 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
           </div>
         </div>
 
-        {/* Step connector */}
-        <div className="flex justify-center -my-1 z-10">
-          <ArrowDown className="w-4 h-4 text-gray-400" />
-        </div>
-
         {/* Step 2: Promo / voucher code card */}
-        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
+        <div className="p-5">
           <div className="flex items-center gap-2.5 mb-3">
             <span className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${promoSuccess !== null ? "bg-green-500 text-white" : "bg-[#002a38] text-white"}`} style={{ fontSize: "0.75rem", fontWeight: 800 }}>
               {promoSuccess !== null ? <Check className="w-3.5 h-3.5" /> : "2"}
@@ -445,13 +440,8 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
           </AnimatePresence>
         </div>
 
-        {/* Step connector */}
-        <div className="flex justify-center -my-1 z-10">
-          <ArrowDown className="w-4 h-4 text-gray-400" />
-        </div>
-
         {/* Step 3: Voucher + CTA card */}
-        <div id="hero-voucher-picker" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
+        <div id="hero-voucher-picker" className="p-5">
           <div className="mb-3">
             <div className="flex items-center gap-2.5">
               <span className="w-6 h-6 rounded-full bg-[#002a38] text-white flex items-center justify-center shrink-0" style={{ fontSize: "0.75rem", fontWeight: 800 }}>
