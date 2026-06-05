@@ -33,7 +33,7 @@ export function LandingPage() {
 
         {/* Invite Friend Section — shown right below the hero when authenticated */}
         {isAuthenticated && user && (
-          <section className="px-5" style={{ width: "100%", paddingBottom: "80px" }}>
+          <section className="px-5" style={{ width: "100%", paddingTop: "var(--space-2xl)", paddingBottom: "80px" }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -127,7 +127,7 @@ export function LandingPage() {
 
         {/* Invite Friend CTA — guest only, above FAQ */}
         {!isAuthenticated && (
-          <section className="cta-section-guest" style={{ padding: "0 var(--space-lg) 80px", width: "100%" }}>
+          <section className="cta-section-guest" style={{ padding: "var(--space-2xl) var(--space-lg) 80px", width: "100%" }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
