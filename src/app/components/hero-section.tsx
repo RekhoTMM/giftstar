@@ -359,7 +359,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                     <Icon className="w-4 h-4" />
                   </span>
                   <span className="text-[#002a38] leading-tight" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>{t(key)}</span>
-                  {active && <Check className="w-4 h-4 text-[#0068ff] absolute top-2.5 right-2.5 shrink-0" />}
+                  {active && <Check className="w-4 h-4 text-[#0068ff] absolute right-2.5 top-1/2 -translate-y-1/2 shrink-0" />}
                 </button>
               );
             })}
