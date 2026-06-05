@@ -387,15 +387,15 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
               </motion.div>
             ) : (
               <motion.div key="open" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <div className="flex flex-col sm:flex-row sm:items-start gap-2">
-                  <div className="flex flex-col gap-2 flex-1">
-                    <div className="relative">
+                <div className="flex flex-col gap-2">
+                  <div className="flex flex-col sm:flex-row sm:items-stretch gap-2">
+                    <div className="relative flex-1">
                       <input
                         type="text" value={promoInput}
                         onChange={(e) => { setPromoInput(e.target.value.toUpperCase()); setPromoError(""); }}
                         placeholder={t(codeType === "voucher" ? "hero.swap.voucherPlaceholder" : "hero.auth.promoPlaceholder")}
                         onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
-                        className={`w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors ${previewStars ? "pr-10 pl-3.5" : "px-3.5"}`}
+                        className={`w-full h-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 text-[#002a38] placeholder:text-gray-300 focus:outline-none focus:border-[#0068ff] transition-colors ${previewStars ? "pr-10 pl-3.5" : "px-3.5"}`}
                         style={{ fontSize: "0.875rem", fontWeight: 600, letterSpacing: "0.05em" }}
                       />
                       {previewStars && (
@@ -409,31 +409,31 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                         </motion.span>
                       )}
                     </div>
-                    {promoError && <p className="text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>}
-                    <div className="flex items-center justify-between gap-2 flex-wrap">
-                      <span className="text-gray-400" style={{ fontSize: "0.75rem" }}>1 ვარსკვლავი = 1 ლ</span>
-                      {previewStars && (
-                        <motion.span
-                          key={`hint-${previewStars}`}
-                          initial={{ opacity: 0, y: -2 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="flex items-center gap-1 text-[#3FA62E]"
-                          style={{ fontSize: "0.75rem", fontWeight: 700 }}
-                        >
-                          მიიღებ <Star className="w-3 h-3 fill-[#3FA62E]" />{previewStars} ვარსკვლავს
-                        </motion.span>
+                    <button onClick={handleApplyPromo} disabled={isRedeeming || !promoInput.trim()}
+                      className="w-full sm:w-auto px-5 py-3 bg-[#002a38] text-white rounded-xl hover:bg-[#003a50] disabled:opacity-50 transition-colors shrink-0 flex items-center justify-center gap-1.5 order-last sm:order-none"
+                      style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
+                      {isRedeeming ? (
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      ) : (
+                        "გამოყენება"
                       )}
-                    </div>
+                    </button>
                   </div>
-                  <button onClick={handleApplyPromo} disabled={isRedeeming || !promoInput.trim()}
-                    className="w-full sm:w-auto px-5 py-3 bg-[#002a38] text-white rounded-xl hover:bg-[#003a50] disabled:opacity-50 transition-colors shrink-0 flex items-center justify-center gap-1.5 order-last sm:order-none"
-                    style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
-                    {isRedeeming ? (
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    ) : (
-                      "გამოყენება"
+                  {promoError && <p className="text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>}
+                  <div className="flex flex-col gap-1">
+                    <span className="text-gray-400" style={{ fontSize: "0.75rem" }}>1 ვარსკვლავი = 1 ლ</span>
+                    {previewStars && (
+                      <motion.span
+                        key={`hint-${previewStars}`}
+                        initial={{ opacity: 0, y: -2 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-1 text-[#3FA62E]"
+                        style={{ fontSize: "0.75rem", fontWeight: 700 }}
+                      >
+                        მიიღებ <Star className="w-3 h-3 fill-[#3FA62E]" />{previewStars} ვარსკვლავს
+                      </motion.span>
                     )}
-                  </button>
+                  </div>
                 </div>
               </motion.div>
             )}
