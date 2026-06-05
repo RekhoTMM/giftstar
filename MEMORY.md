@@ -7,9 +7,10 @@ GiftStar / GiftMe.ge is a Georgian loyalty/rewards platform where users collect 
 Branch strategy:
 - `main` — production (Netlify auto-deploys)
 - `v3` — hero redesign iteration (complete, merged once into `main`)
-- `v4` — current iteration; branched from the `v3` tip (active)
+- `v4` — hero/voucher refinement iteration (complete)
+- `v5` — current iteration; branched from the `v4` tip (active)
 
-This document captures everything built on `v3` and continues with `v4`.
+This document captures everything built on `v3` and continues through `v4` and `v5`.
 
 ## Stack
 
@@ -170,6 +171,22 @@ The "available vouchers" grid below the hero is now a **read-only showcase** of 
 `VouchersSection` no longer takes `selectedVoucherIndex` / `onSelectVoucher` props; `landing-page.tsx` renders `<VouchersSection />`. The shared `selectedVoucherIndex` state still drives the hero.
 
 Side effect: `MysteryBoxAnimation` is now unreferenced (the reveal animation was only reachable from this section's purchase flow). It's tree-shaken out. If the mystery-box reveal should survive, it needs wiring into the hero's `usePurchaseFlow`.
+
+### 5. Further v4 refinements
+
+Hero (`hero-section.tsx`):
+- Headline font reduced to `clamp(1.875rem, 3.4vw, 2.5rem)`.
+- Inline selector tuned: shows `COLLAPSED_COUNT = 2` rows before "show more (+N)"; each row now shows **expiry** (Clock + `…expiry`) next to the star cost.
+- **Affordability:** authenticated users see unaffordable vouchers (`user.stars < v.stars`) as **disabled rows** — dimmed, grayscale image, red star cost, `Lock` badge instead of the select check, not selectable (`title` = `hero.swap.insufficient`). Guests unaffected. The exchange CTA stays in its normal state (no insufficient-CTA variant — that approach was tried then replaced by disabled rows).
+- Selected row can be **deselected** by tapping it again (`onSelectVoucher(isSel ? null : i)`).
+
+Vouchers section (`vouchers-section.tsx`):
+- **No prices** on the cards or in the info modal.
+- The info action is the **whole card** (one clickable `button` opening the info modal); the bottom-right info icon is now a visual affordance that lights up on card hover.
+- Copy reframed to "voucher types": `vouchers.sectionTag/title/subtitle` updated in ka/en/ru (ka: "ვაუჩერის ტიპები" / "რა ტიპის ვაუჩერების მიღებაა შესაძლებელი?" / "გაიგე მეტი საიტზე არსებული ვაუჩერების შესახებ").
+
+Landing page (`landing-page.tsx`):
+- Section order is now **Hero → Invite friend → Voucher types → FAQ** (invite moved directly below the hero, with `var(--space-2xl)` top spacing to match other sections).
 
 ## Outstanding considerations
 
