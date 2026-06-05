@@ -3,6 +3,8 @@ import { Users, ChevronDown, ChevronUp, Copy, Check } from "lucide-react";
 import { motion } from "motion/react";
 import { AuthModal } from "./auth-modal";
 import { HeroSection } from "./hero-section";
+import { HeroSectionV4 } from "./hero-section-v4";
+import { VariantSwitcher } from "./variant-switcher";
 import { VouchersSection } from "./vouchers-section";
 import { useAuth } from "./auth-context";
 import { useLanguage } from "../../i18n/language-context";
@@ -16,6 +18,12 @@ export function LandingPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [copiedReferral, setCopiedReferral] = useState(false);
   const [selectedVoucherIndex, setSelectedVoucherIndex] = useState<number | null>(null);
+  const [variant, setVariant] = useState<1 | 2>(() => (localStorage.getItem("giftstar-variant") === "1" ? 1 : 2));
+
+  const changeVariant = (v: 1 | 2) => {
+    setVariant(v);
+    localStorage.setItem("giftstar-variant", String(v));
+  };
 
   const openRegister = () => {
     setAuthMode("register");
@@ -26,8 +34,14 @@ export function LandingPage() {
 
   return (
     <>
-      {/* New Hero Section */}
-      <HeroSection onRegister={openRegister} selectedVoucherIndex={selectedVoucherIndex} onSelectVoucher={setSelectedVoucherIndex} />
+      {/* Hero — variant 1 = v4 branch, variant 2 = v5 branch */}
+      {variant === 1 ? (
+        <HeroSectionV4 onRegister={openRegister} selectedVoucherIndex={selectedVoucherIndex} onSelectVoucher={setSelectedVoucherIndex} />
+      ) : (
+        <HeroSection onRegister={openRegister} selectedVoucherIndex={selectedVoucherIndex} onSelectVoucher={setSelectedVoucherIndex} />
+      )}
+
+      <VariantSwitcher variant={variant} onChange={changeVariant} />
 
       <div style={{ maxWidth: "var(--size-container-max)", margin: "0 auto", width: "100%" }}>
 

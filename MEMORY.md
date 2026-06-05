@@ -198,6 +198,10 @@ Step 2 adapts to the choice: its title uses `hero.swap.enterPromo` / `hero.swap.
 
 Note: voucher-code redemption has no distinct backend behavior yet — it's the same mock flow as promo. If voucher codes should resolve differently (e.g. a dedicated lookup/validation), that needs wiring into `handleApplyPromo`.
 
+### 2. A/B variant switcher (`variant-switcher.tsx`, `landing-page.tsx`, `hero-section-v4.tsx`)
+
+A floating pill (`VariantSwitcher`, fixed bottom-center) lets you flip the landing hero between **variant 1 = the `v4` branch hero** and **variant 2 = the `v5` hero**. The v4↔v5 difference is entirely in the hero (the rest of the page is identical), so `hero-section-v4.tsx` is a snapshot of `origin/v4:hero-section.tsx` with its export renamed `HeroSection → HeroSectionV4` (its internal `PromoCodeWithExpiry` left unexported; the v5 `hero-section.tsx` still owns the exported one used by the dashboard). `landing-page.tsx` holds `variant` state (persisted in `localStorage` `giftstar-variant`, default 2) and renders `HeroSectionV4` vs `HeroSection` accordingly. Remove the switcher + `hero-section-v4.tsx` once a variant is chosen.
+
 ## Outstanding considerations
 
 - Auth modal's `intent` + `onAuthSuccess` plumbing was tried and reverted on `v3` — could be revisited if pre-signup interaction needs to carry through. (Guest taps apply/exchange → auth modal opens but typed promo / selected voucher is dropped.)
