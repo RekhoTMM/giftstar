@@ -355,8 +355,8 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                   aria-pressed={active}
                   className={`flex items-center gap-2.5 rounded-2xl border p-3 transition-all duration-200 ${active ? "border-[#0068ff] bg-[#f5f9ff] shadow-sm shadow-[#0068ff]/10" : "border-gray-200 bg-white hover:border-gray-300"}`}
                 >
-                  <span className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors ${active ? "bg-[#0068ff] text-white" : "bg-gray-100 text-gray-500"}`}>
-                    <Icon className="w-4.5 h-4.5" />
+                  <span className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${active ? "bg-[#0068ff] text-white" : "bg-gray-100 text-gray-500"}`}>
+                    <Icon className="w-4 h-4" />
                   </span>
                   <span className="text-[#002a38] text-left leading-tight" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>{t(key)}</span>
                   {active && <Check className="w-4 h-4 text-[#0068ff] ml-auto shrink-0" />}
