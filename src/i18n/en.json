@@ -45,9 +45,9 @@
     }
   },
   "vouchers": {
-    "sectionTag": "Vouchers",
-    "title": "Available Vouchers",
-    "subtitle": "Collect stars and choose your favorite gift",
+    "sectionTag": "Voucher types",
+    "title": "What types of vouchers can you get?",
+    "subtitle": "Learn more about the vouchers available on the site",
     "exchange": "Exchange",
     "prizes": "Prizes",
     "star": "star",
