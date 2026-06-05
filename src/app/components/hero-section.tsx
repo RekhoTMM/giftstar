@@ -63,7 +63,7 @@ export function HeroSection({ onRegister: _onRegister, selectedVoucherIndex, onS
         }}
       >
         {/* Headline */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.05 }} className="text-center mb-6">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.05 }} className="text-center mb-6 md:mb-10">
           <h1 className="text-[#002a38]" style={{ fontSize: "clamp(1.875rem, 3.4vw, 2.5rem)", fontWeight: 800, lineHeight: 1.3, letterSpacing: "-0.02em" }}>
             {t("hero.guest.headline1")}{" "}
             <span className="relative inline-block px-1.5">
@@ -421,7 +421,7 @@ function SwapPanel({ selectedIndex, onSelectVoucher }: { selectedIndex: number |
                   </div>
                   {promoError && <p className="text-red-500" style={{ fontSize: "0.75rem" }}>{promoError}</p>}
                   <div className="flex flex-col gap-1">
-                    <span className="text-gray-400" style={{ fontSize: "0.75rem" }}>1 ვარსკვლავი = 1 ლ</span>
+                    <span className="text-gray-400" style={{ fontSize: "0.75rem" }}>1 ვარსკვლავი = 1 ₾</span>
                     {previewStars && (
                       <motion.span
                         key={`hint-${previewStars}`}
